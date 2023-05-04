@@ -2,10 +2,6 @@
 include 'debugging.php';
 include 'header.html';
 
-
-
-
-
 ?>
 
 /<!-- register user form -->

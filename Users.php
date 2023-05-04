@@ -77,7 +77,8 @@ class Users {
 
     function checkUser($username, $password) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $this->username . '\' AND password = \'' . $password . '\'');
+        echo 'SELECT * FROM dbProj_User WHERE username = \'' . $username . '\' AND password = \'' . $password . '\'';
+        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $username . '\' AND password = \'' . $password . '\'');
         $this->initWith($data->user_id, $data->username, $data->role, $data->password, $data->email);
     }
 
@@ -122,6 +123,14 @@ class Users {
 
         return $errors;
     }
+    
+    
+
+    
+    // ...
+
+    
+    
 
 }
 

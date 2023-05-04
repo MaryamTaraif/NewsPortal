@@ -1,7 +1,11 @@
-<?php include 'header.html' ?>;
-<!DOCTYPE html>
+<?php 
+    ob_start(); // start output buffering
 
-<body>
+include 'header.html' ;
+include 'debugging.php';
+
+?>
+
 
     <section class="login first grey">
         <div class="container">
@@ -9,8 +13,10 @@
                 <div class="box box-border">
                     <div class="box-body">
                        <!-- Login form -->
+                      
                         <h4>Login</h4>
-                        <form>
+                
+                        <form action='' method="post">
                             <div class="form-group">
                                 <label>Username</label>
                                 <input type="text" name="username" class="form-control">
@@ -28,7 +34,7 @@
 
                             </div>
                             <div class="form-group text-center">
-                                <span class="text-muted">Don't have an account?</span> <a href="register.html">Create one</a>
+                                <span class="text-muted">Don't have an account?</span> <a href="register.php">Create one</a>
                             </div>
 
                         </form>
@@ -37,7 +43,37 @@
             </div>
         </div>
     </section>
-<?php include 'footer.html'?>
+
+<?php 
+ if(isset($_POST['submitted'])){
+        $lgn = new Login();
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        
+        if($lgn->login($username, $password)){
+        
+         header('Location: index.php');
+         exit;
+            
+        }else{
+            echo $error = 'Wrong Login Values';
+        }
+        
+        
+        
+    }
+
+
+
+?>
+
+
+
+<?php include 'footer.html';
+
+?>
+
+
 
     <!-- JS -->
     <script src="js/jquery.js"></script>
@@ -54,7 +90,8 @@
     <script src="js/e-magz.js"></script>
 </body>
 </html>
-<?php
+<?php ob_end_flush(); ?>
+
 
 /* 
  * To change this license header, choose License Headers in Project Properties.
