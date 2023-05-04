@@ -1,8 +1,8 @@
 <?php 
     ob_start(); // start output buffering
 
-include 'header.html' ;
-include 'debugging.php';
+include 'header.php' ;
+
 
 ?>
 
@@ -44,6 +44,10 @@ include 'debugging.php';
         </div>
     </section>
 
+
+<?php include 'footer.html';
+
+?>
 <?php 
  if(isset($_POST['submitted'])){
         $lgn = new Login();
@@ -69,9 +73,6 @@ include 'debugging.php';
 
 
 
-<?php include 'footer.html';
-
-?>
 
 
 
