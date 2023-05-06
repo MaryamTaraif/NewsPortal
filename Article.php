@@ -134,16 +134,30 @@ class Article {
     }
     
     //get the list of articles in the passed category 
-    function getCatArticles($category_id) {
+    public static function getCatArticles($category_id) {
         $db = Database::getInstance();
         $data = $db->multiFetch('Select * from dbProj_Article where category_id = ' . $category_id);
         return $data;
     }
     
     //get all articles ordered from the latest date 
-    function getArticles() {
+    public static function getArticles() {
         $db = Database::getInstance();
         $data = $db->multiFetch('Select * from dbProj_Article order by publish_date desc');
         return $data;
+    }
+    
+    
+    //categories functions 
+    public static function getAllCat(){
+        $db = Database::getInstance();
+        $data = $db->multiFetch('Select * from dbProj_Category');
+        return $data;
+    }
+    public static function getCatName($cat_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $cat_id . '\'');
+        return $data->category_name;
+        
     }
 }
