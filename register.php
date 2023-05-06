@@ -1,6 +1,33 @@
 <?php 
-include 'debugging.php';
-include 'header.html';
+
+include 'header.php';
+
+
+
+if(isset($_POST['submitted'])){
+    //new User object
+    $user = new Users();
+    //set 
+    $user->setUsername($_POST['username']);
+    $user->setEmail($_POST['email']);
+    //hashed password
+    $password = $_POST['password']; //get password 
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //hash password using password_hash function
+    $user->setPassword($hashedPassword);
+    $user->setRole($_POST['role']);  
+    //call register method from user class
+    if($user->initWithUsername()){
+    $result = $user->registerUser();
+   if($result == true){
+       echo '<script>alert("User Registered Successfully!")</script>';
+   }else{
+       echo '<label>not Successful</label>';
+   }        
+}else{
+    echo '<script>alert("Username already exists!")</script>';
+   }
+}
+
 
 ?>
 
@@ -56,27 +83,5 @@ include 'header.html';
 
 
 <?php
-
-
-if(isset($_POST['submitted'])){
-    //new User object
-    $user = new Users();
-    //set 
-    $user->setUsername($_POST['username']);
-    $user->setEmail($_POST['email']);
-    //hashed password
-    $password = $_POST['password']; //get password 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //hash password using password_hash function
-    $user->setPassword($hashedPassword);
-    $user->setRole($_POST['role']);  
-    //call register method from user class
-    $result = $user->registerUser();
-   if($result == true){
-       echo '<script>alert("User Registered Successfully!")</script>';
-   }else{
-       echo '<label>not Successful</label>';
-   }        
-}
-
 
 include 'footer.html' ?>

@@ -3,7 +3,6 @@
 
 include 'header.php' ;
 
-
 ?>
 
 
@@ -54,6 +53,7 @@ include 'header.php' ;
         $username = $_POST['username'];
         $password = $_POST['password'];
         
+       
         if($lgn->login($username, $password)){
         
          header('Location: index.php');
@@ -70,11 +70,6 @@ include 'header.php' ;
 
 
 ?>
-
-
-
-
-
 
     <!-- JS -->
     <script src="js/jquery.js"></script>

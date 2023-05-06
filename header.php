@@ -70,7 +70,9 @@
             </div>
 ';
                                 }else{
-                                    echo '<h5>Welcome, '.$_SESSION['username'].'</h5>';
+                                    echo '<h5>Welcome, '.$_SESSION['username'].'</h5>'.
+                                            
+                                            '<h6 style="text-align: center;">'.$_SESSION['role'].'</h6>';
                                 }
                                 ?>
                                 

@@ -75,17 +75,29 @@ class Users {
         $this->initWith($data->user_id, $data->username, $data->role, $data->password, $data->email);
     }
 
+//    function checkUser($username, $password) {
+//        $db = Database::getInstance();
+//        echo 'SELECT * FROM dbProj_User WHERE username = \'' . $username . '\' AND password = \'' . $password . '\'';
+//        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $username . '\' AND password = \'' . $password . '\'');
+//        $this->initWith($data->user_id, $data->username, $data->role, $data->password, $data->email);
+//    }
+
+
     function checkUser($username, $password) {
         $db = Database::getInstance();
-        echo 'SELECT * FROM dbProj_User WHERE username = \'' . $username . '\' AND password = \'' . $password . '\'';
-        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $username . '\' AND password = \'' . $password . '\'');
-        $this->initWith($data->user_id, $data->username, $data->role, $data->password, $data->email);
+        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $username . '\'');
+        if ($data != null && password_verify($password, $data->password)) {
+            $this->initWith($data->user_id, $data->username, $data->role, $data->password, $data->email);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function registerUser() {
         try {
             $db = Database::getInstance();
-            $query= 'INSERT INTO dbProj_User (user_id, username,role,password,email) VALUES (null, \'' . $this->username . '\',\'' . $this->role . '\',\'' . $this->password . '\',\'' . $this->email . '\')';
+            $query = 'INSERT INTO dbProj_User (user_id, username,role,password,email) VALUES (null, \'' . $this->username . '\',\'' . $this->role . '\',\'' . $this->password . '\',\'' . $this->email . '\')';
             echo $query;
             $db->querySql($query);
             return true;
@@ -123,15 +135,8 @@ class Users {
 
         return $errors;
     }
-    
-    
 
-    
     // ...
-
-    
-    
-
 }
 
 /* 
