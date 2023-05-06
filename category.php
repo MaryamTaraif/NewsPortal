@@ -1,12 +1,7 @@
 <?php
-include 'Database.php';
-include 'Article.php';
-include 'header.html';
+include 'header.php';
 $id = $_GET['cid'];
-////get category name
-$db = Database::getInstance();
-$r = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $_GET['cid'] . '\'');
-$name = $r->category_name;
+$name = Article::getCatName($id);
 ?>
 		<section class="category">
 		  <div class="container" style="padding-top: 180px;">
@@ -26,8 +21,7 @@ $name = $r->category_name;
 		        <div class="row">
                             <?php
                             //get the list of articles 
-                            $article = new Article();
-                            $list = $article->getCatArticles($id);
+                            $list = Article::getCatArticles($id);
                             //if the result if not empty 
                             if (!empty($list)) {
                                 //loop through and display 
