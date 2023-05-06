@@ -158,6 +158,18 @@ class Article {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $cat_id . '\'');
         return $data->category_name;
-        
+    }
+    
+    public static function getWeeklyTops(){
+        //top articles for this week to display in the home banner 
+        $db = Database::getInstance();
+        $today = date('Y-m-d');
+        $one_week_ago = date('Y-m-d', strtotime('-1 week'));
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$one_week_ago' ORDER BY rating DESC LIMIT 3");
+        //if nothing added this week, return just the latest article to be in the banner 
+        if (empty($data)){
+            $data = $db->singleFetch("SELECT * FROM dbProj_Article order by publish_date desc limit 1");
+        }
+        return $data;
     }
 }

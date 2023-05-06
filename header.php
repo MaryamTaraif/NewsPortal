@@ -39,7 +39,7 @@
                     <div class="row">
                         <div class="col-md-3 col-sm-12">
                             <div class="brand">
-                                <a href="index.html">
+                                <a href="index.php">
                                     <img src="images/logo.png" alt="Magz Logo">
                                 </a>
                             </div>						

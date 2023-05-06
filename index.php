@@ -7,12 +7,12 @@ include 'header.php';
         <div class="container">
             <div class="row">
                 <div class="col-md-8 col-sm-12 col-xs-12">
-                    <div class="headline">
+<!--                    <div class="headline">
                         <div class="nav" id="headline-nav">
                             <a class="left carousel-control" role="button" data-slide="prev">
                                 <span class="ion-ios-arrow-left" aria-hidden="true"></span>
                                 <span class="sr-only">Previous</span>
-                            </a>
+                            </a> 
                             <a class="right carousel-control" role="button" data-slide="next">
                                 <span class="ion-ios-arrow-right" aria-hidden="true"></span>
                                 <span class="sr-only">Next</span>
@@ -26,60 +26,27 @@ include 'header.php';
                                 <a href="#">Ut rutrum sodales mauris ut suscipit</a>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="owl-carousel owl-theme slide" id="featured">
-                        <div class="item">
+                        <?php 
+                        $list = Article::getWeeklyTops();
+                            for ($i = 0; $i < count($list); $i++){
+                                echo '<div class="item">
                             <article class="featured">
                                 <div class="overlay"></div>
                                 <figure>
                                     <img src="images/news/img04.jpg" alt="Sample Article">
                                 </figure>
                                 <div class="details">
-                                    <div class="category"><a href="category.html">Computer</a></div>
-                                    <h1><a href="single.html">Phasellus iaculis quam sed est elementum vel ornare ligula venenatis</a></h1>
-                                    <div class="time">December 26, 2016</div>
+                                    <div class="category"><a href="category.html">'. Article::getCatName($list[$i]->category_id) .'</a></div>
+                                    <h1><a href="single.html">'. $list[$i]->title .'</a></h1>
+                                    <div class="time">'.  $list[$i]->publish_date  .'</div>
                                 </div>
                             </article>
-                        </div>
-                        <div class="item">
-                            <article class="featured">
-                                <div class="overlay"></div>
-                                <figure>
-                                    <img src="images/news/img14.jpg" alt="Sample Article">
-                                </figure>
-                                <div class="details">
-                                    <div class="category"><a href="category.html">Travel</a></div>
-                                    <h1><a href="single.html">Class aptent taciti sociosqu ad litora torquent per conubia nostra</a></h1>
-                                    <div class="time">December 10, 2016</div>
-                                </div>
-                            </article>
-                        </div>
-                        <div class="item">
-                            <article class="featured">
-                                <div class="overlay"></div>
-                                <figure>
-                                    <img src="images/news/img13.jpg" alt="Sample Article">
-                                </figure>
-                                <div class="details">
-                                    <div class="category"><a href="category.html">International</a></div>
-                                    <h1><a href="single.html">Maecenas accumsan tortor ut velit pharetra mollis</a></h1>
-                                    <div class="time">October 12, 2016</div>
-                                </div>
-                            </article>
-                        </div>
-                        <div class="item">
-                            <article class="featured">
-                                <div class="overlay"></div>
-                                <figure>
-                                    <img src="images/news/img05.jpg" alt="Sample Article">
-                                </figure>
-                                <div class="details">
-                                    <div class="category"><a href="category.html">Lifestyle</a></div>
-                                    <h1><a href="single.html">Mauris elementum libero at pharetra auctor Fusce ullamcorper elit</a></h1>
-                                    <div class="time">November 27, 2016</div>
-                                </div>
-                            </article>
-                        </div>
+                        </div>';
+                            }
+                        ?>
+                        
                     </div>
                     <div class="line">
                         <div>Latest News</div>
@@ -87,7 +54,14 @@ include 'header.php';
                     <div class="row">
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="row">
-                                <article class="article col-md-12">
+                                <?php
+                                    //get all articles 
+                                $list = Article::getArticles();
+                                if (!empty($list)){
+                                    //display them 
+                                    for ($i = 0; $i < count($list); $i++){
+                                        if ($i %2 == 0){
+                                            echo ' <article class="article col-md-12">
                                     <div class="inner">
                                         <figure>
                                             <a href="single.html">
@@ -96,13 +70,13 @@ include 'header.php';
                                         </figure>
                                         <div class="padding">
                                             <div class="detail">
-                                                <div class="time">December 10, 2016</div>
-                                                <div class="category"><a href="category.html">Healthy</a></div>
+                                                <div class="time">'. $list[$i]->publish_date .'</div>
+                                                <div class="category"><a href="category.php?cid='. $list[$i]->category_id.'">'. Article::getCatName($list[$i]->category_id) .'</a></div>
                                             </div>
-                                            <h2><a href="single.html">Duis aute irure dolor in reprehenderit in voluptate</a></h2>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+                                            <h2><a href="single.html">'. $list[$i]->title .'</a></h2>
+                                            <p>'.  $list[$i]->description .'</p>
                                             <footer>
-                                                <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>1263</div></a>
+                                                <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
                                                 <a class="btn btn-primary more" href="single.html">
                                                     <div>More</div>
                                                     <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -110,36 +84,51 @@ include 'header.php';
                                             </footer>
                                         </div>
                                     </div>
-                                </article>
-                                <article class="article col-md-12">
-                                    <div class="inner">
-                                        <figure>
-                                            <a href="single.html">
-                                                <img src="images/news/img06.jpg" alt="Sample Article">
-                                            </a>
-                                        </figure>
-                                        <div class="padding">
-                                            <div class="detail">
-                                                <div class="time">December 22, 2016</div>
-                                                <div class="category"><a href="category.html">Healthy</a></div>
-                                            </div>
-                                            <h2><a href="single.html">Exercitation ullamco laboris nisi ut aliquip</a></h2>
-                                            <p>Maecenas accumsan tortor ut velit pharetra mollis. Proin eu nisl et arcu iaculis placerat sollicitudin ut est. In fringilla dui dui.</p>
-                                            <footer>
-                                                <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>327</div></a>
-                                                <a class="btn btn-primary more" href="single.html">
-                                                    <div>More</div>
-                                                    <div><i class="ion-ios-arrow-thin-right"></i></div>
-                                                </a>
-                                            </footer>
-                                        </div>
-                                    </div>
-                                </article>
+                                </article>';
+                                        }
+                                       
+                                    }
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="row">
-                                <article class="article col-md-12">
+                                <?php 
+                                $list = Article::getArticles();
+                                if (!empty($list)){
+                                    //display them 
+                                    for ($i = 0; $i < count($list); $i++){
+                                        if ($i % 2 != 0) {
+                                            echo ' <article class="article col-md-12">
+                                    <div class="inner">
+                                        <figure>
+                                            <a href="single.html">
+                                                <img src="images/news/img10.jpg" alt="Sample Article">
+                                            </a>
+                                        </figure>
+                                        <div class="padding">
+                                            <div class="detail">
+                                                <div class="time">'. $list[$i]->publish_date .'</div>
+                                                <div class="category"><a href="category.php?cid='. $list[$i]->category_id.'">'. Article::getCatName($list[$i]->category_id) .'</a></div>
+                                            </div>
+                                            <h2><a href="single.html">'. $list[$i]->title .'</a></h2>
+                                            <p>'.  $list[$i]->description .'</p>
+                                            <footer>
+                                                <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
+                                                <a class="btn btn-primary more" href="single.html">
+                                                    <div>More</div>
+                                                    <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                                </a>
+                                            </footer>
+                                        </div>
+                                    </div>
+                                </article>';
+                                    }
+                                    }
+                                }
+                                ?>
+<!--                                <article class="article col-md-12">
                                     <div class="inner">
                                         <figure>                                
                                             <a href="single.html">
@@ -186,7 +175,7 @@ include 'header.php';
                                             </footer>
                                         </div>
                                     </div>
-                                </article>
+                                </article>-->
                             </div>
                         </div>
                     </div>
