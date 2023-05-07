@@ -1,32 +1,6 @@
 <?php 
-
 include 'header.php';
 
-
-
-if(isset($_POST['submitted'])){
-    //new User object
-    $user = new Users();
-    //set 
-    $user->setUsername($_POST['username']);
-    $user->setEmail($_POST['email']);
-    //hashed password
-    $password = $_POST['password']; //get password 
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //hash password using password_hash function
-    $user->setPassword($hashedPassword);
-    $user->setRole($_POST['role']);  
-    //call register method from user class
-    if($user->initWithUsername()){
-    $result = $user->registerUser();
-   if($result == true){
-       echo '<script>alert("User Registered Successfully!")</script>';
-   }else{
-       echo '<label>not Successful</label>';
-   }        
-}else{
-    echo '<script>alert("Username already exists!")</script>';
-   }
-}
 
 
 ?>
@@ -53,9 +27,17 @@ if(isset($_POST['submitted'])){
                             <label>Role</label>
 
                             <select id="roles" name="role" class="form-control"  value="">
-                                <option value="Admin">Admin</option>
-                                <option value="Author">Author</option>
-                                <option value="Viewer">Viewer</option>
+                                <?php 
+                                
+                                $typesList = Users::getTypes();
+                                if(!empty($typesList)){
+                                    for($i=0;$i<count($typesList);$i++){
+                                        echo '<option value="'.$typesList[$i]->type_name .'">'. $typesList[$i]->type_name .'</option>';
+                                    }
+                                }
+                               
+                                ?>
+  
                             </select>
                         </div>
 
@@ -83,5 +65,39 @@ if(isset($_POST['submitted'])){
 
 
 <?php
+
+if(isset($_POST['submitted'])){
+    //new User object
+    $user = new Users();
+    //set 
+    $user->setUsername($_POST['username']);
+    $user->setEmail($_POST['email']);
+    //hashed password
+    $password = $_POST['password']; //get password 
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //hash password using password_hash function
+    $user->setPassword($hashedPassword);
+    $user->setType_name($_POST['role']);  
+    //call register method from user class
+    if($user->initWithUsername()){
+    $result = $user->registerUser();
+   if($result == true){
+       echo '<script>alert("User Registered Successfully!")</script>';
+   }else{
+       echo '<label>not Successful</label>';
+   }        
+}else{
+    echo '<script>alert("Username already exists!")</script>';
+   }
+}
+
+
+
+
+
+
+
+
+
+
 
 include 'footer.html' ?>

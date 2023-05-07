@@ -99,7 +99,7 @@ class Article {
 
     function initWithId($article_id) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id);
+        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id . '\'');
         $this->initWith($data->article_id, $data->title, $data->desc, $data->content, $data->publish_date,$data->rating, $data->author_id,$data->category_id );
     }
     
@@ -159,6 +159,12 @@ class Article {
         $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $cat_id . '\'');
         return $data->category_name;
     }
+    
+   
+    
+    
+    
+    
     
     public static function getWeeklyTops(){
         //top articles for this week to display in the home banner 
