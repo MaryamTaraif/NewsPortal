@@ -215,12 +215,13 @@ $author = new Users();
                                     echo '<div class="item">
                         <div class="details">
                             <div class="user">
-                                <figure>
+                                <figure style="margin-right: 10px;">
                                     <img src="images/user.png">
                                 </figure>';
                                     $commenterUsername->initWithUid($comments[$i]->user_id);
                                     echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
-                            <div class="description">' . $comments[$i]->content . '</div>
+                                        <div class="time" style="margin-top: -5px;">'.$commenterUsername->getType_name().'</div>
+                            <div class="description" style="margin-top: 10px; padding-left: 10px;">' . $comments[$i]->content . '</div>
                         </div>
                     </div>
                 </div>';
