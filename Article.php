@@ -180,4 +180,11 @@ class Article {
         }
         return $data;
     }
+    
+  public static function getComments($article_id) {
+    $db = Database::getInstance();
+    $data = $db->multiFetch('SELECT * FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'');
+    return $data;
+}
+
 }
