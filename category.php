@@ -38,7 +38,7 @@ $name = Article::getCatName($id);
 		                  </div>
 		                  <div class="time">'.$list[$i]->publish_date .'</div>
 		                </div>
-		                <h1><a href="#">'.$list[$i]->title .'</a></h1>
+		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
 		                <p>
 		                  '.$list[$i]->description .'
 		                </p>
