@@ -39,7 +39,7 @@ include 'header.php';
                                 </figure>
                                 <div class="details">
                                     <div class="category"><a href="category.html">'. Article::getCatName($list[$i]->category_id) .'</a></div>
-                                    <h1><a href="single.html">'. $list[$i]->title .'</a></h1>
+                                    <h1><a href="singleArticle.php?aid='.$list[$i]->article_id .'">'. $list[$i]->title .'</a></h1>
                                     <div class="time">'.  $list[$i]->publish_date  .'</div>
                                 </div>
                             </article>
@@ -64,7 +64,7 @@ include 'header.php';
                                             echo ' <article class="article col-md-12">
                                     <div class="inner">
                                         <figure>
-                                            <a href="single.html">
+                                            <a href="singleArticle.php?aid='.$list[$i]->article_id.'">
                                                 <img src="images/news/img10.jpg" alt="Sample Article">
                                             </a>
                                         </figure>
@@ -73,11 +73,11 @@ include 'header.php';
                                                 <div class="time">'. $list[$i]->publish_date .'</div>
                                                 <div class="category"><a href="category.php?cid='. $list[$i]->category_id.'">'. Article::getCatName($list[$i]->category_id) .'</a></div>
                                             </div>
-                                            <h2><a href="single.html">'. $list[$i]->title .'</a></h2>
+                                            <h2><a href="singleArticle.php?aid='.$list[$i]->article_id.'">'. $list[$i]->title .'</a></h2>
                                             <p>'.  $list[$i]->description .'</p>
                                             <footer>
                                                 <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
-                                                <a class="btn btn-primary more" href="single.html">
+                                                <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'">
                                                     <div>More</div>
                                                     <div><i class="ion-ios-arrow-thin-right"></i></div>
                                                 </a>
@@ -103,7 +103,7 @@ include 'header.php';
                                             echo ' <article class="article col-md-12">
                                     <div class="inner">
                                         <figure>
-                                            <a href="single.html">
+                                            <a href="singleArticle.php?aid='.$list[$i]->article_id.'">
                                                 <img src="images/news/img10.jpg" alt="Sample Article">
                                             </a>
                                         </figure>
@@ -112,11 +112,11 @@ include 'header.php';
                                                 <div class="time">'. $list[$i]->publish_date .'</div>
                                                 <div class="category"><a href="category.php?cid='. $list[$i]->category_id.'">'. Article::getCatName($list[$i]->category_id) .'</a></div>
                                             </div>
-                                            <h2><a href="single.html">'. $list[$i]->title .'</a></h2>
+                                            <h2><a href="singleArticle.php?aid='.$list[$i]->article_id.'">'. $list[$i]->title .'</a></h2>
                                             <p>'.  $list[$i]->description .'</p>
                                             <footer>
                                                 <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
-                                                <a class="btn btn-primary more" href="single.html">
+                                                <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'">
                                                     <div>More</div>
                                                     <div><i class="ion-ios-arrow-thin-right"></i></div>
                                                 </a>

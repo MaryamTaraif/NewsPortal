@@ -161,10 +161,12 @@ class Article {
     }
     
    
-    
-    
-    
-    
+  public static function getRecentArticle() {
+        $db = Database::getInstance();
+        $today = date('Y-m-d');
+        $data = $db->singleFetch("SELECT * FROM dbProj_Article WHERE STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' ORDER BY publish_date DESC LIMIT 1");
+        return $data;
+    }
     
     public static function getWeeklyTops(){
         //top articles for this week to display in the home banner 

@@ -4132,5 +4132,14 @@ blockquote {
   z-index: 2001;
 }
 
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+
 
 /*# sourceMappingURL=style.css.map */
