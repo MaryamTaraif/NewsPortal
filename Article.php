@@ -99,8 +99,7 @@ class Article {
 
     function initWithId($article_id) {
         $db = Database::getInstance();
-
-        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id);
+        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id .  '\'');
         $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date,$data->rating, $data->user_id,$data->category_id );
 
     }
@@ -187,9 +186,9 @@ class Article {
         $data = $db->multiFetch('Select * from dbProj_Category');
         return $data;
     }
-    public static function getCatName($cat_id){
+    public static function getCatName($category_id){
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $cat_id . '\'');
+        $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $category_id . '\'');
         return $data->category_name;
     }
     
@@ -230,5 +229,13 @@ class Article {
         $data = $db->multiFetch('SELECT * FROM dbProj_Article WHERE user_id ='. $author_id .' order by publish_date desc');
         return $data;
     }
+    
+     //get the list of articles in the passed category 
+    public static function getCatArticles($category_id) {
+        $db = Database::getInstance();
+        $data = $db->multiFetch('Select * from dbProj_Article where category_id = ' . $category_id);
+        return $data;
+    }
+    
 
 }

@@ -39,7 +39,7 @@ $author = new Users();
                                             $title = $recentArticle->title;
                                             $description = $recentArticle->description;
 
-                                            echo '<h1><a href="singleArticle.php?aid=' . $id . '">' . $title . '</a></h1>';
+                                            echo '<h1><a href="singleArticle.php?aid='. $id . '">' . $title . '</a></h1>';
 
                                             echo "<p>$description</p>";
                                         } else {
@@ -79,6 +79,7 @@ $author = new Users();
                 <ol class="breadcrumb">
                     <li><a href="#">Home</a></li>
                     <li class="active"><?php echo $article->getCatName($article->getCategory_id()) ?></li>
+                  
                 </ol>
                 <article class="article main-article">
                     <header>
@@ -86,13 +87,15 @@ $author = new Users();
                         <ul class="details">
                             <li>Posted on <?php echo $article->getPublish_date() ?></li>
                             <li><?php echo $article->getCatName($article->getCategory_id()) ?></li>
-                            <li>By <a href="#"><?php echo $article->getAuthor_id() ?>></a></li>
+                            <li><?php  $author->initWithUid($article->getUser_id());
+                            echo 'By '.$author->getUsername(); ?></li>
+                           
                         </ul>
                     </header>
 
                     <div class="main">
                         <blockquote>
-                            description will be here
+                            <?php $article->getDescription(); ?>
                         </blockquote>
                         <div class="featured">
                             <figure>
@@ -160,11 +163,11 @@ $author = new Users();
                             </figure>
                             <div class="details">
 
-                                <h3 class="name"><?php
-                                    $author->initWithUid($article->getAuthor_id());
+                                <h4 class="name"><?php
+                                    $author->initWithUid($article->getUser_id());
                                     echo $author->getUsername();
-                                    ?></h3>
-                                <p><?php $author->getUsername(); ?></p>
+                                    ?></h4>
+                              
 
                             </div>
 
