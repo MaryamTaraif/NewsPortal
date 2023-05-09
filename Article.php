@@ -4,24 +4,23 @@ class Article {
     
     private $article_id;
     private $title;
-    private $desc;
+    private $description;
     private $content;
     private $publish_date;
     private $rating;
-    private $author_id;
+    private $user_id;
     private $category_id;
     
     public function __construct() {
         $this->article_id = null;
         $this->title = null;
-        $this->desc = null;
+        $this->description = null;
         $this->content = null;
         $this->publish_date = null;
         $this->rating = null;
-        $this->author_id = null;
+        $this->user_id = null;
         $this->category_id = null;
     }
-    
     public function getArticle_id() {
         return $this->article_id;
     }
@@ -30,8 +29,8 @@ class Article {
         return $this->title;
     }
 
-    public function getDesc() {
-        return $this->desc;
+    public function getDescription() {
+        return $this->description;
     }
 
     public function getContent() {
@@ -46,8 +45,8 @@ class Article {
         return $this->rating;
     }
 
-    public function getAuthor_id() {
-        return $this->author_id;
+    public function getUser_id() {
+        return $this->user_id;
     }
 
     public function getCategory_id() {
@@ -62,8 +61,8 @@ class Article {
         $this->title = $title;
     }
 
-    public function setDesc($desc): void {
-        $this->desc = $desc;
+    public function setDescription($description): void {
+        $this->description = $description;
     }
 
     public function setContent($content): void {
@@ -78,53 +77,47 @@ class Article {
         $this->rating = $rating;
     }
 
-    public function setAuthor_id($author_id): void {
-        $this->author_id = $author_id;
+    public function setUser_id($user_id): void {
+        $this->user_id = $user_id;
     }
 
     public function setCategory_id($category_id): void {
         $this->category_id = $category_id;
     }
 
-    function initWith($article_id, $title, $desc, $content, $publish_date,$rating,$author_id,$category_id) {
+    
+    function initWith($article_id, $title, $description, $content, $publish_date,$rating,$user_id,$category_id) {
         $this->article_id = $article_id;
         $this->title = $title;
-        $this->desc = $desc;
+        $this->$description = $description;
         $this->content =  $content;
         $this->publish_date = $publish_date;
         $this->rating = $rating;
-        $this->author_id = $author_id;
+        $this->user_id = $user_id;
         $this->category_id = $category_id;
     }
 
     function initWithId($article_id) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id . '\'');
-        $this->initWith($data->article_id, $data->title, $data->desc, $data->content, $data->publish_date,$data->rating, $data->author_id,$data->category_id );
+
+        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id);
+        $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date,$data->rating, $data->user_id,$data->category_id );
+
     }
     
     public function isValid() {
         $errors = true;
 
-        if (empty($this->article_id))
-            $errors = false;
-
         if (empty($this->title))
             $errors = false;
 
-        if (empty($this->desc))
+        if (empty($this->description))
             $errors = false;
 
         if (empty($this->content))
             $errors = false;
         
-        if (empty($this->publish_date))
-            $errors = false;
-        
-        if (empty($this->rating))
-            $errors = false;
-        
-        if (empty($this->author_id))
+        if (empty($this->user_id))
             $errors = false;
         
         if (empty($this->category_id))
@@ -133,12 +126,52 @@ class Article {
         return $errors;
     }
     
-    //get the list of articles in the passed category 
-    public static function getCatArticles($category_id) {
+    //add article 
+    function addArticle(){
+        if ($this->isValid()){
+            $db = Database::getInstance();
+            //insert article into db 
+            $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id)'
+                    . 'VALUES (\''. $this->title . '\',\'' . $this->description . '\',\'' . $this->content 
+                    . '\',\'' . $this->user_id .'\',\'' . $this->category_id . '\')';
+            $db->querySql($query); 
+            
+            //retrieve the article id just inserted 
+            $r = $db->singleFetch('SELECT article_id FROM dbProj_Article WHERE title = \'' . $this->title .'\' '
+                    . 'and user_id = \'' .$this->user_id .'\' and category_id = \'' . $this->category_id .'\' '
+                    . 'and description = \'' . $this->description .'\' and content = \'' . $this->content . '\'');
+            $this->article_id = $r->article_id;
+            return true;
+        }
+                 
+    }
+    
+    //update article
+    
+    
+    //delete article 
+    
+    
+    
+    
+    public static function getAllCatArticles($category_id){
         $db = Database::getInstance();
-        $data = $db->multiFetch('Select * from dbProj_Article where category_id = ' . $category_id);
+        // get the total number of articles for the category
+        $totalSql = "SELECT COUNT(*) as total FROM dbProj_Article WHERE category_id = $category_id";
+        $total = $db->singleFetch($totalSql);
+        return $total;
+    }
+    
+    //get the list of articles in the passed category 
+   public static function getPageArticles($category_id, $page, $page_size) {
+        $db = Database::getInstance();
+        $offset = $page * $page_size;
+        $sql = "SELECT * FROM dbProj_Article WHERE category_id = $category_id LIMIT $offset, $page_size";
+        $data = $db->multiFetch($sql);
         return $data;
     }
+
+
     
     //get all articles ordered from the latest date 
     public static function getArticles() {
@@ -160,6 +193,7 @@ class Article {
         return $data->category_name;
     }
     
+
    
   public static function getRecentArticle() {
         $db = Database::getInstance();
@@ -167,6 +201,7 @@ class Article {
         $data = $db->singleFetch("SELECT * FROM dbProj_Article WHERE STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' ORDER BY publish_date DESC LIMIT 1");
         return $data;
     }
+
     
     public static function getWeeklyTops(){
         //top articles for this week to display in the home banner 
@@ -181,10 +216,19 @@ class Article {
         return $data;
     }
     
+
   public static function getComments($article_id) {
     $db = Database::getInstance();
     $data = $db->multiFetch('SELECT * FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'');
     return $data;
 }
+
+
+    public static function authorArticles($author_id){
+        //top articles for this week to display in the home banner 
+        $db = Database::getInstance();
+        $data = $db->multiFetch('SELECT * FROM dbProj_Article WHERE user_id ='. $author_id .' order by publish_date desc');
+        return $data;
+    }
 
 }
