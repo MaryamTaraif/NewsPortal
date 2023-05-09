@@ -19,7 +19,7 @@ class Database {
     }
 
     function connect() {
-        $this->dblink = mysqli_connect('localhost', 'u202003447', 'u202003447', 'db202003447') or die('CAN NOT CONNECT');
+        $this->dblink = mysqli_connect('localhost', 'u202002084', 'u202002084', 'db202002084') or die('CAN NOT CONNECT');
     }
 
     function __destruct() {
@@ -32,33 +32,49 @@ class Database {
         mysqli_close($this->dblink);
     }
 
-    function querySQL($sql) {
+     function querySQL($sql) {
         if ($sql != null || $sql != '') {
             $sql = $this->mkSafe($sql);
             mysqli_query($this->dblink, $sql);
         }
     }
+    
+       function prepare($sql) {
+        return mysqli_prepare($this->dblink, $sql);
+    }
+
 
     function singleFetch($sql) {
         $sql = $this->mkSafe($sql);
         $fet = null;
         if ($sql != null || $sql != '') {
-            $res = mysqli_query($this->dblink, $sql);
-            $fet = mysqli_fetch_object($res);
+            $stmt = mysqli_prepare($this->dblink, $sql);
+            if ($stmt === false) {
+                die('Error in preparing statement: ' . mysqli_error($this->dblink));
+            }
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            $fet = mysqli_fetch_object($result);
+            mysqli_stmt_close($stmt);
         }
         return $fet;
     }
-
     function multiFetch($sql) {
         $sql = $this->mkSafe($sql);
         $result = null;
         $counter = 0;
         if ($sql != null || $sql != '') {
-            $res = mysqli_query($this->dblink, $sql);
-            while ($fet = mysqli_fetch_object($res)) {
+            $stmt = mysqli_prepare($this->dblink, $sql);
+            if ($stmt === false) {
+                die('Error in preparing statement: ' . mysqli_error($this->dblink));
+            }
+            mysqli_stmt_execute($stmt);
+            $stmt_result = mysqli_stmt_get_result($stmt);
+            while ($fet = mysqli_fetch_object($stmt_result)) {
                 $result[$counter] = $fet;
                 $counter++;
             }
+            mysqli_stmt_close($stmt);
         }
         return $result;
     }

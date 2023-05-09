@@ -4,16 +4,16 @@ class Users {
 
     private $user_id;
     private $username;
-    private $role;
     private $password;
     private $email;
+    private $type_name;
 
     function __construct() {
         $this->user_id = null;
         $this->username = null;
-        $this->role = null;
         $this->password = null;
         $this->email = null;
+        $this->type_name = null;
     }
 
     function getUser_id() {
@@ -24,9 +24,7 @@ class Users {
         return $this->username;
     }
 
-    function getRole() {
-        return $this->role;
-    }
+    
 
     function getPassword() {
         return $this->password;
@@ -46,11 +44,16 @@ class Users {
         return $this;
     }
 
-    function setRole($role) {
-        $this->role = $role;
+    public function getType_name() {
+        return $this->type_name;
+    }
+
+    public function setType_name($type_name) {
+        $this->type_name = $type_name;
         return $this;
     }
 
+    
     function setPassword($password) {
         $this->password = $password;
         return $this;
@@ -61,18 +64,18 @@ class Users {
         return $this;
     }
 
-    function initWith($user_id, $username, $role, $password, $email) {
+    function initWith($user_id, $username, $password, $email,$type_name) {
         $this->user_id = $user_id;
         $this->username = $username;
-        $this->role = $role;
         $this->password = $password;
         $this->email = $email;
+        $this->type_name = $type_name;
     }
 
     function initWithUid($user_id) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE user_id = \'' . $user_id);
-        $this->initWith($data->user_id, $data->username, $data->role, $data->password, $data->email);
+        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE user_id = \'' . $user_id . '\'');
+        $this->initWith($data->user_id, $data->username, $data->password, $data->email,$data->type_name);
     }
 
 //    function checkUser($username, $password) {
@@ -85,21 +88,28 @@ class Users {
 
     function checkUser($username, $password) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $username . '\'');
-        if ($data != null && password_verify($password, $data->password)) {
-            $this->initWith($data->user_id, $data->username, $data->role, $data->password, $data->email);
-            return true;
-        } else {
-            return false;
+        $stmt = $db->prepare('SELECT * FROM dbProj_User WHERE username = ?');
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $data = $result->fetch_object();
+            if (password_verify($password, $data->password)) {
+                $this->initWith($data->user_id, $data->username, $data->password, $data->email, $data->type_name);
+                return true;
+            }
         }
+
+        return false;
     }
 
     function registerUser() {
         try {
             $db = Database::getInstance();
-            $query = 'INSERT INTO dbProj_User (user_id, username,role,password,email) VALUES (null, \'' . $this->username . '\',\'' . $this->role . '\',\'' . $this->password . '\',\'' . $this->email . '\')';
-            echo $query;
-            $db->querySql($query);
+            $stmt = $db->prepare('INSERT INTO dbProj_User (user_id, username, password, email, type_name) VALUES (null, ?, ?, ?, ?)');
+            $stmt->bind_param('ssss', $this->username, $this->password, $this->email, $this->type_name);
+            $stmt->execute();
             return true;
         } catch (Exception $e) {
             echo 'Exception: ' . $e;
@@ -122,7 +132,7 @@ class Users {
         if (empty($this->username))
             $errors = false;
 
-        if (empty($this->role))
+        if (empty($this->type_name))
             $errors = false;
 
 
@@ -135,6 +145,14 @@ class Users {
 
         return $errors;
     }
+    
+    public static function getTypes(){
+        $db = Database::getInstance();
+        $data = $db->multiFetch('select * from dbProj_User_type ');
+        return $data;
+    }
+    
+    
 
     // ...
 }
