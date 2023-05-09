@@ -88,21 +88,28 @@ class Users {
 
     function checkUser($username, $password) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $username . '\'');
-        if ($data != null && password_verify($password, $data->password)) {
-            $this->initWith($data->user_id, $data->username, $data->password, $data->email,$data->type_name);
-            return true;
-        } else {
-            return false;
+        $stmt = $db->prepare('SELECT * FROM dbProj_User WHERE username = ?');
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $data = $result->fetch_object();
+            if (password_verify($password, $data->password)) {
+                $this->initWith($data->user_id, $data->username, $data->password, $data->email, $data->type_name);
+                return true;
+            }
         }
+
+        return false;
     }
 
     function registerUser() {
         try {
             $db = Database::getInstance();
-            $query = 'INSERT INTO dbProj_User (user_id, username,password,email,type_name) VALUES (null, \'' . $this->username . '\',\'' . $this->password . '\',\'' . $this->email .'\',\'' . $this->type_name .'\')';
-            echo $query;
-            $db->querySql($query);
+            $stmt = $db->prepare('INSERT INTO dbProj_User (user_id, username, password, email, type_name) VALUES (null, ?, ?, ?, ?)');
+            $stmt->bind_param('ssss', $this->username, $this->password, $this->email, $this->type_name);
+            $stmt->execute();
             return true;
         } catch (Exception $e) {
             echo 'Exception: ' . $e;
