@@ -204,7 +204,7 @@ $author = new Users();
 
                     <div class="line thin"></div>
                     <div class="comments">
-                        <h2 class="title">3 Responses <a href="#">Write a Response</a></h2>
+                        <h2 class="title"> 1 Comments <a href="#">Write a Comment</a></h2>
                         <div class="comment-list">
                             <?php
                             $comments = Article::getComments($id);

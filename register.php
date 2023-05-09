@@ -42,11 +42,6 @@ include 'header.php';
                         <div class="form-group text-right">
                             <input type="submit" id="registerButton" value="Register" class="btn btn-primary btn-block" disabled>
                             <input type="hidden" name="submitted" value="1">
-                             <?php
-                            if (isset($_POST['submitted']) && strlen($username) < 3) {
-                                echo '<div class="alert alert-danger">Username must be at least 3 characters long.</div>';
-                            }
-                            ?>
                         </div>
 
                         <div class="form-group text-center">
@@ -96,7 +91,10 @@ if (isset($_POST['submitted'])) {
     $role = $_POST['role'];
     $email = $_POST['email'];
 
-   
+    // Check if username length is at least 3 characters
+    if (strlen($username) < 3) {
+        echo '<div class="alert alert-danger">Username must be at least 3 characters long.</div>';
+    } else {
         // Continue with the registration process
         $user = new Users();
         $user->setUsername($username);
@@ -115,7 +113,7 @@ if (isset($_POST['submitted'])) {
         } else {
             echo '<script>alert("Username already exists!")</script>';
         }
-    
+    }
 }
 
 
