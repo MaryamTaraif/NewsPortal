@@ -379,15 +379,6 @@
 								<li><a href="#">Latest</a></li>
 								<li><a href="#">Most Read</a></li>
 							</ul>
-							<div class="nav-tabs-right">
-								<select class="form-control">
-									<option>Limit</option>
-									<option>10</option>
-									<option>20</option>
-									<option>50</option>
-									<option>100</option>
-								</select>
-							</div>
 						</div>
 						<div class="search-result">
 							Search results for keyword "hello" found in 5,200 posts.
