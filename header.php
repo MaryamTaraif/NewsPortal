@@ -45,12 +45,14 @@
                             </div>						
                         </div>
                         <div class="col-md-6 col-sm-12">
-                            <form class="search" autocomplete="off">
+                            <form class="search" action="search.php" method="get">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <input type="text" name="q" class="form-control" placeholder="Type something here">									
                                         <div class="input-group-btn">
+                                            
                                             <button class="btn btn-primary"><i class="ion-search"></i></button>
+                                            
                                         </div>
                                     </div>
                                 </div>
