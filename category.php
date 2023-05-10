@@ -38,13 +38,13 @@ $name = Article::getCatName($id);
 		                  </div>
 		                  <div class="time">'.$list[$i]->publish_date .'</div>
 		                </div>
-		                <h1><a href="#">'.$list[$i]->title .'</a></h1>
+		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
 		                <p>
 		                  '.$list[$i]->description .'
 		                </p>
 		                <footer>
 		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
-		                  <a class="btn btn-primary more" href="single.html">
+		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>

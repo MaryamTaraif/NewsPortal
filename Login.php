@@ -66,7 +66,7 @@ Class Login extends Users {
 
                 $_SESSION['user_id'] = $this->getUser_id();
                 $_SESSION['username'] = $this->getUsername();
-                $_SESSION['role'] = $this->getRole();
+                $_SESSION['role'] = $this->getType_name();
                 setcookie('user_id', $_SESSION['user_id'], time() + 60 * 60 * 24 * 7, '/', $this->domain);
                 setcookie('username', $_SESSION['username'], time() + 60 * 60 * 24 * 7, '/', $this->domain);
                 setcookie('role', $_SESSION['role'], time() + 60 * 60 * 24 * 7, '/', $this->domain);
