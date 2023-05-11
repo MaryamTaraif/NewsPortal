@@ -1,7 +1,11 @@
 <?php
 include 'header.php';
-
-
+$edit = false;
+if(isset($_GET['id'])){
+    $article = new Article();
+    $article->initWithId($_GET['article_id']);
+    $edit = true;
+}
 ?>
 
 	<section class="page">
@@ -10,9 +14,18 @@ include 'header.php';
 					<div class="col-md-12">
 	          <ol class="breadcrumb">
 	          	<li><a href="#">Home</a></li>
-	            <li class="active">New Article</li>
+	            <li class="active"><?php if ($edit)
+                                                          echo 'Edit Article';
+                                                    else 
+                                                        echo 'New Article';
+                                                    ?></li>
 	          </ol>
-						<h1 class="page-title">New Article</h1>
+						<h1 class="page-title">
+                                                    <?php if ($edit)
+                                                          echo 'Edit Article';
+                                                    else 
+                                                        echo 'New Article';
+                                                    ?></h1>
 						<p class="page-subtitle">Publish your thoughts</p>
 						<div class="line thin"></div>
 						<div class="page-description">
@@ -93,7 +106,14 @@ if(isset($_POST['submitted'])){
     $article->setTitle($_POST['title']);
     $article->setDescription($_POST['description']);
     $article->setContent($_POST['content']);
-    $article->setUser_id(4);
+    
+    if (isset($_SESSION['user_id'])){
+        $article->setUser_id($_SESSION['user_id']);
+    }
+    else {
+        $article->setUser_id(4); 
+    }
+    
     if ($article->addArticle() == true){
      //header('Location: index.php');
     }
