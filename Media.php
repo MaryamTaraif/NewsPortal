@@ -3,13 +3,13 @@
 class Media {
     
     private $media_id;
-    private $url;
+    private $URL;
     private $article_id;
     private $type_name;
     
     public function __construct() {
         $this->media_id = null;
-        $this->url = null;
+        $this->URL = null;
         $this->article_id = null;
         $this->type_name = null;
     }
@@ -19,7 +19,7 @@ class Media {
     }
 
     public function getUrl() {
-        return $this->url;
+        return $this->URL;
     }
 
     public function getArticle_id() {
@@ -35,7 +35,7 @@ class Media {
     }
 
     public function setUrl($url): void {
-        $this->url = $url;
+        $this->URL = $url;
     }
 
     public function setArticle_id($article_id): void {
@@ -48,20 +48,21 @@ class Media {
     
     function initWith($media_id, $url, $article_id, $type_name) {
         $this->media_id = $media_id;
-        $this->url = $url;
+        $this->URL = $url;
         $this->article_id = $article_id;
         $this->type_name = $type_name;
     }
 
-    function initWithId($media_id) {
-        $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE media_id = \'' . $media_id);
-        $this->initWith($data->media_id, $data->url, $data->article_id, $data->type_name);
-    }
+  function initWithId($media_id) {
+    $db = Database::getInstance();
+    $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE media_id = ' . $media_id);
+    $this->initWith($data->media_id, $data->URL, $data->article_id, $data->type_name);
+}
+
     
     public static function getMedia($article_id){
         $db = Database::getInstance();
-        $data = $db->multiFetch('SELECT * FROM dbProj_Media WHERE article_id = ' . $article_id);
+        $data = $db->multiFetch('SELECT * FROM dbProj_Media WHERE article_id = ' . $article_id );
         return $data;
     }
     
@@ -71,7 +72,7 @@ class Media {
         if (empty($this->article_id))
             $errors = false;
 
-        if (empty($this->url))
+        if (empty($this->URL))
             $errors = false;
 
         if (empty($this->type_name))
@@ -84,8 +85,12 @@ class Media {
         if($this->isValid()){
             $db = Database::getInstance();
             //insert article into db 
-            $query = 'INSERT INTO dbProj_Media (url, article_id, type_name)'
-                    . 'VALUES (\''. $this->url . '\',\'' . $this->article_id . '\',\'' . $this->type_name . '\')';
+//            echo 'INSERT INTO dbProj_Media (URL, article_id, type_name)'
+//                    . 'VALUES (\''. $this->URL . '\',\'' . $this->article_id . '\',\'' . $this->type_name . '\')';
+            
+          $query = 'INSERT INTO dbProj_Media (URL, article_id, type_name)'
+         . 'VALUES (\'' . $this->URL . '\', \'' . $this->article_id . '\', \'' . $this->type_name . '\')';
+
             $db->querySql($query); 
             return true;
         }

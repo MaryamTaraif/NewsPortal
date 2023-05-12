@@ -32,25 +32,25 @@ $author = new Users();
                                 </figure>
                                 <div class="details">
                                     <p>
-                                        <?php
-                                        $recentArticle = Article::getRecentArticle();
+<?php
+$recentArticle = Article::getRecentArticle();
 
-                                        if ($recentArticle) {
-                                            $title = $recentArticle->title;
-                                            $description = $recentArticle->description;
+if ($recentArticle) {
+    $title = $recentArticle->title;
+    $description = $recentArticle->description;
 
-                                            echo '<h1><a href="singleArticle.php?aid='. $id . '">' . $title . '</a></h1>';
+    echo '<h1><a href="singleArticle.php?aid=' . $id . '">' . $title . '</a></h1>';
 
-                                            echo "<p>$description</p>";
-                                        } else {
-                                            echo "No recent articles found.";
-                                        }
-                                        ?>
+    echo "<p>$description</p>";
+} else {
+    echo "No recent articles found.";
+}
+?>
 
                                     </p>
                                     <div class="detail">
                                         <div class="time">
-                                            <?php echo $recentArticle->publish_date; ?></div>
+<?php echo $recentArticle->publish_date; ?></div>
 
                                     </div>
                                 </div>
@@ -79,7 +79,7 @@ $author = new Users();
                 <ol class="breadcrumb">
                     <li><a href="#">Home</a></li>
                     <li class="active"><?php echo $article->getCatName($article->getCategory_id()) ?></li>
-                  
+
                 </ol>
                 <article class="article main-article">
                     <header>
@@ -87,19 +87,24 @@ $author = new Users();
                         <ul class="details">
                             <li>Posted on <?php echo $article->getPublish_date() ?></li>
                             <li><?php echo $article->getCatName($article->getCategory_id()) ?></li>
-                            <li><?php  $author->initWithUid($article->getUser_id());
-                            echo 'By '.$author->getUsername(); ?></li>
-                           
+                            <li><?php
+$author->initWithUid($article->getUser_id());
+echo 'By ' . $author->getUsername();
+?></li>
+
                         </ul>
                     </header>
 
                     <div class="main">
                         <blockquote>
-                            <?php $article->getDescription(); ?>
+<?php $article->getDescription(); ?>
                         </blockquote>
                         <div class="featured">
                             <figure>
-                                <img src="images/news/img01.jpg">
+
+
+
+
                                 <figcaption>Image by magz</figcaption>
                             </figure>
                         </div>
@@ -164,10 +169,10 @@ $author = new Users();
                             <div class="details">
 
                                 <h4 class="name"><?php
-                                    $author->initWithUid($article->getUser_id());
-                                    echo $author->getUsername();
-                                    ?></h4>
-                              
+                                $author->initWithUid($article->getUser_id());
+                                echo $author->getUsername();
+?></h4>
+
 
                             </div>
 
@@ -209,30 +214,30 @@ $author = new Users();
                     <div class="comments">
                         <h2 class="title"> 1 Comments <a href="#">Write a Comment</a></h2>
                         <div class="comment-list">
-                            <?php
-                            $comments = Article::getComments($id);
-                            $commenterUsername = new Users();
+<?php
+$comments = Article::getComments($id);
+$commenterUsername = new Users();
 
-                            if (!empty($comments)) {
-                                for ($i = 0; $i < count($comments); $i++) {
-                                    echo '<div class="item">
+if (!empty($comments)) {
+    for ($i = 0; $i < count($comments); $i++) {
+        echo '<div class="item">
                         <div class="details">
                             <div class="user">
                                 <figure style="margin-right: 10px;">
                                     <img src="images/user.png">
                                 </figure>';
-                                    $commenterUsername->initWithUid($comments[$i]->user_id);
-                                    echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
-                                        <div class="time" style="margin-top: -5px;">'.$commenterUsername->getType_name().'</div>
+        $commenterUsername->initWithUid($comments[$i]->user_id);
+        echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
+                                        <div class="time" style="margin-top: -5px;">' . $commenterUsername->getType_name() . '</div>
                             <div class="description" style="margin-top: 10px; padding-left: 10px;">' . $comments[$i]->content . '</div>
                         </div>
                     </div>
                 </div>';
-                                }
-                            } else {
-                                echo '<p>No comments found on this article.</p>';
-                            }
-                            ?>
+    }
+} else {
+    echo '<p>No comments found on this article.</p>';
+}
+?>
                         </div>
                     </div>
 
@@ -273,7 +278,18 @@ $author = new Users();
 </div>
 </div>
 </section>
-
+<?php
+$mediaList = Media::getMedia($id); // Retrieve the media for the article
+foreach ($mediaList as $media) {
+    if ($media->type_name === 'image') {
+        echo '<img src="' . $media->URL . '" alt="' . $media->type_name . '">';
+    } elseif ($media->type_name === 'video') {
+        echo '<video src="' . $media->URL . '" controls>';
+        echo 'Your browser does not support the video tag.';
+        echo '</video>';
+    }
+}
+?>
 
 
 <?php include 'footer.html' ?>;
