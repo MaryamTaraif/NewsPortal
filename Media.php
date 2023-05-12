@@ -59,9 +59,22 @@ class Media {
         $this->initWith($data->media_id, $data->url, $data->article_id, $data->type_name);
     }
     
-    public static function getMedia($article_id){
+    public static function getPhoto($article_id){
         $db = Database::getInstance();
-        $data = $db->multiFetch('SELECT * FROM dbProj_Media WHERE article_id = ' . $article_id);
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "image" and article_id = ' . $article_id);
+        
+        return $data;
+    }
+    
+    public static function getVideoAudio($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "audio" or type_name = "video" and article_id = ' . $article_id);
+        return $data;
+    }
+    
+    public static function getDownloadableFile ($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHEREWHERE type_name = "file" and article_id = ' . $article_id);
         return $data;
     }
     
