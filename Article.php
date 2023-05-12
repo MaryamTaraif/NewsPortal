@@ -235,7 +235,7 @@ class Article {
       $db = Database::getInstance();
       $data = $db->multiFetch('SELECT * FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'');
       return $data;
-    }
+    } 
 
 
     public static function authorPublishedArticles($author_id){
