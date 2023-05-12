@@ -3,13 +3,13 @@
 class Media {
     
     private $media_id;
-    private $URL;
+    private $url;
     private $article_id;
     private $type_name;
     
     public function __construct() {
         $this->media_id = null;
-        $this->URL = null;
+        $this->url = null;
         $this->article_id = null;
         $this->type_name = null;
     }
@@ -19,7 +19,7 @@ class Media {
     }
 
     public function getUrl() {
-        return $this->URL;
+        return $this->url;
     }
 
     public function getArticle_id() {
@@ -35,7 +35,7 @@ class Media {
     }
 
     public function setUrl($url): void {
-        $this->URL = $url;
+        $this->url = $url;
     }
 
     public function setArticle_id($article_id): void {
@@ -48,21 +48,33 @@ class Media {
     
     function initWith($media_id, $url, $article_id, $type_name) {
         $this->media_id = $media_id;
-        $this->URL = $url;
+        $this->url = $url;
         $this->article_id = $article_id;
         $this->type_name = $type_name;
     }
 
-  function initWithId($media_id) {
-    $db = Database::getInstance();
-    $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE media_id = ' . $media_id);
-    $this->initWith($data->media_id, $data->URL, $data->article_id, $data->type_name);
-}
-
-    
-    public static function getMedia($article_id){
+    function initWithId($media_id) {
         $db = Database::getInstance();
-        $data = $db->multiFetch('SELECT * FROM dbProj_Media WHERE article_id = ' . $article_id );
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE media_id = \'' . $media_id);
+        $this->initWith($data->media_id, $data->url, $data->article_id, $data->type_name);
+    }
+    
+    public static function getPhoto($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "image" and article_id = ' . $article_id);
+        
+        return $data;
+    }
+    
+    public static function getVideoAudio($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "audio" or type_name = "video" and article_id = ' . $article_id);
+        return $data;
+    }
+    
+    public static function getDownloadableFile ($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHEREWHERE type_name = "file" and article_id = ' . $article_id);
         return $data;
     }
     
@@ -72,7 +84,7 @@ class Media {
         if (empty($this->article_id))
             $errors = false;
 
-        if (empty($this->URL))
+        if (empty($this->url))
             $errors = false;
 
         if (empty($this->type_name))
@@ -85,12 +97,8 @@ class Media {
         if($this->isValid()){
             $db = Database::getInstance();
             //insert article into db 
-//            echo 'INSERT INTO dbProj_Media (URL, article_id, type_name)'
-//                    . 'VALUES (\''. $this->URL . '\',\'' . $this->article_id . '\',\'' . $this->type_name . '\')';
-            
-          $query = 'INSERT INTO dbProj_Media (URL, article_id, type_name)'
-         . 'VALUES (\'' . $this->URL . '\', \'' . $this->article_id . '\', \'' . $this->type_name . '\')';
-
+            $query = 'INSERT INTO dbProj_Media (url, article_id, type_name)'
+                    . 'VALUES (\''. $this->url . '\',\'' . $this->article_id . '\',\'' . $this->type_name . '\')';
             $db->querySql($query); 
             return true;
         }

@@ -123,22 +123,6 @@ class Upload {
             $files['name'] = $this->make_safe($files['name']);
             $files['name'] = $this->check_file_exists($files['name']);
 
-//            // Get the mime type of the uploaded file
-//            $uploaded_mime_type = trim(mime_content_type($files['tmp_name']));
-//            echo $uploaded_mime_type;
-//            if (in_array($uploaded_mime_type, $this->allowed_photo_mime_types)) {
-//                $this->setFileType('image');
-//            } elseif (in_array($uploaded_mime_type, $this->allowed_video_mime_types)) {
-//                $this->setFileType('video');
-//            } elseif (in_array($uploaded_mime_type, $this->allowed_audio_mime_types)) {
-//                $this->setFileType('audio');
-//            } elseif (in_array($uploaded_mime_type, $this->allowed_file_mime_types)) {
-//                $this->setFileType('file');
-//            }
-//            else {
-//                $error[] = $files['name'] . ' is not of an acceptable type';
-//            }
-
             if ($files['size'] <= 0)
                 $error[] = $files['name'] . ' uploading failed (Size is 0)';
 
