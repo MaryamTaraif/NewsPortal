@@ -6,6 +6,9 @@ $article->initWithId($id);
 
 //get author details
 $author = new Users();
+
+//get media details
+$media = new Media();
 ?>
 
 <section class="single">
@@ -102,7 +105,7 @@ $author = new Users();
                         <div class="featured">
                             <figure>
 
-
+                                <img src="<?php $media->getPhoto($id)?>" width="width" height="height" />
 
 
                                 <figcaption>Image by magz</figcaption>
@@ -248,26 +251,7 @@ $author = new Users();
             <div class="line">
                 <div>Media</div>
             </div>
-            <?php
-            $media = new Media();
-            $allMedia = $media->getMedia($id);
-
-            if (!empty($allMedia)) {
-                foreach ($allMedia as $mediaItem) {
-                    if ($mediaItem->type_name == 'image') {
-                        echo '<img src="media/' . htmlspecialchars($mediaItem->URL) . '" alt="Image" style="width: 100%; height: auto;">';
-                    } elseif ($mediaItem->type_name == 'video') {
-                        echo '<video src="media/' . htmlspecialchars($mediaItem->URL) . '" controls style="width: 100%; height: auto;"></video>';
-                    } elseif ($mediaItem->type_name == 'audio') {
-                        echo '<audio src="media/' . htmlspecialchars($mediaItem->URL) . '" controls style="width: 100%;"></audio>';
-                    } elseif ($mediaItem->type_name == 'file') {
-                        echo '<a href="media/' . htmlspecialchars($mediaItem->URL) . '" style="/* add your desired styling for the download link */">Download File</a>';
-                    }
-                }
-            } else {
-                echo 'No Media';
-            }
-            ?>
+    
 
 
 
