@@ -276,5 +276,19 @@ class Article {
         return $data;
     }
     
+    //count the number of comments in the artcile
+     public static function countComments($article_id) {
+    $db = Database::getInstance();
+    $query = 'SELECT COUNT(*) AS comment_count FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'';
+    $result = $db->singleFetch($query);
+    
+    if ($result !== false && isset($result->comment_count)) {
+        return $result->comment_count;
+    } else {
+        return 0; // No comments found
+    }
+}
+
+    
 
 }
