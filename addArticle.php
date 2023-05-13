@@ -3,8 +3,21 @@ include 'header.php';
 $edit = false;
 if(isset($_GET['id'])){
     $article = new Article();
-    $article->initWithId($_GET['article_id']);
+    $article->initWithId($_GET['id']);
     $edit = true;
+    
+    //get media 
+    $photo = Media::getPhotoURL($article->getArticle_id());
+    if (!empty(Media::getVideoURL($article->getArticle_id()))){
+        $video = Media::getVideoURL($article->getArticle_id());
+    }
+    if (!empty (Media::getAudioURL($article->getArticle_id()))) {
+        $audio = Media::getAudioURL($article->getArticle_id());
+    }
+    if (!empty (Media::getDownloadableFile($article->getArticle_id()))){
+        $file = Media::getDownloadableFile($article->getArticle_id());
+    }
+    
 }
 ?>
 
@@ -31,7 +44,7 @@ if(isset($_GET['id'])){
 						<div class="page-description">
 							<div class="row">
 								<div class="col-md-6 col-sm-6">
-                                                                    <form action="" method="post" enctype="multipart/form-data" class="row contact" style="padding-top: 0px;">
+                                                                    <form action="" method="post" enctype="multipart/form-data" class="row contact">
 										<div class="col-md-6">
 											<div class="form-group">
 												<label>Category <span class="required"></span></label>
@@ -43,7 +56,7 @@ if(isset($_GET['id'])){
                                                                                                          for ($i = 0; $i < count($list); $i++) {
                                                                                                             echo '<option value="'. $list[$i]->category_id .'">'. $list[$i]->category_name .'</option>';
                                                                                                          }
-                                                                                                        }
+                                                                                                        }     
                                                                                                     ?>
                                                                                                 </select>
 											</div>
@@ -51,19 +64,27 @@ if(isset($_GET['id'])){
 										<div class="col-md-6">
 											<div class="form-group">
 												<label>Title <span class="required"></span></label>
-												<input type="text" class="form-control" name="title" required>
+                                                                                              
+												<?php if ($edit)
+                                                                                                    echo '<input type="text" class="form-control" name="title" required value="' . $article->getTitle() .'">';
+                                                                                                else 
+                                                                                                    echo '<input type="text" class="form-control" name="title" required>';
+                                                                                                    ?>
 											</div>
 										</div>
 										<div class="col-md-12">
 											<div class="form-group">
 												<label>Description <span class="required"></span></label>
-												<input type="text" class="form-control" name="description" required>
+                                                                                                <input type="text" class="form-control" name="description" required value="<?php if ($edit) echo $article->getDescription(); ?>">
+												
+                                                                                                   
 											</div>
 										</div>
 										<div class="col-md-12">
 											<div class="form-group">
 												<label>Content <span class="required"></span></label>
-												<textarea class="form-control" name="content" required></textarea>
+                                                                                                <textarea class="form-control" name="content" required><?php if ($edit) echo $article->getContent(); ?></textarea>
+												
 											</div>
 										</div>
 										
@@ -71,15 +92,43 @@ if(isset($_GET['id'])){
 											<div class="form-group">
                                                                                             <label>Attachments </label> <br>
                                                                                                 <label>Photo <span class="required"></span></label>
-												<input type="file"  name="photo" accept="image/*" required>
+                                                                                                <?php if($edit) {
+                                                                                                    echo '<br><img src="'.$photo->URL .'" alt="Selected photo" style="width:350px; height:350px;">'
+                                                                                                        . '<input type="file"  name="photo" accept="image/*" >';
+                                                                                                }
+                                                                                                else {
+                                                                                                    echo '<input type="file"  name="photo" accept="image/*" required>';
+                                                                                                }
+?>
+												
 											</div>
                                                                                         <div class="form-group">
                                                                                                 <label>Video/Audio <span class="required"></span></label>
-                                                                                                <input type="file"  name="video/audio" accept="audio/*, video/*" required>
+                                                                                                 <?php if(!empty($video)) {
+                                                                                                     
+                                                                                                    echo '<br><video controls>
+                                                                                                            <source src="'. $video->URL .'" type="video/*">
+                                                                                                          </video>';
+                                                                                                 }
+                                                                                                 elseif (!empty($audio)) {
+                                                                                                     echo '<br><audio controls>
+                                                                                                            <source src="'. $audio->URL .'" type="audio/wav">
+                                                                                                          </audio>
+                                                                                                          <input type="file"  name="video/audio" accept="audio/*, video/*">';
+                                                                                                }
+                                                                                                else {
+                                                                                                    echo '<input type="file"  name="video/audio" accept="audio/*, video/*" required>';
+                                                                                                }
+?>
+                                                                                                
+                                                                                                
                                                                                         </div>
                                                                                     
                                                                                         <div class="form-group">
                                                                                                 <label>Downloadable File </label>
+                                                                                                <?php if (!empty($file)) {
+                                                                                                echo '<br><a href="'. $file->URL .'"> '. $file->URL .' </a>';}
+                                                                                                    ?>
                                                                                                 <input type="file"  name="downloadable">
                                                                                         </div>
 										</div>
@@ -87,6 +136,7 @@ if(isset($_GET['id'])){
                                                                                     <input type ="submit" class="btn btn-primary" value ="Save" />
                                                                                 </div>
                                                                                  <input type="hidden" name="submitted" value="1"/>
+                                                                                 <input type ="hidden" name="id" value="<?php if ($edit) { echo $article->getArticle_id();} ?>">
 									</form>
 								</div>
 							</div>
@@ -100,22 +150,35 @@ if(isset($_GET['id'])){
 
 <?php 
 if(isset($_POST['submitted'])){
-    //add article 
+    //if not an edited one, create new object 
+    if (!$edit){
     $article = new Article();
-    $article->setCategory_id($_POST['category']);
-    $article->setTitle($_POST['title']);
-    $article->setDescription($_POST['description']);
-    $article->setContent($_POST['content']);
-    
-    if (isset($_SESSION['user_id'])){
-        $article->setUser_id($_SESSION['user_id']);
     }
     else {
-        $article->setUser_id(4); 
+        $article->setArticle_id($_GET['id']);
     }
     
-    if ($article->addArticle() == true){
-     //header('Location: index.php');
+    //populate object with fields values
+    
+    $article->setCategory_id($_POST['category']);
+    $article->setTitle($_POST['title']);
+
+    $article->setDescription($_POST['description']);
+    $article->setContent($_POST['content']);
+            var_dump($article->getContent());
+
+    if (!$edit){
+        $article->setUser_id($_SESSION['user_id']);
+    }
+    
+    //save
+    if ($edit){
+        if ($article->updateArticle())
+            echo 'updated';
+    }
+    else {
+        if ($article->addArticle())
+            echo 'added';
     }
     
     // upload all files 
@@ -130,11 +193,19 @@ if(isset($_POST['submitted'])){
             $msg = $upload->upload('photo');
             if (empty($msg)) {
                 $media = new Media();
+                if ($edit){
+                    $media->initWithId($photo->media_id);
+                }
                 $media->setArticle_id($article->getArticle_id());
                 $media->setType_name($upload->getFileType());
-                $media->setUrl($upload->getFilepath());
-
-                if ($media->addMedia()){
+                $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
+                
+                //save changes
+                if($edit){
+                   
+                   $media->updateMedia();
+                }else {
+                    $media->addMedia(); 
                     echo 'Successfully uploaded photo.';
                 }
             }
@@ -157,11 +228,22 @@ if(isset($_POST['submitted'])){
             $msg = $upload->upload('video/audio');
             if (empty($msg)) {
                 $media = new Media();
+                if ($edit && $video){
+                   $media->initWithId($video->media_id);       
+                }
+                elseif ($edit && $audio) {
+                    $media->initWithId($audio->media_id);
+                }
+                
                 $media->setArticle_id($article->getArticle_id());
                 $media->setType_name($upload->getFileType());
-                $media->setUrl($upload->getFilepath());
+                $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
 
-                if ($media->addMedia()){
+                //save changes
+                if($edit){
+                   $media->updateMedia();
+                }else {
+                    $media->addMedia(); 
                     echo 'Successfully uploaded video/audio.';
                 }
             }
@@ -176,12 +258,19 @@ if(isset($_POST['submitted'])){
             $msg = $upload->upload('downloadable');
             if (empty($msg)) {
                 $media = new Media();
+                if ($edit && $file){
+                    $media->initWithId($file->media_id);
+                }
                 $media->setArticle_id($article->getArticle_id());
                 $media->setType_name($upload->getFileType());
-                $media->setUrl($upload->getFilepath());
+                $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
 
-                if ($media->addMedia()){
-                    echo 'Successfully uploaded downloadble file.';
+                //save changes
+                if($edit && $file){
+                   $media->updateMedia();
+                }else {
+                    $media->addMedia(); 
+                    echo 'Successfully uploaded downloadable file.';
                 }
             }
             else {
