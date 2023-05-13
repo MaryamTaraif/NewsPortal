@@ -18,6 +18,7 @@ include 'header.php';
 		        
 		        <div class="row">
                             <?php
+                            
                             //get the list of articles 
                             $list = Article::authorDraftArticles($_SESSION['user_id']);
                             //if the result if not empty 
@@ -30,7 +31,7 @@ include 'header.php';
                                         echo '<article class="col-md-12 article-list">
 		            <div class="inner">
 		              <figure>
-                                <img src="images/news/img01.jpg">
+                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
 		              </figure>
 		              <div class="details">
 		                <div class="detail">
@@ -48,7 +49,13 @@ include 'header.php';
 		                    <div>Edit</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>
-                                  <a href="#" class="love"><i class="ion-android-delete"></i></a>
+                                  <a href="#" onclick="deleteArticle()" class="love"><i class="ion-android-delete"></i></a>
+                                  <script>
+                                        function deleteArticle() {
+                                            alert("Are you sure you want to delete the article "'. $list[$i]->title .'"");
+                                        }
+                                  </script>
+
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
 		                    <div>Publish</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -75,7 +82,7 @@ include 'header.php';
                                         echo '<article class="col-md-12 article-list">
 		            <div class="inner">
 		              <figure>
-                                <img src="images/news/img01.jpg">
+                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
 		              </figure>
 		              <div class="details">
 		                <div class="detail">
