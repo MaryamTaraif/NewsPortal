@@ -140,16 +140,12 @@ class Article {
     function addArticle(){
         if ($this->isValid()){
             $db = Database::getInstance();
-
             // Build the query
-            $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id, status)'
-             . 'VALUES ("'. $title . '","' . $description . '","' . $content 
-             . '","' . $user_id .'","' . $category_id .'","' . $status . '")';
-
-
-            echo $query;
+            $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id)'
+             . 'VALUES ("'. $this->title . '","' . $this->description . '","' . $this->content 
+             . '","' . $this->user_id .'","' . $this->category_id . '")';
             $db->querySql($query); 
-            
+            echo $query;
             //retrieve the article id just inserted 
             $r = $db->singleFetch('SELECT article_id FROM dbProj_Article WHERE title = \'' . $this->title .'\' '
                     . 'and user_id = \'' .$this->user_id .'\' and category_id = \'' . $this->category_id .'\' '
@@ -161,12 +157,35 @@ class Article {
     }
     
     //update article
-    
+    function updateArticle(){
+        if ($this->isValid()){
+            $db = Database::getInstance();
+            $q = 'UPDATE dbProj_Article SET title = \'' . $this->title .'\','
+                    . ' content = \'' . $this->content .'\','
+                    . ' description = \'' . $this->description .'\','
+                    . ' category_id = \'' . $this->category_id . '\','
+                    . ' user_id = \'' . $this->user_id . '\','
+                    . ' status = \'' . $this->status .'\' '
+                    . 'WHERE article_id = ' . $this->article_id;
+            $db->querySql($q); 
+            echo $q;
+            return true;
+        }
+    }
     
     //delete article 
     
     
-    
+    //publish article 
+    function publish(){
+         $db = Database::getInstance();
+            $q = 'UPDATE dbProj_Article SET publish_date = \'' . $this->publish_date .'\','
+                    . ' status = \'' . $this->status .'\' '
+                    . 'WHERE article_id = ' . $this->article_id;
+            $db->querySql($q); 
+            echo $q;
+            return true;
+    }
     
     public static function getAllCatArticles($category_id){
         $db = Database::getInstance();
