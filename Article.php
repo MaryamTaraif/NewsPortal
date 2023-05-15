@@ -11,6 +11,7 @@ class Article {
     private $user_id;
     private $category_id;
     private $status;
+    private $views;
     
     public function __construct() {
         $this->article_id = null;
@@ -22,6 +23,7 @@ class Article {
         $this->user_id = null;
         $this->category_id = null;
         $this->status = false;
+        $views = null;
     }
     public function getArticle_id() {
         return $this->article_id;
@@ -59,6 +61,9 @@ class Article {
         return $this->status;
     }
 
+    public function getViews() {
+        return $this->views;
+    }
     
     public function setArticle_id($article_id): void {
         $this->article_id = $article_id;
@@ -96,7 +101,12 @@ class Article {
         $this->status = $status;
     }
     
-    function initWith($article_id, $title, $description, $content, $publish_date,$rating,$user_id,$category_id, $status) {
+    public function setViews($views): void {
+        $this->views = $views;
+    }
+
+        
+    function initWith($article_id, $title, $description, $content, $publish_date,$rating,$user_id,$category_id, $status, $views) {
         $this->article_id = $article_id;
         $this->title = $title;
         $this->$description = $description;
@@ -106,12 +116,13 @@ class Article {
         $this->user_id = $user_id;
         $this->category_id = $category_id;
         $this->status = $status;
+        $this->views = $views;
     }
 
     function initWithId($article_id) {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id .  '\'');
-        $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date,$data->rating, $data->user_id,$data->category_id, $data->status );
+        $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date,$data->rating, $data->user_id,$data->category_id, $data->status, $data->views );
 
     }
     
@@ -141,17 +152,23 @@ class Article {
         if ($this->isValid()){
             $db = Database::getInstance();
             // Build the query
-            $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id)'
+            $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id, views)'
              . 'VALUES ("'. $this->title . '","' . $this->description . '","' . $this->content 
-             . '","' . $this->user_id .'","' . $this->category_id . '")';
-            $db->querySql($query); 
+             . '","' . $this->user_id .'","' . $this->category_id .'","0")';
+             $result = $db->querySql($query); 
             echo $query;
-            //retrieve the article id just inserted 
-            $r = $db->singleFetch('SELECT article_id FROM dbProj_Article WHERE title = \'' . $this->title .'\' '
-                    . 'and user_id = \'' .$this->user_id .'\' and category_id = \'' . $this->category_id .'\' '
-                    . 'and description = \'' . $this->description .'\' and content = \'' . $this->content . '\'');
-            $this->article_id = $r->article_id;
+            if ($result){
+                //retrieve the article id just inserted 
+                $r = $db->singleFetch('SELECT article_id FROM dbProj_Article WHERE title = \'' . $this->title .'\' '
+                        . 'and user_id = \'' .$this->user_id .'\' and category_id = \'' . $this->category_id .'\' '
+                        . 'and description = \'' . $this->description .'\' and content = \'' . $this->content . '\'');
+                $this->article_id = $r->article_id;
             return true;
+            }
+            else {
+                return false;
+            }
+            
         }
                  
     }
@@ -174,16 +191,22 @@ class Article {
     }
     
     //delete article 
-    
+    public static function deleteArticle($article_id) {
+        $db = Database::getInstance();
+        $db->querySql('CALL deleteArticle('. $article_id .', @deletionResult)');
+        return true;
+    }
+
+
     
     //publish article 
-    function publish(){
+    public static function publish($article_id){
          $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET publish_date = \'' . $this->publish_date .'\','
-                    . ' status = \'' . $this->status .'\' '
-                    . 'WHERE article_id = ' . $this->article_id;
+         $today = date('Y-m-d');
+            $q = 'UPDATE dbProj_Article SET publish_date = \'' . $today .'\','
+                    . ' status = 1 '
+                    . 'WHERE article_id = ' . $article_id;
             $db->querySql($q); 
-            echo $q;
             return true;
     }
     
@@ -249,6 +272,12 @@ class Article {
         return $data;
     }
     
+    public static function getAuthorTops($author_id){
+        $db = Database::getInstance();
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and user_id = '. $user_id .' ORDER BY rating DESC LIMIT 3");
+        echo $data;
+        return $data;
+    }
 
     public static function getComments($article_id) {
       $db = Database::getInstance();
