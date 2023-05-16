@@ -29,7 +29,7 @@ $name = Article::getCatName($id);
                                         echo '<article class="col-md-12 article-list">
 		            <div class="inner">
 		              <figure>
-                                <img src="images/news/img01.jpg">
+                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
 		              </figure>
 		              <div class="details">
 		                <div class="detail">
