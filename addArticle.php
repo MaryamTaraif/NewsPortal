@@ -54,7 +54,12 @@ if(isset($_GET['id'])){
                                                                                                         $list = Article::getAllCat();
                                                                                                         if (!empty($list)){
                                                                                                          for ($i = 0; $i < count($list); $i++) {
-                                                                                                            echo '<option value="'. $list[$i]->category_id .'">'. $list[$i]->category_name .'</option>';
+                                                                                                             if ($edit && $list[$i]->category_id == $article->getCategory_id()) {
+                                                                                                                echo '<option value="'. $list[$i]->category_id .'" selected>'. $list[$i]->category_name .'</option>';
+                                                                                                             }
+                                                                                                             else {
+                                                                                                                echo '<option value="'. $list[$i]->category_id .'">'. $list[$i]->category_name .'</option>';
+                                                                                                             }
                                                                                                          }
                                                                                                         }     
                                                                                                     ?>
@@ -64,12 +69,8 @@ if(isset($_GET['id'])){
 										<div class="col-md-6">
 											<div class="form-group">
 												<label>Title <span class="required"></span></label>
-                                                                                              
-												<?php if ($edit)
-                                                                                                    echo '<input type="text" class="form-control" name="title" required value="' . $article->getTitle() .'">';
-                                                                                                else 
-                                                                                                    echo '<input type="text" class="form-control" name="title" required>';
-                                                                                                    ?>
+                                                                                                <input type="text" class="form-control" name="title" required value="<?php if ($edit) echo $article->getTitle(); ?>">
+												
 											</div>
 										</div>
 										<div class="col-md-12">
@@ -165,7 +166,6 @@ if(isset($_POST['submitted'])){
 
     $article->setDescription($_POST['description']);
     $article->setContent($_POST['content']);
-            var_dump($article->getContent());
 
     if (!$edit){
         $article->setUser_id($_SESSION['user_id']);
@@ -178,7 +178,8 @@ if(isset($_POST['submitted'])){
     }
     else {
         if ($article->addArticle())
-            echo 'added';
+            var_dump($article->getArticle_id());
+            
     }
     
     // upload all files 
