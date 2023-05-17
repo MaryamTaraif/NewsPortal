@@ -106,9 +106,14 @@ class Media {
             //insert article into db 
             $query = 'INSERT INTO dbProj_Media (url, article_id, type_name)'
                     . 'VALUES (\''. $this->url . '\',\'' . $this->article_id . '\',\'' . $this->type_name . '\')';
-            $db->querySql($query); 
             echo $query;
-            return true;
+            $result = $db->querySql($query); 
+            if ($result){
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
     
