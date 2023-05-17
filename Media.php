@@ -81,7 +81,6 @@ class Media {
     public static function getDownloadableFile ($article_id){
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "file" and article_id = ' . $article_id);
-        
         return $data;
     }
     
@@ -106,7 +105,6 @@ class Media {
             //insert article into db 
             $query = 'INSERT INTO dbProj_Media (url, article_id, type_name)'
                     . 'VALUES (\''. $this->url . '\',\'' . $this->article_id . '\',\'' . $this->type_name . '\')';
-            echo $query;
             $result = $db->querySql($query); 
             if ($result){
                 return true;
@@ -123,9 +121,18 @@ class Media {
             $query = 'UPDATE dbProj_Media SET url = \'' . $this->url .'\','
                     . ' type_name = \'' . $this->type_name .'\' WHERE media_id = ' . $this->media_id;
             $db->querySql($query); 
-            echo $query;
             return true;
         }
     }
     
+    function deleteMedia(){
+        $db = Database::getInstance();
+        $result = $db->querySql('DELETE FROM dbProj_Media WHERE media_id = '. $this->media_id);
+        if ($result){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

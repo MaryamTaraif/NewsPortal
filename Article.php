@@ -109,7 +109,7 @@ class Article {
     function initWith($article_id, $title, $description, $content, $publish_date,$rating,$user_id,$category_id, $status, $views) {
         $this->article_id = $article_id;
         $this->title = $title;
-        $this->$description = $description;
+        $this->description = $description;
         $this->content =  $content;
         $this->publish_date = $publish_date;
         $this->rating = $rating;
@@ -149,35 +149,26 @@ class Article {
     
     //add article 
     function addArticle()
-{
-    if ($this->isValid()) {
-        $db = Database::getInstance();
-        
-        // Build the query
-        $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id, views)'
-                 . ' VALUES ("' . $this->title . '","' . $this->description . '","' . $this->content 
-                 . '","' . $this->user_id .'","' . $this->category_id .'","0")';
-        echo $query;
-        $result = $db->querySql($query); 
-        
-        if ($result) {
-            echo 'added';
-            // Retrieve the article ID just inserted
-            $articleId = mysqli_insert_id($db->dblink);
-            
-            if ($articleId) {
-                $this->article_id = $articleId;
-                echo 'article_id: ' . $articleId . '<br>';
-                return true;
+    {
+        if ($this->isValid()) {
+            $db = Database::getInstance();
+            $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id, views)'
+                     . ' VALUES ("' . $this->title . '","' . $this->description . '","' . $this->content 
+                     . '","' . $this->user_id .'","' . $this->category_id .'","0")';
+            $result = $db->querySql($query); 
+            if ($result) {
+                // Retrieve the article ID just inserted
+                $articleId = mysqli_insert_id($db->dblink);
+                if ($articleId) {
+                    $this->article_id = $articleId;
+                    return true;
+                }
             }
+            return false;
         }
-        
-        return false;
     }
-}
 
                  
-    
     
     //update article
     function updateArticle(){
@@ -190,17 +181,26 @@ class Article {
                     . ' user_id = \'' . $this->user_id . '\','
                     . ' status = \'' . $this->status .'\' '
                     . 'WHERE article_id = ' . $this->article_id;
-            $db->querySql($q); 
-            echo $q;
-            return true;
+            $result = $db->querySql($q); 
+            if($result) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
     
     //delete article 
     public static function deleteArticle($article_id) {
         $db = Database::getInstance();
-        $db->querySql('CALL deleteArticle('. $article_id .', @deletionResult)');
-        return true;
+        $result = $db->querySql('CALL deleteArticle('. $article_id .')');
+        if ($result){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 
@@ -212,8 +212,13 @@ class Article {
             $q = 'UPDATE dbProj_Article SET publish_date = \'' . $today .'\','
                     . ' status = 1 '
                     . 'WHERE article_id = ' . $article_id;
-            $db->querySql($q); 
-            return true;
+            $result = $db->querySql($q); 
+            if ($result){
+                return true;
+            }
+            else {
+                return false;
+            }
     }
     
     public static function getAllCatArticles($category_id){

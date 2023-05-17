@@ -20,7 +20,24 @@ if(isset($_GET['id'])){
     
 }
 ?>
-
+<script>
+    
+    function removeFile(mediaId){
+        if (confirm("Are you sure you want to remove this attached file?")) {
+        var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the page
+                    if (this.responseText === "removed") {
+                        location.reload();
+                    }
+                }
+            };
+           xhttp.open("GET", "removeMedia.php?media_id=" + mediaId, true);
+            xhttp.send();
+        }
+    }
+</script>
 	<section class="page">
 			<div class="container" style="padding-top: 180px;">
 				<div class="row">
@@ -128,8 +145,10 @@ if(isset($_GET['id'])){
                                                                                         <div class="form-group">
                                                                                                 <label>Downloadable File </label>
                                                                                                 <?php if (!empty($file)) {
-                                                                                                echo '<br><a href="'. $file->URL .'"> '. $file->URL .' </a>';}
-                                                                                                    ?>
+                                                                                                        echo '<br><a href="'. $file->URL .'"> '. $file->URL .' </a>';
+                                                                                                        echo '<a href="#" onclick="removeFile('. $file->media_id .')">   <b>REMOVE</b></a>';
+                                                                                                    }
+                                                                                                ?>
                                                                                                 <input type="file"  name="downloadable">
                                                                                         </div>
 										</div>
@@ -160,36 +179,33 @@ if(isset($_POST['submitted'])){
     }
     
     //populate object with fields values
-    
     $article->setCategory_id($_POST['category']);
     $article->setTitle($_POST['title']);
-
     $article->setDescription($_POST['description']);
     $article->setContent($_POST['content']);
-
     if (!$edit){
         $article->setUser_id($_SESSION['user_id']);
     }
     
     //save
     if ($edit){
-        if ($article->updateArticle())
-            echo 'updated';
+        if ($article->updateArticle()){
+            echo 'article updated successflly';
+        }
     }
     else {
-        if ($article->addArticle())
-            var_dump($article->getArticle_id());
-            
+        if ($article->addArticle()){
+            echo 'article added successflly';
+        }
     }
     
     // upload all files 
     if (!empty($_FILES)) {
-        echo 'upload attempt';
         $upload = new Upload();
         $upload->setUploadDir('media/');
 
         // Upload photo file
-        if (isset($_FILES['photo'])) {
+        if (isset($_FILES['photo']) && !empty($_FILES['photo']['name'])) {
             $upload->setFileType('image');
             $msg = $upload->upload('photo');
             if (empty($msg)) {
@@ -203,20 +219,22 @@ if(isset($_POST['submitted'])){
                 
                 //save changes
                 if($edit){
-                   
-                   $media->updateMedia();
+                  if ($media->updateMedia()){
+                      echo '<br>photo updated</br>';
+                  }
                 }else {
-                    $media->addMedia(); 
-                    echo 'Successfully uploaded photo.';
+                    if ($media->addMedia()){
+                        echo '<br>photo added</br>';
+                    }
                 }
             }
             else {
-                print_r($msg);
+               print_r($msg);
             }
         }
 
         // Upload video/audio file
-        if (isset($_FILES['video/audio'])) {
+        if (isset($_FILES['video/audio']) && !empty($_FILES['video/audio']['name'])) {
             //determine the type 
             $fileName = $_FILES['video/audio'];
             $type = $fileName['type'];
@@ -242,19 +260,22 @@ if(isset($_POST['submitted'])){
 
                 //save changes
                 if($edit){
-                   $media->updateMedia();
+                   if ($media->updateMedia()){
+                       echo '<br>video/audio updated</br>';
+                   }
                 }else {
-                    $media->addMedia(); 
-                    echo 'Successfully uploaded video/audio.';
+                   if ($media->addMedia()){
+                       echo '<br>video/audio added</br>';
+                   }
                 }
             }
             else {
-                print_r($msg);
+               print_r($msg);
             }
         }
         
         // Upload downloadable file
-        if (isset($_FILES['downloadable'])) {
+        if (isset($_FILES['downloadable']) && !empty($_FILES['downloadable']['name'])) {
             $upload->setFileType('file'); 
             $msg = $upload->upload('downloadable');
             if (empty($msg)) {
@@ -268,14 +289,17 @@ if(isset($_POST['submitted'])){
 
                 //save changes
                 if($edit && $file){
-                   $media->updateMedia();
+                   if ($media->updateMedia()){
+                       echo '<br>downloadable file updated</br>';
+                   }
                 }else {
-                    $media->addMedia(); 
-                    echo 'Successfully uploaded downloadable file.';
+                    if ($media->addMedia()){
+                       echo '<br>downloadable file added</br>';
+                   }
                 }
             }
             else {
-                print_r($msg);
+               print_r($msg);
             }
         }
     }
