@@ -1,6 +1,41 @@
 <?php
 include 'header.php';
 ?>
+<script>
+    function deleteArticle(articleId) {
+        if (confirm("Are you sure you want to delete this article?")) {
+            // make an AJAX request
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the page
+                    if (this.responseText === "deleted") {
+                        location.reload();
+                    } 
+                }
+            };
+            xhttp.open("GET", "deleteArticle.php?d_id=" + articleId, true);
+            xhttp.send();
+        }
+    }
+    
+    function publishArticle(articleId){
+        if (confirm("Are you sure you want to publish this article?")) {
+            // make an AJAX request
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the page
+                    if (this.responseText === "published") {
+                        location.reload();
+                    } 
+                }
+            };
+            xhttp.open("GET", "publishArticle.php?p_id=" + articleId, true);
+            xhttp.send();
+        }
+    }
+</script>
 		<section class="category">
 		  <div class="container" style="padding-top: 180px;">
 		    <div class="row">
@@ -49,14 +84,8 @@ include 'header.php';
 		                    <div>Edit</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>
-                                  <a href="#" onclick="deleteArticle()" class="love"><i class="ion-android-delete"></i></a>
-                                  <script>
-                                        function deleteArticle() {
-                                            alert("Are you sure you want to delete the article "'. $list[$i]->title .'"");
-                                        }
-                                  </script>
-
-		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
+                                  <a href="#" class="love" onclick="deleteArticle('.$list[$i]->article_id .')"><i class="ion-android-delete"></i></a>
+		                  <a class="btn btn-primary more" onclick="publishArticle('.$list[$i]->article_id .')"> 
 		                    <div>Publish</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>
