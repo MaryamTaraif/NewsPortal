@@ -124,6 +124,9 @@
                             if(!empty($_SESSION['user_id'])){
                              echo'  <li class="dropdown magz-dropdown"><a href="#">My Account <i class="ion-ios-arrow-right"></i></a>
                                 <ul class="dropdown-menu">
+                                    <li><a href="myArticles.php"><i class="icon ion-person"></i>My Articles</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="addArticle.php"><i class="icon ion-person"></i>Add Article</a></li>     
                                     <li><a href="myArticles.php"><i class="icon ion-person"></i> Dashbaord</a></li>
     
                                     <li class="divider"></li>
