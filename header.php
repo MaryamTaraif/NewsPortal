@@ -127,6 +127,8 @@
                                     <li><a href="myArticles.php"><i class="icon ion-person"></i>My Articles</a></li>
                                     <li class="divider"></li>
                                     <li><a href="addArticle.php"><i class="icon ion-person"></i>Add Article</a></li>     
+                                    <li><a href="myArticles.php"><i class="icon ion-person"></i> Dashbaord</a></li>
+    
                                     <li class="divider"></li>
                                     <li><a href="logout.php"><i class="icon ion-log-out"></i> Logout</a></li>
                                 </ul>
