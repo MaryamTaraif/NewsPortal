@@ -1,4 +1,10 @@
 <?php
+// Check if the user is not logged in, then redirect to login
+session_start();
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author') {
+    header("Location: loginPage.php");
+    exit();
+}
 include 'header.php';
 ?>
 <script>
@@ -73,7 +79,7 @@ include 'header.php';
 		                  <div class="category">
 		                   <a href="#">'. Article::getCatName($list[$i]->category_id) .'</a> 
 		                  </div>
-                                  
+                                  <div class="time">'.$list[$i]->publish_date .'</div>
 		                </div>
 		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
 		                <p>

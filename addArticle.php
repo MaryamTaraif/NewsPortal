@@ -1,5 +1,14 @@
 <?php
+// Check if the user is not logged in, then redirect to login
+session_start();
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author') {
+    header("Location: loginPage.php");
+    exit();
+}
+
+
 include 'header.php';
+//check if this is an edit request, then get the article data  
 $edit = false;
 if(isset($_GET['id'])){
     $article = new Article();
@@ -21,7 +30,7 @@ if(isset($_GET['id'])){
 }
 ?>
 <script>
-    
+    //AJAX, function to send a request to remove attached file (as it's optional)
     function removeFile(mediaId){
         if (confirm("Are you sure you want to remove this attached file?")) {
         var xhttp = new XMLHttpRequest();
@@ -38,6 +47,8 @@ if(isset($_GET['id'])){
         }
     }
 </script>
+
+
 	<section class="page">
 			<div class="container" style="padding-top: 180px;">
 				<div class="row">
@@ -67,7 +78,7 @@ if(isset($_GET['id'])){
 												<label>Category <span class="required"></span></label>
                                                                                                 <select id="category" name="category" class="form-control" required>
                                                                                                    <?php 
-                                                                                                        //retrieve all categories and add to the dropdown list 
+                                                                                                        //oppulate the dropdown list with categories and select the desired one if edit form 
                                                                                                         $list = Article::getAllCat();
                                                                                                         if (!empty($list)){
                                                                                                          for ($i = 0; $i < count($list); $i++) {
@@ -170,7 +181,7 @@ if(isset($_GET['id'])){
 
 <?php 
 if(isset($_POST['submitted'])){
-    //if not an edited one, create new object 
+    //if not an edited form, create new object 
     if (!$edit){
     $article = new Article();
     }
@@ -183,6 +194,7 @@ if(isset($_POST['submitted'])){
     $article->setTitle($_POST['title']);
     $article->setDescription($_POST['description']);
     $article->setContent($_POST['content']);
+    $article->setPublish_date(date('Y-m-d')); //set to current date (last modification) 
     if (!$edit){
         $article->setUser_id($_SESSION['user_id']);
     }
