@@ -1,8 +1,41 @@
 <?php
 include 'header.php';
-$id = $_GET['cid'];
-$name = Article::getCatName($id);
 ?>
+<script>
+    function deleteArticle(articleId) {
+        if (confirm("Are you sure you want to delete this article?")) {
+            // make an AJAX request
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the page
+                    if (this.responseText === "deleted") {
+                        location.reload();
+                    } 
+                }
+            };
+            xhttp.open("GET", "deleteArticle.php?d_id=" + articleId, true);
+            xhttp.send();
+        }
+    }
+    
+    function publishArticle(articleId){
+        if (confirm("Are you sure you want to publish this article?")) {
+            // make an AJAX request
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the page
+                    if (this.responseText === "published") {
+                        location.reload();
+                    } 
+                }
+            };
+            xhttp.open("GET", "publishArticle.php?p_id=" + articleId, true);
+            xhttp.send();
+        }
+    }
+</script>
 		<section class="category">
 		  <div class="container" style="padding-top: 180px;">
 		    <div class="row">
@@ -11,19 +44,23 @@ $name = Article::getCatName($id);
 		          <div class="col-md-12">        
 		            <ol class="breadcrumb">
 		              <li><a href="#">Home</a></li>
-		              <li class="active"><?php echo $name ?></li>
+		              <li class="active">My Articles</li>
 		            </ol>
-		            <h1 class="page-title"><?php echo $name ?></h1>
-		            <p class="page-subtitle">Showing all articles under category <i><?php echo $name ?></i></p>
+		            <h1 class="page-title">My Articles</h1>
+		            <p class="page-subtitle">Showing all articles written by <i><?php echo $_SESSION['username'] ?></i></p>
 		          </div>
 		        </div>
-		        <div class="line"></div>
+		        
 		        <div class="row">
                             <?php
+                            
                             //get the list of articles 
-                            $list = Article::getCatArticles($id);
+                            $list = Article::authorDraftArticles($_SESSION['user_id']);
                             //if the result if not empty 
                             if (!empty($list)) {
+                               echo ' <div class="line">
+                                        <div>Draft Articles</div>
+                                    </div>';
                                 //loop through and display 
                                     for ($i = 0; $i < count($list); $i++) {
                                         echo '<article class="col-md-12 article-list">
@@ -34,7 +71,52 @@ $name = Article::getCatName($id);
 		              <div class="details">
 		                <div class="detail">
 		                  <div class="category">
-		                   <a href="#">'. $name .'</a>
+		                   <a href="#">'. Article::getCatName($list[$i]->category_id) .'</a> 
+		                  </div>
+                                  
+		                </div>
+		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
+		                <p>
+		                  '.$list[$i]->description .'
+		                </p>
+		                <footer>
+                                <a class="btn btn-primary more" href="addArticle.php?id='.$list[$i]->article_id.'"> 
+		                    <div>Edit</div>
+		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
+		                  </a>
+                                  <a href="#" class="love" onclick="deleteArticle('.$list[$i]->article_id .')"><i class="ion-android-delete"></i></a>
+		                  <a class="btn btn-primary more" onclick="publishArticle('.$list[$i]->article_id .')"> 
+		                    <div>Publish</div>
+		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
+		                  </a>
+		                </footer>
+		              </div>
+		            </div>
+		          </article>';
+                                    }
+                            }
+                            
+                            ?>
+                            
+                            <?php
+                            //get the list of articles 
+                            $list = Article::authorPublishedArticles($_SESSION['user_id']);
+                            //if the result if not empty 
+                            if (!empty($list)) {
+                               echo ' <div class="line">
+                                        <div>Published Articles</div>
+                                    </div>';
+                                //loop through and display 
+                                    for ($i = 0; $i < count($list); $i++) {
+                                        echo '<article class="col-md-12 article-list">
+		            <div class="inner">
+		              <figure>
+                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
+		              </figure>
+		              <div class="details">
+		                <div class="detail">
+		                  <div class="category">
+		                   <a href="#">'. Article::getCatName($list[$i]->category_id) .'</a>
 		                  </div>
 		                  <div class="time">'.$list[$i]->publish_date .'</div>
 		                </div>
@@ -45,7 +127,7 @@ $name = Article::getCatName($id);
 		                <footer>
 		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
-		                    <div>More</div>
+		                    <div>View</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>
 		                </footer>
@@ -53,9 +135,6 @@ $name = Article::getCatName($id);
 		            </div>
 		          </article>';
                                     }
-                            }
-                            else {
-                                echo '<h6>Oops, no articles yet.</h6>';
                             }
                             ?>
                           <!--               pagination         -->  

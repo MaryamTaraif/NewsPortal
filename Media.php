@@ -55,13 +55,32 @@ class Media {
 
     function initWithId($media_id) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE media_id = \'' . $media_id);
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE media_id = ' . $media_id);
         $this->initWith($data->media_id, $data->url, $data->article_id, $data->type_name);
     }
     
-    public static function getMedia($article_id){
+    public static function getPhotoURL($article_id){
         $db = Database::getInstance();
-        $data = $db->multiFetch('SELECT * FROM dbProj_Media WHERE article_id = ' . $article_id);
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "image" and article_id = ' . $article_id);
+        return $data;
+        
+    }
+    
+    public static function getVideoURL($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "video" and article_id = ' . $article_id);
+        return $data; 
+    }
+    
+    public static function getAudioURL($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "audio" and article_id = ' . $article_id);
+        return $data; 
+    }
+    
+    public static function getDownloadableFile ($article_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Media WHERE type_name = "file" and article_id = ' . $article_id);
         return $data;
     }
     
@@ -86,9 +105,34 @@ class Media {
             //insert article into db 
             $query = 'INSERT INTO dbProj_Media (url, article_id, type_name)'
                     . 'VALUES (\''. $this->url . '\',\'' . $this->article_id . '\',\'' . $this->type_name . '\')';
+            $result = $db->querySql($query); 
+            if ($result){
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    
+    function updateMedia(){
+        if($this->isValid()){
+            $db = Database::getInstance();
+            $query = 'UPDATE dbProj_Media SET url = \'' . $this->url .'\','
+                    . ' type_name = \'' . $this->type_name .'\' WHERE media_id = ' . $this->media_id;
             $db->querySql($query); 
             return true;
         }
     }
     
+    function deleteMedia(){
+        $db = Database::getInstance();
+        $result = $db->querySql('DELETE FROM dbProj_Media WHERE media_id = '. $this->media_id);
+        if ($result){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }
