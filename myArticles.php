@@ -1,30 +1,31 @@
 <?php
+ob_start();
 // Check if the user is not logged in, then redirect to login
-session_start();
+include 'header.php';
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author') {
-    header("Location: loginPage.php");
+    header("Location: permission_denied.php");
     exit();
 }
-include 'header.php';
 ?>
+
 <script>
     function deleteArticle(articleId) {
-        if (confirm("Are you sure you want to delete this article?")) {
-            // make an AJAX request
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState === 4 && this.status === 200) {
-                    // update the page
-                    if (this.responseText === "deleted") {
-                        location.reload();
-                    } 
-                }
-            };
-            xhttp.open("GET", "deleteArticle.php?d_id=" + articleId, true);
-            xhttp.send();
+    if (confirm("Are you sure you want to delete this article?")) {
+    // make an AJAX request
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
+        // update the page
+        if (this.responseText === "deleted") {
+          location.reload();
+          alert("Deleted Successfully");
         }
+      }
+    };
+    xhttp.open("GET", "deleteArticle.php?d_id=" + articleId, true);
+    xhttp.send();
+  }
     }
-    
     function publishArticle(articleId){
         if (confirm("Are you sure you want to publish this article?")) {
             // make an AJAX request
@@ -34,29 +35,39 @@ include 'header.php';
                     // update the page
                     if (this.responseText === "published") {
                         location.reload();
+                        alert("Published Successfully");
                     } 
                 }
             };
             xhttp.open("GET", "publishArticle.php?p_id=" + articleId, true);
             xhttp.send();
         }
+        
     }
+   
 </script>
 		<section class="category">
-		  <div class="container" style="padding-top: 180px;">
+		  <div class="container" style="padding-top: 200px;">
 		    <div class="row">
 		      <div class="col-md-8 text-left">
 		        <div class="row">
 		          <div class="col-md-12">        
 		            <ol class="breadcrumb">
-		              <li><a href="#">Home</a></li>
+		              <li><a href="#">My Account</a></li>
 		              <li class="active">My Articles</li>
 		            </ol>
 		            <h1 class="page-title">My Articles</h1>
 		            <p class="page-subtitle">Showing all articles written by <i><?php echo $_SESSION['username'] ?></i></p>
 		          </div>
 		        </div>
-		        
+                            <?php 
+                            if (isset($_GET['message'])) {
+                                $successMessage = urldecode($_GET['message']);
+                                echo '<div class="alert alert-success" style="color:seagreen">'.$successMessage.'<button class="close" type="button" onclick="this.parentElement.style.display=\'none\';">
+                                <span>&times;</span>
+                            </button> </div>';
+                            }
+                            ?>
 		        <div class="row">
                             <?php
                             
@@ -68,7 +79,7 @@ include 'header.php';
                                         <div>Draft Articles</div>
                                     </div>';
                                 //loop through and display 
-                                    for ($i = 0; $i < count($list); $i++) {
+                                    for ($i = 0; $i < count($list); $i++ ) {
                                         echo '<article class="col-md-12 article-list">
 		            <div class="inner">
 		              <figure>
@@ -160,110 +171,103 @@ include 'header.php';
 		          </div>
 		        </div>
 		      </div>
+                        
+                        <div class="col-md-4 sidebar">
+                        <aside>
+                        <div class="aside-body">
+                            <div class="featured-author">
+                                <div class="featured-author-inner">
+                                    <div class="featured-author-cover" style="background-image: url('images/news/img15.jpg');">
+                                        <div class="badges">
+                                            <div class="badge-item"><i class="ion-star"></i> Featured</div>
+                                        </div>
+                                        <div class="featured-author-center">
+                                            <figure class="featured-author-picture">
+                                                <img src="images/img01.jpg" alt="Sample Article">
+                                            </figure>
+                                            <div class="featured-author-info">
+                                                <h2 class="name">John Doe</h2>
+                                                <div class="desc">@JohnDoe</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="featured-author-body">
+                                        <div class="featured-author-count">
+                                            <div class="item">
+                                                <a href="#">
+                                                    <div class="name">Posts</div>
+                                                    <div class="value">208</div>														
+                                                </a>
+                                            </div>
+                                            <div class="item">
+                                                <a href="#">
+                                                    <div class="name">Stars</div>
+                                                    <div class="value">3,729</div>														
+                                                </a>
+                                            </div>
+                                            <div class="item">
+                                                <a href="#">
+                                                    <div class="icon">
+                                                        <div>More</div>
+                                                        <i class="ion-chevron-right"></i>
+                                                    </div>														
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="featured-author-quote">
+                                            "Eur costrict mobsa undivani krusvuw blos andugus pu aklosah"
+                                        </div>
+                                        <div class="block">
+                                            <h2 class="block-title">Photos</h2>
+                                            <div class="block-body">
+                                                <ul class="item-list-round" data-magnific="gallery">
+                                                    <li><a href="images/news/img06.jpg" style="background-image: url('images/news/img06.jpg');"></a></li>
+                                                    <li><a href="images/news/img07.jpg" style="background-image: url('images/news/img07.jpg');"></a></li>
+                                                    <li><a href="images/news/img08.jpg" style="background-image: url('images/news/img08.jpg');"></a></li>
+                                                    <li><a href="images/news/img09.jpg" style="background-image: url('images/news/img09.jpg');"></a></li>
+                                                    <li><a href="images/news/img10.jpg" style="background-image: url('images/news/img10.jpg');"></a></li>
+                                                    <li><a href="images/news/img11.jpg" style="background-image: url('images/news/img11.jpg');"></a></li>
+                                                    <li><a href="images/news/img12.jpg" style="background-image: url('images/news/img12.jpg');"><div class="more">+2</div></a></li>
+                                                    <li class="hidden"><a href="images/news/img13.jpg" style="background-image: url('images/news/img13.jpg');"></a></li>
+                                                    <li class="hidden"><a href="images/news/img14.jpg" style="background-image: url('images/news/img14.jpg');"></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="featured-author-footer">
+                                            <a href="#">See All Authors</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
 <!--               side bar          -->
-<!--		      <div class="col-md-4 sidebar">
-		        <aside>
-		          <div class="aside-body">
-		            <figure class="ads">
-			            <a href="single.html">
-			              <img src="images/ad.png">
-			            </a>
-		              <figcaption>Advertisement</figcaption>
-		            </figure>
-		          </div>
-		        </aside>
-		        <aside>
-		          <h1 class="aside-title">Recent Post</h1>
-		          <div class="aside-body">
-		            <article class="article-fw">
-		              <div class="inner">
-		                <figure>
-			                <a href="single.html">
-			                  <img src="images/news/img12.jpg">
-			                </a>
-		                </figure>
-		                <div class="details">
-		                  <h1><a href="single.html">Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit</a></h1>
-		                  <p>
-		                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		                    tempor incididunt ut labore et dolore magna aliqua.
-		                  </p>
-		                  <div class="detail">
-		                    <div class="time">December 26, 2016</div>
-		                    <div class="category"><a href="category.html">Lifestyle</a></div>
-		                  </div>
-		                </div>
-		              </div>
-		            </article>
-		            <div class="line"></div>
-		            <article class="article-mini">
-		              <div class="inner">
-		              <figure>
-			              <a href="single.html">
-			                <img src="images/news/img05.jpg">
-		                </a>
-		              </figure>
-		              <div class="padding">
-		                <h1><a href="single.html">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-		                <div class="detail">
-		                  <div class="category"><a href="category.html">Lifestyle</a></div>
-		                  <div class="time">December 22, 2016</div>
-		                </div>
-		              </div>
-		              </div>
-		            </article>
-		            <article class="article-mini">
-		              <div class="inner">
-		                <figure>
-			                <a href="single.html">
-			                  <img src="images/news/img02.jpg">
-		                  </a>
-		                </figure>
-		                <div class="padding">
-		                  <h1><a href="single.html">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
-		                  <div class="detail">
-		                    <div class="category"><a href="category.html">Travel</a></div>
-		                    <div class="time">December 21, 2016</div>
-		                  </div>
-		                </div>
-		              </div>
-		            </article>
-		            <article class="article-mini">
-		              <div class="inner">
-		                <figure>
-			                <a href="single.html">
-			                  <img src="images/news/img13.jpg">
-		                  </a>
-		                </figure>
-		                <div class="padding">
-		                  <h1><a href="single.html">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-		                  <div class="detail">
-		                    <div class="category"><a href="category.html">International</a></div>
-		                    <div class="time">December 20, 2016</div>
-		                  </div>
-		                </div>
-		              </div>
-		            </article>
-		          </div>
-		        </aside>
-		        <aside>
-		          <div class="aside-body">
-		            <form class="newsletter">
-		              <div class="icon">
-		                <i class="ion-ios-email-outline"></i>
-		                <h1>Newsletter</h1>
-		              </div>
-		              <div class="input-group">
-		                <input type="email" class="form-control email" placeholder="Your mail">
-		                <div class="input-group-btn">
-		                  <button class="btn btn-primary"><i class="ion-paper-airplane"></i></button>
-		                </div>
-		              </div>
-		              <p>By subscribing you will receive new articles in your email.</p>
-		            </form>
-		          </div>
-		        </aside>
-		      </div>-->
+            <?php 
+            //get authors tops 
+            $tops = Article::getAuthorTops($_SESSION['user_id']);
+            if (!empty($tops)){
+                echo '<aside>
+                        <h1 class="aside-title">Your Top Aticles </h1> <div class="aside-body">';
+                for ($i = 0; $i < count($tops); $i++) {
+                    echo '<article class="article-mini">
+                                            <div class="inner">
+                                                <figure>
+                                                    <a href="singleArticle.php?aid='. $tops[$i]->article_id .'">
+                                                      <img src="'. Media::getPhotoURL($tops[$i]->article_id)->URL .'">
+                                                    </a>
+                                                </figure>
+                                                <div class="padding">
+                                                    <h1><a href="singleArticle.php?aid='. $tops[$i]->article_id .'">'. $tops[$i]->title .'</a></h1>
+                                                </div>
+                                            </div>
+                                        </article>';
+                }
+                echo '</div> </aside>';
+            }
+            else 
+
+        ?>
+ </div>
 		    </div>
 		  </div>
 		</section>

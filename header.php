@@ -122,21 +122,18 @@
                             
                             <?php
                             if(!empty($_SESSION['user_id'])){
-                             echo'  <li class="dropdown magz-dropdown"><a href="#">My Account <i class="ion-ios-arrow-right"></i></a>
+                             echo'  <li class="dropdown magz-dropdown" style="margin-left: auto;"><a href="#">My Account <i class="ion-ios-arrow-right"></i></a>
                                 <ul class="dropdown-menu">';
                                     
                                     if ($_SESSION['role'] == 'Author') {
                                     echo '<li><a href="myArticles.php"><i class="icon ion-person"></i>My Articles</a></li>
-                                    <li><a href="addArticle.php"><i class="icon ion-person"></i>Add Article</a></li>';    
+                                    <li><a href="addArticle.php"><i class="icon ion-plus"></i>Add Article</a></li>';    
                                     }
                                     echo '<li><a href="logout.php"><i class="icon ion-log-out"></i> Logout</a></li>
                                 </ul>
                             </li>';
                                        
                             }
-                            
-                            
-                            
                             ?>
                               
                         </ul>
@@ -145,11 +142,5 @@
             </nav>
             <!-- End nav -->
         </header>
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 

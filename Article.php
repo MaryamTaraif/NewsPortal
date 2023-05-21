@@ -286,8 +286,8 @@ class Article {
     
     public static function getAuthorTops($author_id){
         $db = Database::getInstance();
-        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and user_id = '. $user_id .' ORDER BY rating DESC LIMIT 3");
-        echo $data;
+        $q = "SELECT * FROM dbProj_Article WHERE status = true and user_id = $author_id ORDER BY rating DESC LIMIT 3";
+        $data = $db->multiFetch($q);
         return $data;
     }
 
