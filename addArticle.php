@@ -242,7 +242,13 @@ if (isset($_POST['submitted'])) {
                     }
                 }
             } else {
-                $errors[] = $msg;
+                if (is_array($msg)) {
+                    foreach ($msg as $errorMessage) {
+                        $errors[] = $errorMessage;
+                    }
+                } else {
+                    $errors[] = $msg;
+                }
             }
         }
 
@@ -282,7 +288,13 @@ if (isset($_POST['submitted'])) {
                     }
                 }
             } else {
-                $errors[] = $msg;
+                if (is_array($msg)) {
+                    foreach ($msg as $errorMessage) {
+                        $errors[] = $errorMessage;
+                    }
+                } else {
+                    $errors[] = $msg;
+                }
             }
         }
 
@@ -310,7 +322,13 @@ if (isset($_POST['submitted'])) {
                     }
                 }
             } else {
-                $errors[] = $msg;
+                if (is_array($msg)) {
+                    foreach ($msg as $errorMessage) {
+                        $errors[] = $errorMessage;
+                    }
+                } else {
+                    $errors[] = $msg;
+                }
             }
         }
     }
