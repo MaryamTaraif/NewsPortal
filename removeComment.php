@@ -1,34 +1,66 @@
 <?php
-// Check if a comment has been marked for removal
-if(isset($_GET['removeComment'])) {
-    // Get the comment ID and update the database to show that it was removed
-    $comment_id = $_GET['removeComment'];
-    $remove_query = "UPDATE dbProj_Comment SET removed_by_admin=1 WHERE id='$comment_id'";
-    mysqli_query($this->dblink, $remove_query);
+
+
+include 'debugging.php';
+
+$page_title = 'Delete Comment';
+
+include 'header.php';
+
+$id=0;
+
+//the first time the page is displayed it is because it is from a hyper link so we use $_GET to 
+//retrieve the parameter from the link
+//Any time the page is shown after that it is because it has been submitted using the form
+//so we then use $_POST to get the form data
+if( isset($_GET['id']) )
+{
+    $id=$_GET['id'];  
+}
+elseif(isset($_POST['id']))
+{
+    $id=$_POST['id'];    
+}
+else
+{
+     echo '<p class="error"> Error has occured</p>';    
 }
 
-// Get all comments from the database
-$comments_query = "SELECT * FROM dbProj_Comment";
-$comments_result = mysqli_query($this->dblink, $comments_query);
 
-// Display all comments in a table
-echo "<h2>All Comments</h2>";
-echo "<table>";
-echo "<tr><th>ID</th><th>Author</th><th>Comment</th><th>Date</th><th>Actions</th></tr>";
-while($row= mysqli_fetch_assoc($comments_result)) {
-    // If the comment was removed by an admin, display a message instead of the comment text
-    $comment_text = $row['comment'];
-    if ($row['removed_by_admin']) {
-        $comment_text = "This comment was removed by an administrator";
-    }
-    
-    // Display the comment in a table row, along with links to remove the comment or view the user's profile
-    echo "<tr><td>".$row["id"]."</td><td>".$row["author"]."</td><td>".$comment_text."</td><td>".$row["date"]."</td><td>";
-    if (!$row['removed_by_admin']) {
-        echo "<a href='AdminPanel.php?removeComment=".$row["id"]."'>Remove</a> | ";
-    }
-    echo "<a href='Users.php?id=".$row["user_id"]."'>View User</a></td></tr>";
+echo '<h1>Delete Comment</h1>';
+$comment = new Comment();
+$comment->initWithCid($id);
+
+if(isset($_POST['submitted']))
+{
+//test the value of the radio button    
+    if(isset($_POST['sure']) && ($_POST['sure'] == 'Yes') ) //delete the record   
+    {  
+       if($comment->deleteComment())
+           echo '<p> Comment' .$comment->getContent(). ' was deleted</p>'; 
+       $comment->setContent('This comment was removed by an administrator');
+    }//no confirmation
+     else
+       echo '<p> Comment '. $comment->getContent(). '  deletion not confirmed</p>'; 
 }
-echo "</table>";
+else //show form
+{
+    echo '<div id="stylized" class="myform"> 
+        <form action="removeComment.php" method="post">
+        <br />
+        <h3>Subject: '.$comment->getContent() . '</h3></br>
+        <label>Delete this Comment?</label> <br/><br/>
+          <input type="radio" name="sure" value="Yes" /><label>Yes</label>
+          <input type="radio" name="sure" value="No" checked="checked" /> <label>No</label>
+          <input type="submit" class ="DB4Button" name="submit" value="Delete" />
+        
+         <input type ="hidden" name="submitted" value="TRUE">
+         <input type ="hidden" name="id" value="' . $id . '"/>
+         </form>
+         <div class="spacer"></div>
+         </div>';   
 
+}
 
+include 'footer.html';
+?>
