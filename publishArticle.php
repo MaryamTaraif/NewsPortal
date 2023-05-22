@@ -8,7 +8,7 @@ $valid = true;
 if (empty(Media::getPhotoURL($_GET['p_id']))) {
     $valid = false;
 }
-if (empty(Media::getVideoURL($_GET['p_id'])) || empty(Media::getAudioURL($article->getArticle_id()))) {
+if (empty(Media::getVideoURL($_GET['p_id'])) && empty(Media::getAudioURL($_GET['p_id']))) {
     $valid = false;
 }
 
