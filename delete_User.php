@@ -39,7 +39,7 @@ if(isset($_POST['submitted']))
 //test the value of the radio button    
     if(isset($_POST['sure']) && ($_POST['sure'] == 'Yes') ) //delete the record   
     {  
-       if($user->delete.user())
+       if($user->deleteuser())
            echo '<p> User' .$user->getUsername(). ' was deleted</p>'; 
     }//no confirmation
      else

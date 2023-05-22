@@ -38,7 +38,10 @@ if(isset($_POST['submitted']))
     {  
        if($comment->deleteComment())
            echo '<p> Comment' .$comment->getContent(). ' was deleted</p>'; 
+       if($this->type_name == 'Administrator')
+       {
        $comment->setContent('This comment was removed by an administrator');
+       }
     }//no confirmation
      else
        echo '<p> Comment '. $comment->getContent(). '  deletion not confirmed</p>'; 
