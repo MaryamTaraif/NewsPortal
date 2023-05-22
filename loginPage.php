@@ -32,15 +32,19 @@ include 'header.php';
 
                     <?php
                     if (isset($_POST['submitted'])) {
+                        //new login object
                         $lgn = new Login();
+                        //get the inputted username and password
                         $username = $_POST['username'];
                         $password = $_POST['password'];
 
+                        //validates the login credentials,
                         if ($lgn->login($username, $password)) {
-                            header('Location: index.php');
+                            header('Location: index.php'); //redirect to index page
                             exit;
                         } else {
-                            echo '<div class="alert alert-danger">Wrong Login Values</div>';
+                            echo '<div class="alert alert-danger">Wrong Login Values</div>'; // Display an error message if the login values are incorrect
+        
                         }
                     }
                     ?>
@@ -69,10 +73,13 @@ include 'header.php';
 
 <script>
     // JavaScript Validation
+    
+       // Add event listener to the login form
     document.getElementById("loginForm").addEventListener("submit", function(event) {
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
 
+    // Check if either username or password is empty
         if (username.trim() === "" || password.trim() === "") {
             event.preventDefault();
             alert("Please fill in all the fields.");

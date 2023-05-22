@@ -73,9 +73,9 @@ include 'header.php';
     formFields.forEach(function(field) {
         field.addEventListener("input", function() {
             if (checkForm()) {
-                document.getElementById("registerButton").disabled = false;
+                document.getElementById("registerButton").disabled = false; //enable register button
             } else {
-                document.getElementById("registerButton").disabled = true;
+                document.getElementById("registerButton").disabled = true; //disable register button
             }
         });
     });
@@ -106,12 +106,12 @@ if (isset($_POST['submitted'])) {
         if ($user->initWithUsername()) {
             $result = $user->registerUser();
             if ($result == true) {
-                echo '<script>alert("User Registered Successfully!")</script>';
+                echo '<script>alert("User Registered Successfully!")</script>'; // Display a success message if user registration is successful
             } else {
-                echo '<label>Registration was not successful.</label>';
+                echo '<label>Registration was not successful.</label>'; // Display an error message if user registration fails
             }
         } else {
-            echo '<script>alert("Username already exists!")</script>';
+            echo '<script>alert("Username already exists!")</script>'; // Display an alert if the username already exists
         }
     }
 }
