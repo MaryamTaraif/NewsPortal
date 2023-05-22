@@ -116,7 +116,18 @@ class Users {
             return false;
         }
     }
-
+    
+  function deleteuser() {
+        try {
+            $db = Database::getInstance();
+            $data = $db->querySql('Delete from dbProj_User where user_id=' . $this->user_id);
+            return true;
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e;
+            return false;
+        }
+    }
+    
     function initWithUsername() {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $this->username . '\'');
@@ -125,7 +136,29 @@ class Users {
         }
         return true;
     }
+    
+  function getAllusers() {
+        $db = Database::getInstance();
+        $data = $db->multiFetch('Select * from dbProj_User');
+        return $data;
+    }
+    
+    function updateDB() {
 
+        if ($this->isValid()) {
+
+
+            $db = Database::getInstance();
+            $data = 'UPDATE dbProj_User set
+			email = \'' . $this->email . '\' ,
+			username = \'' . $this->username . '\' ,
+			password = \'' . $this->password . '\',
+                            type_name = \'' . $this->type_name . '\'
+				WHERE user_id = ' . $this->user_id;
+            $db->querySql($data);
+        }
+    }
+    
     public function isValid() {
         $errors = true;
 
