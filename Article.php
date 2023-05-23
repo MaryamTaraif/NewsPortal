@@ -329,7 +329,28 @@ class Article {
         return 0; // No comments found
     }
 }
+    
+    // Define a new function that takes a search query as a parameter
+    public static function searchArticles($searchText) {
+    $db = Database::getInstance();
+    $query = "SELECT * FROM dbProj_Article WHERE MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
+    $result = $db->multiFetch($query);    
+    return $result;
+}
+
+    public static function searchByAuthor($authorName)
+    {
+        echo 'function';
+        $db = Database::getInstance();
+        $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE u.user_id = a.user_id and u.username like '$authorName%'";
+        $data = $db->multiFetch($q);
+        if ($data){
+            return $data;
+        }else{
+            return "nothing";
+        }
+        
+    }
 
     
-
 }

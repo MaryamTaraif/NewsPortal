@@ -153,7 +153,11 @@ class Users {
     }
     
     
-
+    public static function getAuthorId($authorName){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('select user_id from dbProj_User where username  ');
+        return $data;
+    }
     // ...
 }
 

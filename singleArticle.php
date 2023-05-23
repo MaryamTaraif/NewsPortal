@@ -272,6 +272,11 @@ $media = new Media();
                     <textarea class="form-control" name="message" placeholder="Write your response ..."></textarea>
                 </div>
                 <div class="form-group col-md-12">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <button class="btn btn-primary" onclick="performTask()">Perform Task</button>
+                    <?php else: ?>
+                        <a href="loginPage.php" class="btn btn-primary">submit</a>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>

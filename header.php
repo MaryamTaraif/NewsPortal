@@ -47,9 +47,10 @@
                             </div>						
                         </div>
                         <div class="col-md-6 col-sm-12">
+                            <form class="search" action="test_search.php">
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <input type="text" name="q" class="form-control" placeholder="Type something here">									
+                                        <input type="text" name="searchText" class="form-control" placeholder="Type something here">									
                                         <div class="input-group-btn">
                                             
                                             <button class="btn btn-primary"><i class="ion-search"></i></button>
