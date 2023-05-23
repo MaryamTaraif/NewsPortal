@@ -1,7 +1,43 @@
 <?php
 include 'header.php';
 ?>
+<script>
+    // Define a function to handle the search form submission
+function searchArticles() {
+    // Get the search query from the search form input
+   var query = document.getElementById('searchInput').value;
+    // Create a new XMLHttpRequest object
+    var xhr = new XMLHttpRequest();
+    // Define a function to handle the AJAX response
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Parse the JSON response
+            var data = JSON.parse(xhr.responseText);
+            // Display the search results
+            displaySearchResults(data);
+        }
+    };
+    // Open a new AJAX request
+    xhr.open('GET', '/path/to/searchArticles.php?query=' + encodeURIComponent(query));
+    // Send the AJAX request
+    xhr.send();
+}
 
+// Define a function to display the search results
+function displaySearchResults(data) {
+    // Clear the previous search results
+    document.getElementById('searchResults').innerHTML = '';
+    // Loop through the search results and append them to the search results container
+    for (var i = 0; i < data.length; i++) {
+        var article = data[i];
+        var articleHtml = '<div class="article">' +
+            '<h2 class="article-title">' + article.title + '</h2>' +
+            '<div class="article-body">' + article.body + '</div>' +
+            '</div>';
+        document.getElementById('searchResults').innerHTML += articleHtml;
+    }
+}
+    </script>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -55,6 +91,7 @@ include 'header.php';
 												</button>
 											</div>
 										</div>
+                                                                            
 									</div>
 								</form>
 							</div>
@@ -86,9 +123,9 @@ include 'header.php';
 					<div class="col-md-9">
 						<div class="nav-tabs-group">
 							<ul class="nav-tabs-list">
-								<li class="active"><a href="#">All</a></li>
-								<li><a href="#">Latest</a></li>
-								<li><a href="#">Popular</a></li>
+								<li class="active" data-function="all"><a href="#">All</a></li>
+								<li data-function="mostPopular"><a href="#">Latest</a></li>
+								<li data-function="latest"><a href="#">Popular</a></li>
 								
 							</ul>
 							
@@ -97,121 +134,49 @@ include 'header.php';
 							Search results .....
 						</div>
 						<div class="row">
-							<article class="col-md-12 article-list">
-								<div class="inner">
-									<figure>
-										<a href="single.html">
-											<img src="images/news/img11.jpg">
-										</a>
-									</figure>
-									<div class="details">
-										<div class="detail">
-											<div class="category">
-												<a href="#">Film</a>
-											</div>
-											<time>December 19, 2016</time>
-										</div>
-										<h1><a href="single.html">Donec consequat arcu at ultrices sodales quam erat aliquet diam</a></h1>
-										<p>
-										Donec consequat, arcu at ultrices sodales, quam erat aliquet diam, sit amet interdum libero nunc accumsan nisi.
-										</p>
-										<footer>
-											<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>273</div></a>
-											<a class="btn btn-primary more" href="single.html">
-												<div>More</div>
-												<div><i class="ion-ios-arrow-thin-right"></i></div>
-											</a>
-										</footer>
-									</div>
-								</div>
-							</article>
-							<article class="col-md-12 article-list">
-								<div class="inner">
-									<div class="badge">
-										Sponsored
-									</div>
-									<figure>
-										<a href="single.html">
-											<img src="images/news/img02.jpg">
-										</a>
-									</figure>
-									<div class="details">
-										<div class="detail">
-											<div class="category">
-												<a href="#">Travel</a>
-											</div>
-											<time>December 18, 2016</time>
-										</div>
-										<h1><a href="single.html">Maecenas accumsan tortor ut velit pharetra mollis</a></h1>
-										<p>
-											Maecenas accumsan tortor ut velit pharetra mollis. Proin eu nisl et arcu iaculis placerat sollicitudin ut est. In fringilla dui.
-										</p>
-										<footer>
-											<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>4209</div></a>
-											<a class="btn btn-primary more" href="single.html">
-												<div>More</div>
-												<div><i class="ion-ios-arrow-thin-right"></i></div>
-											</a>
-										</footer>
-									</div>
-								</div>
-							</article>
-							<article class="col-md-12 article-list">
-								<div class="inner">
-									<figure>
-										<a href="single.html">
-											<img src="images/news/img03.jpg">
-										</a>
-									</figure>
-									<div class="details">
-										<div class="detail">
-											<div class="category">
-											<a href="#">Travel</a>
-											</div>
-											<time>December 16, 2016</time>
-										</div>
-										<h1><a href="single.html">Nulla facilisis odio quis gravida vestibulum Proin venenatis pellentesque arcu</a></h1>
-										<p>
-											Nulla facilisis odio quis gravida vestibulum. Proin venenatis pellentesque arcu, ut mattis nulla placerat et.
-										</p>
-										<footer>
-											<a href="#" class="love active"><i class="ion-android-favorite"></i> <div>302</div></a>
-											<a class="btn btn-primary more" href="single.html">
-												<div>More</div>
-												<div><i class="ion-ios-arrow-thin-right"></i></div>
-											</a>
-										</footer>
-									</div>
-								</div>
-							</article>
-							<article class="col-md-12 article-list">
-								<div class="inner">
-									<figure>
-										<a href="single.html">
-											<img src="images/news/img09.jpg">
-										</a>
-									</figure>
-									<div class="details">
-										<div class="detail">
-											<div class="category">
-												<a href="#">Healthy</a>
-											</div>
-											<time>December 16, 2016</time>
-										</div>
-										<h1><a href="single.html">Maecenas blandit ultricies lorem id tempor enim pulvinar at</a></h1>
-										<p>
-											Maecenas blandit ultricies lorem, id tempor enim pulvinar at. Curabitur sit amet tortor eu ipsum lacinia malesuada. Etiam sed vulputate magna.
-										</p>
-										<footer>
-											<a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>783</div></a>
-											<a class="btn btn-primary more" href="single.html">
-												<div>More</div>
-												<div><i class="ion-ios-arrow-thin-right"></i></div>
-											</a>
-										</footer>
-									</div>
-								</div>
-							</article>
+                                                    
+							<?php
+                            //get the list of articles 
+                            $list = Article::searchArticles();
+                            //if the result if not empty 
+                            if (!empty($list)) {
+                                //loop through and display 
+                                    for ($i = 0; $i < count($list); $i++) {
+                                        echo '<article class="col-md-12 article-list">
+		            <div class="inner">
+		              <figure>
+                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
+		              </figure>
+		              <div class="details">
+		                <div class="detail">
+		                  <div class="category">
+		                   <a href="#">'. $name .'</a>
+		                  </div>
+		                  <div class="time">'.$list[$i]->publish_date .'</div>
+		                </div>
+		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
+		                <p>
+		                  '.$list[$i]->description .'
+		                </p>
+		                <footer>
+		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
+		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
+		                    <div>More</div>
+		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
+		                  </a>
+		                </footer>
+		              </div>
+		            </div>
+		          </article>';
+                                    }
+                            }
+                            else {
+                                echo '<h6>Oops, no articles yet.</h6>';
+                            }
+                            ?>
+				
+                                                    
+                                                    
 		          <div class="col-md-12 text-center">
 		            <ul class="pagination">
 		              <li class="prev"><a href="#"><i class="ion-ios-arrow-left"></i></a></li>
@@ -256,39 +221,4 @@ include 'header.php';
 	</body>
 </html>
 
-<script>  
-      $(document).ready(function(){  
-          // Enable datepicker on input fields
-           $("#from_date, #to_date").datepicker({
-            dateFormat: "yy-mm-dd"
-            });
-    
-           $.datepicker.setDefaults({  
-                dateFormat: 'yy-mm-dd'   
-           });  
-           $(function(){  
-                $("#from_date").datepicker();  
-                $("#to_date").datepicker();  
-           });  
-           $('#filter').click(function(){  
-                var from_date = $('#from_date').val();  
-                var to_date = $('#to_date').val();  
-                if(from_date != '' && to_date != '')  
-                {  
-                     $.ajax({  
-                          url:"filter.php",  
-                          method:"POST",  
-                          data:{from_date:from_date, to_date:to_date},  
-                          success:function(data)  
-                          {  
-                               $('#order_table').html(data);  
-                          }  
-                     });  
-                }  
-                else  
-                {  
-                     alert("Please Select Date");  
-                }  
-           });  
-      });  
- </script>
+<script>

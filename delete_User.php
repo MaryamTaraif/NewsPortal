@@ -1,7 +1,7 @@
 <?php
 
 
-include 'debugging.php';
+
 
 $page_title = 'Delete User';
 
