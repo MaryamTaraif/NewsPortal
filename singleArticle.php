@@ -272,7 +272,6 @@ $media = new Media();
                     <textarea class="form-control" name="message" placeholder="Write your response ..."></textarea>
                 </div>
                 <div class="form-group col-md-12">
-                    <button class="btn btn-primary">Send Response</button>
                 </div>
             </form>
         </div>

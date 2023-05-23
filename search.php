@@ -291,4 +291,4 @@ include 'header.php';
                 }  
            });  
       });  
- </script>
+ </script><script>

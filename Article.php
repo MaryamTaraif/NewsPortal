@@ -254,6 +254,7 @@ class Article {
         $data = $db->multiFetch('Select * from dbProj_Category');
         return $data;
     }
+    
     public static function getCatName($category_id){
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $category_id . '\'');
