@@ -1,7 +1,6 @@
 <?php
 
 
-include 'debugging.php';
 
 $page_title = 'Edit User';
 
@@ -28,19 +27,19 @@ elseif (isset($_POST['id'])) {
 $user = new Users();
 $user->initWithUid($id);
 
-//perfrom the following if the user has submitted the form 
+//perform the following if the user has submitted the form 
 if (isset($_POST['submitted'])) {
 
     $oldName = $user->getUsername();
 
 //populate the user object member variables from values on the form
-    $user->setUsername($_POST['Username']);
-    $user->setEmail($_POST['Email']);
-    $user->setPassword($_POST['Password']);
-    $user->setType_name($_POST['Type_name']);
+    $user->setUsername($_POST['username']);
+    $user->setEmail($_POST['email']);
+    $user->setPassword($_POST['password']);
+    $user->setType_name($_POST['type_name']);
 
 
-    if (!$user->initWithUsername()) {// username exists
+    if ($oldName!=$user->getUsername() && !$user->initWithUsername()) {// username exists
         
         echo "<h2> Thankyou </h2><p>".$user->getUsername()." Exists</p>";
         $user->setUsername($oldName);
@@ -49,7 +48,7 @@ if (isset($_POST['submitted'])) {
 
         $errors = $user->isValid();
 
-        if (empty($errors)) {
+        if ($errors) {
             //update the user 
             $user->updateDB();
             echo "<h2> Thankyou </h2><p>.$user->getUsername(). is updated</p>";
@@ -75,10 +74,10 @@ echo '<div id="stylized" class="myform">
         <br />
         <h3>Edit User: ' . $user->getUsername() . '</h3>
         <br />
-           <label>Username</label>    <input type="text" name="Username" value="' . $user->getUsername() . '" />
-           <label>Email Address</label> <input type="text" name="Email" value="' . $user->getEmail() . '"/>
-           <label>Password</label>      <input type="password" name="Password" value="' . $user->getPassword() . '"/>
-           <label>Type_name</label> <input type="text" name="Type_name" value="' . $user->setType_name() . '"/>
+           <label>Username</label>    <input type="text" name="username" value="' . $user->getUsername() . '" />
+           <label>Email Address</label> <input type="text" name="email" value="' . $user->getEmail() . '"/>
+           <label>Password</label>      <input type="password" name="password" value="' . $user->getPassword() . '"/>
+           <label>Type_name</label> <input type="text" name="type_name" value="' . $user->getType_name() . '"/>
            <input type="submit" class ="DB4Button" name="submit" value="update" />
         
          <input type ="hidden" name="submitted" value="TRUE">

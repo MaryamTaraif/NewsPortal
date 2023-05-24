@@ -255,6 +255,7 @@ class Article {
         $data = $db->multiFetch('Select * from dbProj_Category');
         return $data;
     }
+    
     public static function getCatName($category_id){
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $category_id . '\'');
@@ -329,7 +330,24 @@ class Article {
         return 0; // No comments found
     }
 }
+    
+    // Define a new function that takes a search query as a parameter
+    public static function searchArticles($searchText) {
+    $db = Database::getInstance();
+    $query = "SELECT * FROM dbProj_Article WHERE MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
+    $result = $db->multiFetch($query);    
+    return $result;
+}
+
+    public static function searchByAuthor($authorName)
+    {
+        
+        $db = Database::getInstance();
+        $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE u.user_id = a.user_id and u.username like '$authorName%'";
+        $data = $db->multiFetch($q);
+
+        return $data;
+    }
 
     
-
 }

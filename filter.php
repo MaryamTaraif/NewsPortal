@@ -1,48 +1,39 @@
-<?php  
- //filter.php  
- if(isset($_POST["from_date"], $_POST["to_date"]))  
- {  
-      $connect = mysqli_connect("localhost", "root", "", "testing");  
-      $output = '';  
-      $query = "  
-           SELECT * FROM tbl_order  
-           WHERE order_date BETWEEN '".$_POST["from_date"]."' AND '".$_POST["to_date"]."'  
-      ";  
-      $result = mysqli_query($connect, $query);  
-      $output .= '  
-           <table class="table table-bordered">  
-                <tr>  
-                     <th width="5%">ID</th>  
-                     <th width="30%">Customer Name</th>  
-                     <th width="43%">Item</th>  
-                     <th width="10%">Value</th>  
-                     <th width="12%">Order Date</th>  
-                </tr>  
-      ';  
-      if(mysqli_num_rows($result) > 0)  
-      {  
-           while($row = mysqli_fetch_array($result))  
-           {  
-                $output .= '  
-                     <tr>  
-                          <td>'. $row["order_id"] .'</td>  
-                          <td>'. $row["order_customer_name"] .'</td>  
-                          <td>'. $row["order_item"] .'</td>  
-                          <td>$ '. $row["order_value"] .'</td>  
-                          <td>'. $row["order_date"] .'</td>  
-                     </tr>  
-                ';  
-           }  
-      }  
-      else  
-      {  
-           $output .= '  
-                <tr>  
-                     <td colspan="5">No Order Found</td>  
-                </tr>  
-           ';  
-      }  
-      $output .= '</table>';  
-      echo $output;  
- }  
- ?>
+<?php
+include 'debugging.php';
+$result = Article::searchByAuthor($_GET['author']);
+if (!empty($result)) {
+                                //loop through and display 
+                                    for ($i = 0; $i < count($result); $i++) {
+                                        echo '<article class="col-md-12 article-list">
+		            <div class="inner">
+		              <figure>
+                                <img src="'. Media::getPhotoURL($result[$i]->article_id)->URL .'">
+		              </figure>
+		              <div class="details">
+		                <div class="detail">
+		                  <div class="category">
+		                   <a href="#">'. $name .'</a>
+		                  </div>
+		                  <div class="time">'.$result[$i]->publish_date .'</div>
+		                </div>
+		                <h1><a href="singleArticle.php?aid='.$result[$i]->article_id.'"">'.$result[$i]->title .'</a></h1>
+		                <p>
+		                  '.$result[$i]->description .'
+		                </p>
+		                <footer>
+		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
+                                  <a href="#" class="love"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
+		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
+		                    <div>More</div>
+		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
+		                  </a>
+		                </footer>
+		              </div>
+		            </div>
+		          </article>';
+                                    }
+                            }
+                            else {
+                                echo '<h6>Oops, no articles yet.</h6>';
+                            }
+?>

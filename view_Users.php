@@ -1,9 +1,7 @@
 <?php
 
 
-include 'debugging.php';
-
-include 'header..php';
+include 'header.php';
 
 echo '<h1> Users </h1>';
 
@@ -32,8 +30,8 @@ if (!empty($row)) {
         $bg = ($bg == '#eeeeee' ? '#ffffff' : '#eeeeee');
 
         echo '<tr bgcolor="' . $bg . '">
-            <td><a href="edit_User.php?id=' . $row[$i]->uid . '">Edit</a></td>
-            <td><a href="delete_User.php?id=' . $row[$i]->uid . '">Delete</a></td>
+            <td><a href="edit_User.php?id=' . $row[$i]->user_id . '">Edit</a></td>
+            <td><a href="delete_User.php?id=' . $row[$i]->user_id . '">Delete</a></td>
                 <td>' . $row[$i]->user_id . '</td>
             <td>' . $row[$i]->username . '</td>
                 <td>' . $row[$i]->password . '</td>
