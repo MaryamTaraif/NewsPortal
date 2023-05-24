@@ -341,16 +341,12 @@ class Article {
 
     public static function searchByAuthor($authorName)
     {
-        echo 'function';
+        
         $db = Database::getInstance();
         $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE u.user_id = a.user_id and u.username like '$authorName%'";
         $data = $db->multiFetch($q);
-        if ($data){
-            return $data;
-        }else{
-            return "nothing";
-        }
-        
+
+        return $data;
     }
 
     

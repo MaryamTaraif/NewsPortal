@@ -21,7 +21,8 @@ if (!empty($result)) {
 		                  '.$result[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $result[$i]->rating .'</div></a>
+		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
+                                  <a href="#" class="love"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -33,6 +34,6 @@ if (!empty($result)) {
                                     }
                             }
                             else {
-                                echo '<h6>Result are empty.</h6>';
+                                echo '<h6>Oops, no articles yet.</h6>';
                             }
 ?>
