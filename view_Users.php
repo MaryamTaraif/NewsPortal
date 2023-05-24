@@ -4,7 +4,7 @@
 include 'header.php';
 
 echo '<h1> Users </h1>';
-
+echo  '<div class="container" style="padding-top: 200px;">';
 
 $users = new Users();
 $row = $users->getAllusers();
@@ -45,7 +45,7 @@ if (!empty($row)) {
     echo '<p class="error"> Oh dear. There was an error</p>';
     echo '<p class="error">' . mysqli_error($dbc) . '</p>';
 }
-
+echo '</div>';
 
 include 'footer.html';
 ?>
