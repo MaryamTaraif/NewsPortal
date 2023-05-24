@@ -345,14 +345,8 @@ class Article {
         $db = Database::getInstance();
         $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE u.user_id = a.user_id and u.username like '$authorName%'";
         $data = $db->multiFetch($q);
-        
-//        if (empty($data)){
-//            alert("no");
-//            $data = $db->multiFetch('Select * from dbProj_Article where status = true order by publish_date desc');
-//        }
+
         return $data;
-       
-        
     }
 
     

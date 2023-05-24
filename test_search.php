@@ -166,20 +166,20 @@ function activate(element) {
   element.querySelector('a').style.borderBottom = '2px solid #F73F52';
 }
 
-function updateLikes(itemId) {
-    alert("LIke");
-  // Make an AJAX request to the server-side PHP script
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', 'update_likes.php', true);
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      // Update the like count on the page
-      document.getElementById('like-count-' + itemId).innerHTML = xhr.responseText;
-    }
-  };
-  xhr.send('itemId=' + itemId);
-}
+//function updateLikes(itemId) {
+//    alert("LIke");
+//  // Make an AJAX request to the server-side PHP script
+//  var xhr = new XMLHttpRequest();
+//  xhr.open('POST', 'update_likes.php', true);
+//  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//  xhr.onreadystatechange = function() {
+//    if (xhr.readyState == 4 && xhr.status == 200) {
+//      // Update the like count on the page
+//      document.getElementById('like-count-' + itemId).innerHTML = xhr.responseText;
+//    }
+//  };
+//  xhr.send('itemId=' + itemId);
+//}
 //$(document).ready(function(){
 // 
 // $('.input-daterange').datepicker({
