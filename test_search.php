@@ -105,7 +105,7 @@ if ($_GET['searchText']){
 		                  '.$result[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)">><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
+		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
                                   <a href="#" class="love"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
 		                    <div>More</div>
