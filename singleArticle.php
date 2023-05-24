@@ -1,6 +1,8 @@
 <?php
 include 'header.php';
 $id = $_GET['aid'];
+
+//get article details
 $article = new Article();
 $article->initWithId($id);
 
@@ -26,6 +28,7 @@ $media = new Media();
                 <aside>
                     <h1 class="aside-title">Recent Post</h1>
                     <div class="aside-body">
+                        <!-- get the recent article-->
                         <?php
                         $recentArticle = Article::getRecentArticle();
 
@@ -56,24 +59,9 @@ $media = new Media();
                         ?>
                     </div>
                 </aside>
-                <aside>
-                    <div class="aside-body">
-                        <form class="newsletter">
-                            <div class="icon">
-                                <i class="ion-ios-email-outline"></i>
-                                <h1>Newsletter</h1>
-                            </div>
-                            <div class="input-group">
-                                <input type="email" class="form-control email" placeholder="Your mail">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-primary"><i class="ion-paper-airplane"></i></button>
-                                </div>
-                            </div>
-                            <p>By subscribing you will receive new articles in your email.</p>
-                        </form>
-                    </div>
-                </aside>
+
             </div>
+            <!-- show artcile details -->
             <div class="col-md-8">
                 <ol class="breadcrumb">
                     <li><a href="#">Home</a></li>
@@ -104,6 +92,7 @@ $media = new Media();
 
                         <p><?php echo $article->getContent(); ?> </p>
 
+                        <!-- Check each media existence and display it if found -->
                         <?php
                         $videoURL = $media->getVideoURL($id);
                         if ($videoURL) {
@@ -162,50 +151,27 @@ $media = new Media();
                         <figure>
                             <img src="images/user-writer.png">
                         </figure>
+                        <!-- show author details -->
                         <div class="details">
-                            <h4 class="name">
+                            <h5 class="name"  >
                                 <?php
                                 $author->initWithUid($article->getUser_id());
                                 echo $author->getUsername();
                                 ?>
-                            </h4>
+                            </h5>
+                            <h7>
+                                <a href="mailto:<?php echo $author->getEmail(); ?>">
+                                    <?php echo $author->getEmail(); ?></a>
+                            </h7>
                         </div>
                     </div>
-                    <div style="display: flex; justify-content: center; align-items: center;">
-                        <ul class="social trp sm" style="list-style: none; padding: 0; display: flex;">
-                            <li>
-                                <a href="#" class="facebook" style="font-size: 16px; margin: 0 10px;">
-                                    <svg><rect/></svg>
-                                    <i class="ion-social-facebook"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="twitter" style="font-size: 16px; margin: 0 10px;">
-                                    <svg><rect/></svg>
-                                    <i class="ion-social-twitter"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="youtube" style="font-size: 16px; margin: 0 10px;">
-                                    <svg><rect/></svg>
-                                    <i class="ion-social-youtube"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" class="googleplus" style="font-size: 16px; margin: 0 10px;">
-                                    <svg><rect/></svg>
-                                    <i class="ion-social-googleplus"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-
-
 
                     <div class="line thin"></div>
                     <div class="comments">
-                        <h2 class="title"> <?php
+
+                        <h2 class="title">
+                            <!-- Retrieve the total number of comments on this article and display them -->                     
+                            <?php
                             $commentCount = Article::countComments($id);
                             echo $commentCount . ' Comments';
                             ;
@@ -214,7 +180,6 @@ $media = new Media();
                             <?php
                             $comments = Article::getComments($id);
                             $commenterUsername = new Users();
-
                             if (!empty($comments)) {
                                 for ($i = 0; $i < count($comments); $i++) {
                                     echo '<div class="item">
@@ -231,7 +196,9 @@ $media = new Media();
                     </div>
                 </div>';
                                 }
-                            } else {
+                            }
+                            // <!-- Verify if no comments are found on the article -->
+                            else {
                                 echo '<p>No comments found on this article.</p>';
                             }
                             ?>

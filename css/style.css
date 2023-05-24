@@ -378,6 +378,15 @@ a.twitch {
   color: #fff !important;
 }
 
+.closebtn {
+  color: white;
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
 .main-loading {
   position: fixed;
   top: 50%;
@@ -479,7 +488,7 @@ a.twitch {
   margin: 0 2px;
   border-color: transparent;
   background-color: #f2f2f2;
-  width: 35px;
+  width: 35px; 
   height: 35px;
   line-height: 32px;
   text-align: center;

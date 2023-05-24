@@ -152,9 +152,9 @@ class Article {
     {
         if ($this->isValid()) {
             $db = Database::getInstance();
-            $query = 'INSERT INTO dbProj_Article (title, description, content, user_id, category_id, views)'
+            $query = 'INSERT INTO dbProj_Article (title, description, content, publish_date, user_id, category_id, views)'
                      . ' VALUES ("' . $this->title . '","' . $this->description . '","' . $this->content 
-                     . '","' . $this->user_id .'","' . $this->category_id .'","0")';
+                     . '","' . $this->publish_date .'","' . $this->user_id .'","' . $this->category_id .'","0")';
             $result = $db->querySql($query); 
             if ($result) {
                 // Retrieve the article ID just inserted
@@ -179,6 +179,7 @@ class Article {
                     . ' description = \'' . $this->description .'\','
                     . ' category_id = \'' . $this->category_id . '\','
                     . ' user_id = \'' . $this->user_id . '\','
+                    . ' publish_date = \'' . $this->publish_date . '\','
                     . ' status = \'' . $this->status .'\' '
                     . 'WHERE article_id = ' . $this->article_id;
             $result = $db->querySql($q); 
@@ -286,8 +287,8 @@ class Article {
     
     public static function getAuthorTops($author_id){
         $db = Database::getInstance();
-        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and user_id = '. $user_id .' ORDER BY rating DESC LIMIT 3");
-        echo $data;
+        $q = "SELECT * FROM dbProj_Article WHERE status = true and user_id = $author_id ORDER BY rating DESC LIMIT 3";
+        $data = $db->multiFetch($q);
         return $data;
     }
 
