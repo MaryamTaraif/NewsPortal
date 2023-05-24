@@ -1,9 +1,10 @@
 <?php
 include 'header.php';
-
 if ($_GET['searchText']){
     $result = Article::searchArticles($_GET['searchText']);
 }
+
+
 ?>
 
 <section class="search">
@@ -19,7 +20,7 @@ if ($_GET['searchText']){
                         <form>
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input type="text" id="search" class="form-control" oninput="showArticle(this.value)" placeholder="Enter writer name ...">
+                                    <input type="text" id="search" class="form-control" oninput="showArticleByAuthor(this.value)" placeholder="Enter writer name ...">
                                     <div class="input-group-btn">
                                         <button class="btn btn-primary">
                                             <i class="ion-search"></i>
@@ -50,7 +51,7 @@ if ($_GET['searchText']){
                                 </div>
                                 <p> </p>
                                 <div class="input-group-btn">  
-                                    <button class="btn btn-primary" id="date_filter">Filter</button>  
+                                    <button class="btn btn-primary" name="filter_date" id="filter_date" value="filter_date">Filter</button>  
                                 </div>
                             </div>
                         </form>
@@ -62,9 +63,9 @@ if ($_GET['searchText']){
                     <ul class="nav-tabs-list">
                         <li class="active" id="all" data-function="all" onclick="activate(this)"><a href="#">All</a></li>
                         
-                        <li data-function="mostPopular" id="latest" onclick="activate(this)"><a href="#">Latest</a></li>
+                        <li data-function="latest" id="latest" onclick="activate(this)"><a href="#">Latest</a></li>
                         
-                        <li data-function="latest" id="popular" onclick="activate(this)"><a href="#">Popular</a></li>
+                        <li data-function="mostPopular" id="popular" onclick="activate(this)"><a href="#">Popular</a></li>
 
                     </ul>
 
@@ -104,7 +105,8 @@ if ($_GET['searchText']){
 		                  '.$result[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $result[$i]->rating .'</div></a>
+		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)">><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
+                                  <a href="#" class="love"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -116,9 +118,9 @@ if ($_GET['searchText']){
                                     }
                             }
                             else {
-                                echo '<h6>Oops, no articles yet.</h6>';
+                               echo '<h6>Oops, no articles yet.</h6>';
                             }
-?>
+//?>
 
 
 
@@ -134,7 +136,7 @@ if ($_GET['searchText']){
 
 
 <script>
-   function showArticle(str) {
+   function showArticleByAuthor(str) {
     //create the AJAX request object
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -145,37 +147,8 @@ if ($_GET['searchText']){
     xmlhttp.open("GET", "filter.php?author="+ str, true);
     xmlhttp.send();
 }
-</script>
-<!-- comment
-//  function getWeeklyTops() {
-//    // Perform an AJAX request to fetch the data from the server
-//    var xhr = new XMLHttpRequest();
-//    xhr.onreadystatechange = function() {
-//      if (xhr.readyState === 4 && xhr.status === 200) {
-//        var response = xhr.responseText;
-//        // Handle the response data here
-//        console.log(response);
-//      }
-//    };
-//    xhr.open('GET', 'Article.php', true);
-//    xhr.send();
-//  }
 
-//    function getArticles() {
-//    // Perform an AJAX request to fetch the data from the server
-//    var xhr = new XMLHttpRequest();
-//    xhr.onreadystatechange = function() {
-//      if (xhr.readyState === 4 && xhr.status === 200) {
-//        var response = xhr.responseText;
-//        // Handle the response data here
-//        console.log(response);
-//      }
-//    };
-//    xhr.open('GET', 'Article.php', true);
-//    xhr.send();
-//  }
-
-   function activate(element) {
+function activate(element) {
   // Get all the list items
   var listItems = document.querySelectorAll('.nav-tabs-list li');
 
@@ -191,17 +164,64 @@ if ($_GET['searchText']){
   element.classList.add('active');
   element.querySelector('a').style.color = '#191E21';
   element.querySelector('a').style.borderBottom = '2px solid #F73F52';
-  
-  var elementName = element.getAttribute('data-function');
-  if (functionName === 'all') {
-    <?php $result = Article::getArticles; ?>
-    
-  } else if (functionName === 'mostPopular') {
-    <?php $result = Article::getWeeklyTops(); ?>
-    mostPopular();
-  }
-      
-  }
+}
+
+function updateLikes(itemId) {
+    alert("LIke");
+  // Make an AJAX request to the server-side PHP script
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', 'update_likes.php', true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      // Update the like count on the page
+      document.getElementById('like-count-' + itemId).innerHTML = xhr.responseText;
+    }
+  };
+  xhr.send('itemId=' + itemId);
+}
+//$(document).ready(function(){
+// 
+// $('.input-daterange').datepicker({
+//  todayBtn:'linked',
+//  format: "yyyy-mm-dd",
+//  autoclose: true
+// });
+//
+// fetch_data('no');
+//
+// function fetch_data(is_date_search, start_date='', end_date='')
+// {
+//  var dataTable = $('#article_data').DataTable({
+//   "processing" : true,
+//   "serverSide" : true,
+//   "article" : [],
+//   "ajax" : {
+//    url:"filter.php",
+//    type:"POST",
+//    data:{
+//     is_date_search:is_date_search, start_date:start_date, end_date:end_date
+//    }
+//   }
+//  });
+// }
+//
+// $('#search').click(function(){
+//  var start_date = $('#start_date').val();
+//  var end_date = $('#end_date').val();
+//  if(start_date != '' && end_date !='')
+//  {
+//   $('#article_data').DataTable().destroy();
+//   fetch_data('yes', start_date, end_date);
+//  }
+//  else
+//  {
+//   alert("Both Date is Required");
+//  }
+// }); 
+// 
+//});
+</script>
 
 
-</script>-->
+   
