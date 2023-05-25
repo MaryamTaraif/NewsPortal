@@ -11,7 +11,34 @@ $author = new Users();
 
 //get media details
 $media = new Media();
+
+
+
+
 ?>
+<script>
+function removeComment(comment_id) {
+    if (confirm("Are you sure you want to delete this comment?")) {
+        // make an AJAX request
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                // update the page
+              
+                if (this.responseText === "deleted") {
+                    location.reload();
+                    alert("Deleted Successfully");
+                }
+            }
+        };
+        xhttp.open("GET", "removeComment.php?c_id=" + comment_id, true);
+        xhttp.send();
+    }
+}
+</script>
+
+
 
 <section class="single">
     <div class="container" style="padding-top: 180px;">
@@ -33,14 +60,14 @@ $media = new Media();
                         $recentArticle = Article::getRecentArticle();
 
                         if ($recentArticle) {
-                            $recentId = $recentArticle->id;
+                            $recentId = $recentArticle->article_id;
                             $recentTitle = $recentArticle->title;
                             $recentDescription = $recentArticle->description;
 
                             echo '<article class="article-fw">
                                 <div class="inner">
                                     <figure>
-                                        <a href="singleArticle.php?aid=' . $recentId . '">
+                                        <a href="singleArticle.php?aid='.$recentId . '">
                                             <img src="images/news/img16.jpg">
                                         </a>
                                     </figure>
@@ -167,43 +194,52 @@ $media = new Media();
                     </div>
 
                     <div class="line thin"></div>
-                    <div class="comments">
+        <div class="comments">
+    <h2 class="title">
+        <!-- Retrieve the total number of comments on this article and display them -->
+        <?php
+        $commentCount = Article::countComments($id);
+        echo $commentCount . ' Comments';
+        ?>
+        <a href="#">Write a Comment</a>
+    </h2>
+    <div class="comment-list">
+        <?php
+        $comments = Article::getComments($id);
+        $commenterUsername = new Users();
+        
+        if (!empty($comments)) {
+            for ($i = 0; $i < count($comments); $i++) {
+                echo '<div class="item">
+                    <div class="details">
+                        <div class="user">
+                            <figure style="margin-right: 10px;">
+                                <img src="images/user.png">
+                            </figure>';
+                
+                $commenterUsername->initWithUid($comments[$i]->user_id);
+                echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
+                    <div class="time" style="margin-top: -5px;">' . $commenterUsername->getType_name() . '</div>
+                    <div class="description" style="margin-top: 10px; padding-left: 10px;">' . $comments[$i]->content . '</div>';
+                
+                if ($_SESSION['role'] == 'Admin') {
+                    echo '<a href="#" class="love" style="float: right; margin-left: 3px;" onclick="removeComment(' . $comments[$i]->comment_id . ')"><i class="ion-android-delete" ></i></a>';
+                }
+                
+                echo '
+                    </div>
+                </div>
+            </div>';
+            }
+        }
+        // Verify if no comments are found on the article
+        else {
+            echo '<p>No comments found on this article.</p>';
+        }
+        ?>
+    </div>
+</div>
 
-                        <h2 class="title">
-                            <!-- Retrieve the total number of comments on this article and display them -->                     
-                            <?php
-                            $commentCount = Article::countComments($id);
-                            echo $commentCount . ' Comments';
-                            ;
-                            ?> <a href="#">Write a Comment</a></h2>
-                        <div class="comment-list">
-                            <?php
-                            $comments = Article::getComments($id);
-                            $commenterUsername = new Users();
-                            if (!empty($comments)) {
-                                for ($i = 0; $i < count($comments); $i++) {
-                                    echo '<div class="item">
-                        <div class="details">
-                            <div class="user">
-                                <figure style="margin-right: 10px;">
-                                    <img src="images/user.png">
-                                </figure>';
-                                    $commenterUsername->initWithUid($comments[$i]->user_id);
-                                    echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
-                                        <div class="time" style="margin-top: -5px;">' . $commenterUsername->getType_name() . '</div>
-                            <div class="description" style="margin-top: 10px; padding-left: 10px;">' . $comments[$i]->content . '</div>
-                        </div>
-                    </div>
-                </div>';
-                                }
-                            }
-                            // <!-- Verify if no comments are found on the article -->
-                            else {
-                                echo '<p>No comments found on this article.</p>';
-                            }
-                            ?>
-                        </div>
-                    </div>
 
 
 
@@ -251,6 +287,7 @@ $media = new Media();
 </div>
 </div>
 </section>
+
 
 
 

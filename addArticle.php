@@ -138,8 +138,8 @@ if (isset($_GET['id'])) {
                                         if (!empty($video)) {
 
                                             echo '<br><video controls>
-                                                                                                            <source src="' . $video->URL . '" type="video/*">
-                                                                                                          </video>';
+                                        <source src="' . $video->URL . '" type="video/*">
+                                       </video>';
                                         } elseif (!empty($audio)) {
                                             echo '<br><audio controls>
                                                                                                             <source src="' . $audio->URL . '" type="audio/wav">
@@ -168,9 +168,11 @@ if (isset($_GET['id'])) {
                                     <input type ="submit" class="btn btn-primary" value ="Save" />
                                 </div>
                                 <input type="hidden" name="submitted" value="1"/>
-                                <input type ="hidden" name="id" value="<?php if ($edit) {
-                                            echo $article->getArticle_id();
-                                        } ?>">
+                                <input type ="hidden" name="id" value="<?php
+                                if ($edit) {
+                                    echo $article->getArticle_id();
+                                }
+                                ?>">
                             </form>
                         </div>
                     </div>
@@ -346,8 +348,8 @@ if (isset($_POST['submitted'])) {
         echo '<script>document.getElementById("messageContainer").innerHTML = ' . json_encode($errorMessage) . ';</script>';
     } else {
         $action = $edit ? "updated" : "added";
-        $successMessage = 'Your article has been '. $action .' successfuly.';
-         $encodedSuccessMessage = urlencode($successMessage);
+        $successMessage = 'Your article has been ' . $action . ' successfuly.';
+        $encodedSuccessMessage = urlencode($successMessage);
         header("Location: myArticles.php?message=$encodedSuccessMessage");
         exit;
     }

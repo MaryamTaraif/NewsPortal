@@ -6,7 +6,7 @@ include 'header.php';
 echo '<h1> Articles </h1>';
 
 
-$articles = new Articles();
+$articles = new Article();
 $row = $articles->getArticles();
 
 if (!empty($row)) {
