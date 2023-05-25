@@ -11,12 +11,20 @@ $row = $users->getAllusers();
 
 if (!empty($row)) {
     echo '<br />';
+    echo '<br />';
+    echo '<br />';
+    echo '<br />';
+    echo '<br />';
+    echo '<br />';
+    echo '<br />';
     //display a table of results
     echo '<table align="center" cellspacing = "2" cellpadding = "4" width="75%">';
     echo '<tr bgcolor="#87CEEB">
           <td><b>Edit</b></td>
           <td><b>Delete</b></td>
+          <td><b><a href="view_Users.php">user_id</a></b></td>
           <td><b><a href="view_Users.php">username</a></b></td>
+          <td><b><a href="view_Users.php">password</a></b></td>
           <td><b><a href="view_Users.php">email</a></b></td>
           <td><b><a href="view_Users.php">type_name</a></b></td></tr>';
 
@@ -37,9 +45,10 @@ if (!empty($row)) {
                 <td>' . $row[$i]->password . '</td>
             <td>' . $row[$i]->email . '</td>
                 <td>' . $row[$i]->type_name . '</td>
-              </tr>';
+              </tr>';   
     }
     echo '</table>';
+    echo '<br />';
 } else {
     echo '<p class="error">' . $q . '</p>';
     echo '<p class="error"> Oh dear. There was an error</p>';
