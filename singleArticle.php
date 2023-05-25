@@ -60,14 +60,14 @@ function removeComment(comment_id) {
                         $recentArticle = Article::getRecentArticle();
 
                         if ($recentArticle) {
-                            $recentId = $recentArticle->id;
+                            $recentId = $recentArticle->article_id;
                             $recentTitle = $recentArticle->title;
                             $recentDescription = $recentArticle->description;
 
                             echo '<article class="article-fw">
                                 <div class="inner">
                                     <figure>
-                                        <a href="singleArticle.php?aid=' . $recentId . '">
+                                        <a href="singleArticle.php?aid='.$recentId . '">
                                             <img src="images/news/img16.jpg">
                                         </a>
                                     </figure>
