@@ -2314,9 +2314,9 @@ section .container {
 }
 
 .article-mini {
-  display: inline-block;
+  /*display: inline-block;*/
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
 }
 .article-mini .inner {
   display: inline-block;
@@ -2325,6 +2325,7 @@ section .container {
 .article-mini .padding {
   padding: 0 10px;
   margin-left: 85px;
+  margin-bottom: 0; /* Add this line */
 }
 .article-mini figure {
   float: left;
@@ -2436,9 +2437,10 @@ aside .aside-title:after {
   background-color: #F73F52;
 }
 aside .article-mini {
-  margin-bottom: 10px;
+  margin-bottom: 0; /* Adjusted from 10px to 0 */
   padding-bottom: 10px;
 }
+
 aside .article-mini figure {
   margin-bottom: 0;
 }

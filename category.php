@@ -43,7 +43,7 @@ $name = Article::getCatName($id);
 		                  '.$list[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->rating .'</div></a>
+		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->likes .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
