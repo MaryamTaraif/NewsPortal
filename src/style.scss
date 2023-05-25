@@ -2213,7 +2213,7 @@ section .container {
 .article-mini {
   display: inline-block;
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
   .inner {
     display: inline-block;
     height: 100%;
@@ -2308,8 +2308,8 @@ aside {
   .aside-body {
   }
   .article-mini {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
     figure {
       margin-bottom: 0;
     }
@@ -3120,7 +3120,7 @@ footer.footer {
     }
   }
   .article-mini {
-    margin-bottom: 23px;
+    margin-bottom: 0px;
     .inner {
       border-bottom: 0;
     }
