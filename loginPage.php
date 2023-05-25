@@ -17,7 +17,6 @@ include 'header.php';
                         </div>
                         <div class="form-group">
                             <label class="fw">Password
-                                <a href="forgot.html" class="pull-right">Forgot Password?</a>
                             </label>
                             <input type="password" name="password" id="password" class="form-control">
                         </div>
@@ -44,11 +43,10 @@ include 'header.php';
                             exit;
                         } else {
                             echo '<div class="alert alert-danger">Wrong Login Values</div>'; // Display an error message if the login values are incorrect
-        
                         }
                     }
                     ?>
-                    
+
                 </div>
             </div>
         </div>
@@ -73,13 +71,13 @@ include 'header.php';
 
 <script>
     // JavaScript Validation
-    
-       // Add event listener to the login form
-    document.getElementById("loginForm").addEventListener("submit", function(event) {
+
+    // Add event listener to the login form
+    document.getElementById("loginForm").addEventListener("submit", function (event) {
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
 
-    // Check if either username or password is empty
+        // Check if either username or password is empty
         if (username.trim() === "" || password.trim() === "") {
             event.preventDefault();
             alert("Please fill in all the fields.");

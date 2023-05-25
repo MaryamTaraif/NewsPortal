@@ -23,11 +23,21 @@ include 'header.php';
                         <div class="form-group">
                             <label>Role</label>
                             <select id="roles" name="role" class="form-control" value="">
-                                <?php 
+                                <?php
                                 $typesList = Users::getTypes();
-                                if(!empty($typesList)){
-                                    for($i=0;$i<count($typesList);$i++){
-                                        echo '<option value="'.$typesList[$i]->type_name .'">'. $typesList[$i]->type_name .'</option>';
+                                if (!empty($typesList)) {
+                                    for ($i = 0; $i < count($typesList); $i++) {
+                                        if ($_SESSION['role'] == 'Admin') {
+                                            if ($typesList[$i]->type_name == 'Admin') {
+                                                echo '<option value="' . $typesList[$i]->type_name . '" selected>' . $typesList[$i]->type_name . '</option>';
+                                            } else {
+                                                echo '<option value="' . $typesList[$i]->type_name . '">' . $typesList[$i]->type_name . '</option>';
+                                            }
+                                        } else {
+                                            if ($typesList[$i]->type_name != 'Admin') {
+                                                echo '<option value="' . $typesList[$i]->type_name . '">' . $typesList[$i]->type_name . '</option>';
+                                            }
+                                        }
                                     }
                                 }
                                 ?>
@@ -45,7 +55,7 @@ include 'header.php';
                         </div>
 
                         <div class="form-group text-center">
-                            <span class="text-muted">Already have an account?</span> <a href="login.php">Login</a>
+                            <span class="text-muted">Already have an account?</span> <a href="loginPage.php">Login</a>
                         </div>
                     </form>
                 </div>
@@ -70,8 +80,8 @@ include 'header.php';
 
     // Add event listeners to form fields
     var formFields = document.querySelectorAll("#registrationForm input");
-    formFields.forEach(function(field) {
-        field.addEventListener("input", function() {
+    formFields.forEach(function (field) {
+        field.addEventListener("input", function () {
             if (checkForm()) {
                 document.getElementById("registerButton").disabled = false; //enable register button
             } else {
@@ -84,7 +94,6 @@ include 'header.php';
 
 
 <?php
-
 if (isset($_POST['submitted'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -121,4 +130,5 @@ if (isset($_POST['submitted'])) {
 
 
 
-include 'footer.html' ?>
+include 'footer.html'
+?>
