@@ -7,19 +7,21 @@ class Article {
     private $description;
     private $content;
     private $publish_date;
-    private $rating;
+    private $likes;
+    private $dislikes;
     private $user_id;
     private $category_id;
     private $status;
     private $views;
-    
+     
     public function __construct() {
         $this->article_id = null;
         $this->title = null;
         $this->description = null;
         $this->content = null;
         $this->publish_date = null;
-        $this->rating = null;
+        $this->likes = 0;
+        $this->dislikes = 0;
         $this->user_id = null;
         $this->category_id = null;
         $this->status = false;
@@ -45,10 +47,23 @@ class Article {
         return $this->publish_date;
     }
 
-    public function getRating() {
-        return $this->rating;
+    public function getLikes() {
+        return $this->likes;
     }
 
+    public function getDislikes() {
+        return $this->dislikes;
+    }
+
+    public function setLikes($likes): void {
+        $this->likes = $likes;
+    }
+
+    public function setDislikes($dislikes): void {
+        $this->dislikes = $dislikes;
+    }
+
+    
     public function getUser_id() {
         return $this->user_id;
     }
@@ -106,13 +121,14 @@ class Article {
     }
 
         
-    function initWith($article_id, $title, $description, $content, $publish_date,$rating,$user_id,$category_id, $status, $views) {
+    function initWith($article_id, $title, $description, $content, $publish_date,$likes,$dislikes,$user_id,$category_id, $status, $views) {
         $this->article_id = $article_id;
         $this->title = $title;
         $this->description = $description;
         $this->content =  $content;
         $this->publish_date = $publish_date;
-        $this->rating = $rating;
+        $this->likes = $likes;
+        $this->dislikes = $dislikes;
         $this->user_id = $user_id;
         $this->category_id = $category_id;
         $this->status = $status;
@@ -122,7 +138,7 @@ class Article {
     function initWithId($article_id) {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id .  '\'');
-        $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date,$data->rating, $data->user_id,$data->category_id, $data->status, $data->views );
+        $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date,$data->likes, $data->dislikes, $data->user_id,$data->category_id, $data->status, $data->views );
 
     }
     
@@ -277,7 +293,7 @@ class Article {
         $db = Database::getInstance();
         $today = date('Y-m-d');
         $one_week_ago = date('Y-m-d', strtotime('-1 week'));
-        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$one_week_ago' ORDER BY rating DESC LIMIT 3");
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$one_week_ago' ORDER BY likes DESC LIMIT 3");
         //if nothing added this week, return just the latest article to be in the banner 
         if (empty($data)){
             $data = $db->singleFetch("SELECT * FROM dbProj_Article where status = true order by publish_date desc limit 1");
@@ -287,7 +303,7 @@ class Article {
     
     public static function getAuthorTops($author_id){
         $db = Database::getInstance();
-        $q = "SELECT * FROM dbProj_Article WHERE status = true and user_id = $author_id ORDER BY rating DESC LIMIT 3";
+        $q = "SELECT * FROM dbProj_Article WHERE status = true and user_id = $author_id ORDER BY likes DESC LIMIT 3";
         $data = $db->multiFetch($q);
         return $data;
     }
