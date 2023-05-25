@@ -1,16 +1,22 @@
 <?php
 include 'header.php';
+
 $id = $_GET['aid'];
 
 //get article details
 $article = new Article();
 $article->initWithId($id);
 
+//getting the view & incrementing it
+$article->getViews();
+$article->setViews($article->getViews() + 1);
+$article->updateArticleViews();
 //get author details
 $author = new Users();
 
 //get media details
 $media = new Media();
+
 ?>
 
 <section class="single">
@@ -166,6 +172,14 @@ $media = new Media();
                         </div>
                     </div>
 
+                    <div class="line thin";>
+                        <p style="margin-top: 20px;">
+                        <?php echo $article->getViews() .' views';
+                        ?>
+                            </p>
+                    </div>
+                    
+                    
                     <div class="line thin"></div>
                     <div class="comments">
 
@@ -175,7 +189,7 @@ $media = new Media();
                             $commentCount = Article::countComments($id);
                             echo $commentCount . ' Comments';
                             ;
-                            ?> <a href="#">Write a Comment</a></h2>
+                            ?> <!--<a href="#">Write a Comment</a>--></h2>
                         <div class="comment-list">
                             <?php
                             $comments = Article::getComments($id);
@@ -200,7 +214,7 @@ $media = new Media();
                             // <!-- Verify if no comments are found on the article -->
                             else {
                                 echo '<p>No comments found on this article.</p>';
-                            }
+                            } 
                             ?>
                         </div>
                     </div>
@@ -213,40 +227,36 @@ $media = new Media();
                 <div>Comment</div>
             </div>
 
-
-
-
-
-
-            <form class="row">
+            <?php 
+            if (!empty(($_SESSION['user_id'])))
+            {
+                echo '<form class="row" action="" method="post">
+                <fieldset>
                 <div class="col-md-12">
                     <h3 class="title">Leave Your Comment</h3>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="name">Name <span class="required"></span></label>
-                    <input type="text" id="name" name="" class="form-control">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="email">Email <span class="required"></span></label>
-                    <input type="email" id="email" name="" class="form-control">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="website">Website</label>
-                    <input type="url" id="website" name="" class="form-control">
-                </div>
+               
                 <div class="form-group col-md-12">
                     <label for="message">Response <span class="required"></span></label>
-                    <textarea class="form-control" name="message" placeholder="Write your response ..."></textarea>
+                    <textarea class="form-control" id="comment" type="text" name="content" placeholder="Write your response ..."></textarea>
                 </div>
+                
                 <div class="form-group col-md-12">
-                    <?php if (isset($_SESSION['user_id'])): ?>
-                        <button class="btn btn-primary" onclick="performTask()">Perform Task</button>
-                    <?php else: ?>
-                        <a href="loginPage.php" class="btn btn-primary">submit</a>
-                    <?php endif; ?>
+                <input type ="submit" class="btn btn-primary" value ="send response" />
                 </div>
-            </form>
+                    <input type="hidden" name="submitted" value="1" />
+               </fieldset>
+            </form>'; 
+            } else {
+                echo '<div style="text-align: center;">
+                      <p>Please <a href="loginPage.php">login</a> first</p>
+                      </div>';
+            }
+            
+            
+            ?>
         </div>
+        
     </div>
 </div>
 </div>
@@ -256,7 +266,65 @@ $media = new Media();
 
 
 
-<?php include 'footer.html' ?>;
+<?php 
+ if( isset($_POST['submitted']) )
+{
+    echo 'Add attempt';
+    include 'Comment.php';
 
+    $comment = new Comment();
+    $comment->setContent(trim($_POST['Comment']));
+    
+    $errors = $comment->isValid();
+    
+    if(empty($errors)){
+        if($comment->addComment()){
+             echo "<script>alert('Your comment was added successfully');</script>";
+        }
+    }else{
+        echo'<p> class="error"> Error </p>';
+        
+        foreach($errors as $comment)
+            echo " - $comment<br />";
+    }
+}
+include 'footer.html' 
+?>;
 
+<script>
 
+    
+
+</script>
+
+<!-- comment 
+//    function send(){
+//        
+//        alert('function attempt') ;
+//        //get comment
+//if(isset($_POST['sendResponse'])){
+//    alert('Add attempt') ;
+//    $comment = new Comment();
+//    $comment->setContent(trim($_POST['Comment']));
+//    
+//    $errors = $comment->isValid();
+//    
+//    if(empty($errors)){
+//        if($comment->addComment()){
+//            echo "<p>Your comment was added successfully</p>";
+//        }
+//    }else{
+//        echo'<p> class="error"> Error </p>';
+//        
+//        foreach($errors as $comment)
+//            echo " - $comment<br />";
+//    }
+//}
+//    }
+   
+ <?php if (isset($_SESSION['user_id'])): ?>
+                        <button class="btn btn-primary" onclick="submit()">send response</button>
+                    <?php else: ?>
+                        <a href="register.php" class="btn btn-primary">send response</a>
+                    <?php endif; ?>
+-->

@@ -3,8 +3,6 @@ include 'header.php';
 if ($_GET['searchText']){
     $result = Article::searchArticles($_GET['searchText']);
 }
-
-
 ?>
 
 <section class="search">
@@ -37,24 +35,23 @@ if ($_GET['searchText']){
 
                         <p>Search Within certain period for more accurate results.</p>
                         <p>Your search texts will be cleared when searching by date</p>
-                        <form>
+                        <form method="POST">
                             <div class="form-group">
-
-                                <div class="input-daterange">
-                                    <div class="input-group">
-                                        <input type="date" name="from_date" id="start_date" class="form-control" placeholder="From Date" />  
-                                    </div>
-                                    <p> </p>
-                                    <div class="input-group">
-                                        <input type="date" name="to_date" id="end_date" class="form-control" placeholder="To Date" />
-                                    </div>
+                              <div class="input-daterange">
+                                <div class="input-group">
+                                    <input type="date" name="from_date" id="start_date" class="form-control" placeholder="From Date" />  
                                 </div>
                                 <p> </p>
-                                <div class="input-group-btn">  
-                                    <button class="btn btn-primary" name="filter_date" id="filter_date" value="filter_date">Filter</button>  
+                                <div class="input-group">
+                                  <input type="date" name="to_date" id="end_date" class="form-control" placeholder="To Date"  />
                                 </div>
+                              </div>
+                              <p> </p>
+                              <div class="input-group-btn">  
+                                  <button class="btn btn-primary" name="filter_date" id="filter_date" value="filter_date" onclick="showArticleByDate()">Filter</button>  
+                              </div>
                             </div>
-                        </form>
+                          </form>
                     </div>
                 </aside>
             </div>
@@ -76,16 +73,9 @@ if ($_GET['searchText']){
                 <div class="row" id="searchResult">
                     
                     <?php
-  // Include the necessary dependencies and define the Article class
- 
-  // Call the getWeeklyTops() function to retrieve the weekly tops
-  
- 
-  // Process the $result array or perform any other necessary operations
- 
-  // Return the desired data as the response
-  
-  if (!empty($result)) {
+                // Return the desired data as the response
+
+                if (!empty($result)) {
                                 //loop through and display 
                                     for ($i = 0; $i < count($result); $i++) {
                                         echo '<article class="col-md-12 article-list">
@@ -106,7 +96,7 @@ if ($_GET['searchText']){
 		                </p>
 		                <footer>
 		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
-                                  <a href="#" class="love"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
+                                  <a href="#" id="dislike" class="love" onclick="updateDislikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -122,6 +112,7 @@ if ($_GET['searchText']){
                             }
 //?>
 
+                    
 
 
 
@@ -148,6 +139,20 @@ if ($_GET['searchText']){
     xmlhttp.send();
 }
 
+function showArticleByDate() {
+    //create the AJAX request object
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+        }
+    }
+    fromDate = document.getElementById("start_date").value;
+    toDate = document.getElementById("end_date").value;
+    xmlhttp.open("GET", "filterDate.php?start_date="+ fromDate + "&end_date=" +toDate, true);
+    xmlhttp.send();
+}
+
 function activate(element) {
   // Get all the list items
   var listItems = document.querySelectorAll('.nav-tabs-list li');
@@ -166,6 +171,58 @@ function activate(element) {
   element.querySelector('a').style.borderBottom = '2px solid #F73F52';
 }
 
+document.getElementById("dislike").addEventListener("click", function() {
+  // Increment dislikes  
+  incrementDislikes(<?php echo $result[$i]->id; ?>);
+});
+
+
+  function updateLikes(articleId) {
+    // TODO: Implement logic to update the likes count for the specified article ID
+    alert("Liked article " +articleId);
+  }
+
+  function updateDislikes(articleId) {
+    // TODO: Implement logic to update the dislikes count for the specified article ID
+    alert("Disliked article " + articleId);
+  }
+
+
+//function initDateFilter() {
+//  // Get references to the "From Date" and "To Date" input fields and the "Filter" button
+//  const fromDateInput = document.getElementById("start_date");
+//  const toDateInput = document.getElementById("end_date");
+//  const filterButton = document.getElementById("filter_date");
+//
+//    alert("function is called");
+//  // Add an event listener to the "Filter" button
+//  filterButton.onclick = function() {
+//    // Check if both input fields have values
+//    if (fromDateInput.value === "" || toDateInput.value === "") {
+//      // Display an error message if either input field is empty
+//      alert("Please enter both a From Date and a To Date");
+//    } else {
+//      // If both input fields have values, do the filtering logic here
+//      alert("lab lab lab");
+//    }
+//  };
+//}
+
+//function activate(el) {
+//   var functionName = el.dataset.function;
+//   
+//   if (functionName == "latest") {
+//       getLatestArticle();
+//   }
+//}
+
+//function getLatestArticle() {
+//    fetch("getLatestArticle.php")
+//    .then(res => res.text())
+//    .then(data => {
+//       document.getElementById("latest-article").innerHTML = data;      
+//    })   
+//}
 //function updateLikes(itemId) {
 //    alert("LIke");
 //  // Make an AJAX request to the server-side PHP script
