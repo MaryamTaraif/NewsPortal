@@ -2,7 +2,7 @@
 // Check if the user is not logged in, then redirect to login
 ob_start();
 include 'header.php';
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author') {
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION['role'] !== 'Admin') {
     header("Location: permission_denied.php");
     exit();
 }
