@@ -1,7 +1,7 @@
 <?php
 
 
-include 'debugging.php';
+//include 'debugging.php';
 include 'header.php';
 
 
@@ -26,7 +26,7 @@ if(isset($_POST['submitted'])){
 
 ?>
 <h2 class="i2Style" >Create a new Comment</h2>
-<form action="addComment.php" method="post">
+<form action="addComment.php" method="post" style="padding-top:300px;">
      <fieldset>
             <p><b>Enter Comment</b>
                 <textarea  name="content" cols="45" rows="5"></textarea><br />

@@ -208,6 +208,20 @@ class Article {
         }
     }
     
+    function updateArticleViews(){
+        
+            $db = Database::getInstance();
+            $q = 'UPDATE dbProj_Article SET views = \'' . $this->views .'\''
+                    . 'WHERE article_id = ' . $this->article_id;
+            $result = $db->querySql($q); 
+            if($result) {
+                return true;
+            }
+            else {
+                return false;
+            }
+    }
+    
     //delete article 
     public static function deleteArticle($article_id) {
         $db = Database::getInstance();
@@ -378,7 +392,7 @@ class Article {
 
     public static function getMostPopular($from, $to){
         $db = Database::getInstance();
-        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true ORDER BY views DESC limit 10");
         return $data;
     }
     
