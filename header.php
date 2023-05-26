@@ -136,7 +136,7 @@
                                     <li><a href="addArticle.php"><i class="icon ion-android-add"></i>Add Article</a></li>
                                     <li><a href="view_Articles.php"><i class="icon ion-ios-list"></i>Manage Articles</a></li>
                                     <li><a href="view_Users.php"><i class="icon ion-person-stalker"></i>Manage Users</a></li>
-                                    <li><a href="view_Articles.php"><i class="icon ion-android-settings"></i>Administration Reports</a></li>';
+                                    <li><a href="adminReports.php"><i class="icon ion-android-settings"></i>Administration Reports</a></li>';
 
                                     }
                                     echo '<li><a href="logout.php"><i class="icon ion-log-out"></i> Logout</a></li>
