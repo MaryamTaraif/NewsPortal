@@ -287,7 +287,6 @@ class Article {
         return $data;
     }
 
-    
     public static function getWeeklyTops(){
         //top articles for this week to display in the home banner 
         $db = Database::getInstance();
@@ -357,13 +356,17 @@ class Article {
 
     public static function searchByAuthor($authorName)
     {
-        
         $db = Database::getInstance();
         $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE u.user_id = a.user_id and u.username like '$authorName%'";
         $data = $db->multiFetch($q);
-
         return $data;
     }
 
+    public static function getMostPopular($from, $to){
+        //
+        $db = Database::getInstance();
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
+        return $data;
+    }
     
 }

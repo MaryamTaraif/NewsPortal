@@ -191,7 +191,12 @@ class Users {
         $data = $db->singleFetch('select user_id from dbProj_User where username  ');
         return $data;
     }
-    // ...
+    
+    public static function getAuthors(){
+        $db = Database::getInstance();
+        $data = $db->multiFetch("select * from dbProj_User where type_name = 'Author'");
+        return $data;
+    }
 }
 
 /* 
