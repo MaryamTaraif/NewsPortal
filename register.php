@@ -23,6 +23,7 @@ include 'header.php';
                         <div class="form-group">
                             <label>Role</label>
                             <select id="roles" name="role" class="form-control" value="">
+                                <!-- retrive roles list -->
                                 <?php
                                 $typesList = Users::getTypes();
                                 if (!empty($typesList)) {
