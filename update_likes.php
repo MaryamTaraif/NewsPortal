@@ -1,17 +1,11 @@
 <?php
 
+include 'debugging.php';
 
-// Include the necessary classes and initialize the database connection
-include 'Article.php';
-$db = new Database();
+$result = Article::updateArticleLikes($_GET['$articleId']);
 
-// Get the article ID from the query string
-$articleId = $_GET['article_id'];
+                                echo '
+		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->article_id; ?>)"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
+                                  ';
 
-// Call the incrementDislikes() method in the Article class to update the dislikes count for the article with the specified ID
-$article = new Article();
-$article->updateArticleLikes($articleId);
-
-// Return the new dislikes count as JSON
-$data = ['dislikes' => $article->getDislikes($articleId)];
-echo json_encode($data);
+                            ?>

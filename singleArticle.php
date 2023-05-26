@@ -265,18 +265,21 @@ function removeComment(comment_id) {
 
 <?php
             if(!empty($_SESSION['user_id'])){
-            echo '<form class="row">
+            echo '<form class="row" action="singleArticle.php" method="post">
+                <fieldset>
                 <div class="col-md-12">
                     <h3 class="title">Leave Your Comment</h3>
                 </div>
                 <div class="form-group col-md-12">
                     <label for="message">Response <span class="required"></span></label>
-                    <textarea class="form-control" name="message" placeholder="Write your response ..."></textarea>
+                    <textarea class="form-control" name="content" placeholder="Write your response ..."></textarea>
                 </div>
                 <div class="form-group col-md-12">
                         
                         <button class="btn btn-primary">Send Response</button>
                 </div>
+                <input type="hidden" name="submitted" value="1" />
+                </fieldset>
             </form>';} else {
                  echo '<p style="text-align: center;">Please <a href="loginPage.php">login</a> first</p>';
             }
@@ -293,7 +296,31 @@ function removeComment(comment_id) {
 
 
 
-<?php include 'footer.html' ?>;
+<?php 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+if(isset($_POST['submitted'])){
+    
+    echo 'Add attempt';
+    $comment = new Comment();
+    $comment->setContent(trim($_POST['Comment']));
+    
+    $errors = $comment->isValid();
+    
+    if(empty($errors)){
+        if($comment->addComment()){
+            echo "<p>Your comment was added successfully</p>";
+        }
+    }else{
+        echo'<p> class="error"> Error </p>';
+        
+        foreach($errors as $comment)
+            echo " - $comment<br />";
+    }
+}
+include 'footer.html' ?>;
 
 
 
