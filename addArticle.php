@@ -1,19 +1,19 @@
 <?php
-// Check if the user is not logged in, then redirect to login
+// Check if the user is not logged in or not author, then show restriction
 ob_start();
 include 'header.php';
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author') {
     header("Location: permission_denied.php");
     exit();
 }
-//check if this is an edit request, then get the article data  
+//check if this is an edit request, then get the article data   
 $edit = false;
 if (isset($_GET['id'])) {
     $article = new Article();
     $article->initWithId($_GET['id']);
     $edit = true;
 
-    //get media 
+    //get media for the edited article 
     $photo = Media::getPhotoURL($article->getArticle_id());
     if (!empty(Media::getVideoURL($article->getArticle_id()))) {
         $video = Media::getVideoURL($article->getArticle_id());
@@ -181,6 +181,7 @@ if (isset($_GET['id'])) {
 </section>
 
 <?php
+//once form is submitted 
 if (isset($_POST['submitted'])) {
     // Initialize an array to store error messages
     $errors = array();
@@ -189,20 +190,22 @@ if (isset($_POST['submitted'])) {
     if (!$edit) {
         $article = new Article();
     } else {
+        //if edited, it's the id passed to this page 
         $article->setArticle_id($_GET['id']);
     }
 
-    // populate the object with field values
+    // populate the object with fields values
     $article->setCategory_id($_POST['category']);
     $article->setTitle($_POST['title']);
     $article->setDescription($_POST['description']);
     $article->setContent($_POST['content']);
     $article->setPublish_date(date('Y-m-d')); // set to the current date (last modification)
     if (!$edit) {
+        //set current user as author for new article
         $article->setUser_id($_SESSION['user_id']);
     }
 
-    // save
+    // save changes (add or update the article)
     if ($edit) {
         if (!$article->updateArticle()) {
             $errors[] = 'Failed to update the article.';
@@ -213,7 +216,7 @@ if (isset($_POST['submitted'])) {
         }
     }
 
-    // upload all files
+    //upload all files 
     if (!empty($_FILES)) {
         $upload = new Upload();
         $upload->setUploadDir('media/');
@@ -222,16 +225,18 @@ if (isset($_POST['submitted'])) {
         if (isset($_FILES['photo']) && !empty($_FILES['photo']['name'])) {
             $upload->setFileType('image');
             $msg = $upload->upload('photo');
+            //if uploaded to the server, create new object to insert/update to db 
             if (empty($msg)) {
                 $media = new Media();
                 if ($edit) {
+                    //if this is an editedarticle, get the photo record to replace data 
                     $media->initWithId($photo->media_id);
                 }
                 $media->setArticle_id($article->getArticle_id());
                 $media->setType_name($upload->getFileType());
                 $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
 
-                // save changes
+                // save changes (add or update photo record)
                 if ($edit) {
                     if (!$media->updateMedia()) {
                         $errors[] = 'Failed to update the photo.';
@@ -262,9 +267,9 @@ if (isset($_POST['submitted'])) {
             } elseif (strpos($type, 'audio') !== false) {
                 $fileType = 'audio';
             }
-
             $upload->setFileType($fileType);
             $msg = $upload->upload('video/audio');
+            //if uploaded to server, create object to add/update to db media table
             if (empty($msg)) {
                 $media = new Media();
                 if ($edit && $video) {
@@ -272,7 +277,7 @@ if (isset($_POST['submitted'])) {
                 } elseif ($edit && $audio) {
                     $media->initWithId($audio->media_id);
                 }
-
+                
                 $media->setArticle_id($article->getArticle_id());
                 $media->setType_name($upload->getFileType());
                 $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
@@ -333,6 +338,7 @@ if (isset($_POST['submitted'])) {
         }
     }
 
+    //if there is any error in the revious process, show them
     if (count($errors) > 0) {
         $errorMessage = '<div class="alert alert-danger" style="color:maroon">';
         foreach ($errors as $error) {
@@ -344,7 +350,9 @@ if (isset($_POST['submitted'])) {
                 </div>';
 
         echo '<script>document.getElementById("messageContainer").innerHTML = ' . json_encode($errorMessage) . ';</script>';
-    } else {
+    } 
+    //if everything is perfect, redirec to my article page with success message 
+    else {
         $action = $edit ? "updated" : "added";
         $successMessage = 'Your article has been '. $action .' successfuly.';
          $encodedSuccessMessage = urlencode($successMessage);
