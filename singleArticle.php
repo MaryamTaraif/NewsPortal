@@ -18,17 +18,18 @@ $media = new Media();
 ?>
 <script>
 function removeComment(comment_id) {
-    if (confirm("Are you sure you want to delete this comment?")) {
+    if (confirm("Are you sure you want to remove this comment?")) {
         // make an AJAX request
         var xhttp = new XMLHttpRequest();
-        
         xhttp.onreadystatechange = function() {
             if (this.readyState === 4 && this.status === 200) {
                 // update the page
-              
-                if (this.responseText === "deleted") {
+                if (this.responseText == true) {
                     location.reload();
                     alert("Deleted Successfully");
+                }
+                else {
+                    alert(this.responseText);
                 }
             }
         };
@@ -222,7 +223,7 @@ function removeComment(comment_id) {
                     <div class="time" style="margin-top: -5px;">' . $commenterUsername->getType_name() . '</div>
                     <div class="description" style="margin-top: 10px; padding-left: 10px;">' . $comments[$i]->content . '</div>';
                 
-                if ($_SESSION['role'] == 'Admin') {
+                if ($_SESSION['role'] == 'Admin' && $comments[$i]->content != "This comment was removed by an administrator") {
                     echo '<a href="#" class="love" style="float: right; margin-left: 3px;" onclick="removeComment(' . $comments[$i]->comment_id . ')"><i class="ion-android-delete" ></i></a>';
                 }
                 

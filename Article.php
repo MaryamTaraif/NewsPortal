@@ -219,9 +219,23 @@ class Article {
             return false;
         }
     }
-
-
     
+    public static function adminDeleteArticle($article_id){
+        $db = Database::getInstance();
+        $text = "This article was removed by an administrator";
+        $q = 'UPDATE dbProj_Article SET content = \'' . $text .'\','
+                    . ' description = \'' . $text .'\' '
+                    . 'WHERE article_id = ' . $article_id;
+            $result = $db->querySql($q); 
+            if($result) {
+                return true;
+            }
+            else {
+                return false;
+            }
+    }
+
+
     //publish article 
     public static function publish($article_id){
          $db = Database::getInstance();
@@ -363,10 +377,11 @@ class Article {
     }
 
     public static function getMostPopular($from, $to){
-        //
         $db = Database::getInstance();
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
         return $data;
     }
     
+    
+
 }

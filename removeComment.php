@@ -74,9 +74,9 @@ if (!isset($_GET['c_id']) || empty($_GET['c_id'])) {
     exit;
 }
 //delete article 
-$delete = Comment::removeComment($_GET['c_id']);
-if ($delete) {
-    echo 'This comment was deleted by admin';
+$deleted = Comment::removeComment($_GET['c_id']);
+if ($deleted) {
+    echo true;
 }
 ?>
 

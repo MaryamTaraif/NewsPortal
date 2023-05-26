@@ -61,11 +61,14 @@ class Comment {
     public static function removeComment($comment_id) {
     try {
         $db = Database::getInstance();
-        $query = 'DELETE FROM dbProj_Comment WHERE comment_id=' . $comment_id;
-        echo $query;
-        $db->querySql($query);
-
-        return true;
+        $query = "UPDATE dbProj_Comment SET content = 'This comment was removed by an administrator' WHERE comment_id=" . $comment_id;
+        $result = $db->querySql($query);
+        if ($result){
+            return true;
+        }
+        else {
+            return false;
+        }
     } catch (Exception $e) {
         echo 'Exception: ' . $e->getMessage();
         return false;
