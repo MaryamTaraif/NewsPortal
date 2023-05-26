@@ -197,11 +197,34 @@ class Users {
         $data = $db->multiFetch("select * from dbProj_User where type_name = 'Author'");
         return $data;
     }
+    
+    
+    //featurd profile statistics 
+    public static function getTopAuthor(){
+        try {
+            $db = Database::getInstance();
+            $result = $db->singleFetch('CALL GetTopAuthor()');
+            if ($result) {
+                $resultArray = json_decode(json_encode($result), true);
+                return $resultArray;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e->getMessage();
+            return false;
+        }
+    }
+    
+    public static function getUserStats($user_id) {
+        $db = Database::getInstance();
+        $result = $db->singleFetch("CALL GetUserStats($user_id)");
+
+        if ($result) {
+            $resultArray = json_decode(json_encode($result), true);
+            return $resultArray;
+        } else {
+            return false;
+        }
+    }
 }
-
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
