@@ -1,4 +1,4 @@
-<?php 
+<?php
 ob_start();
 include 'header.php';
 // Check if the user not an admin, then redirect to permission denied page
@@ -6,17 +6,28 @@ if ($_SESSION['role'] !== 'Admin') {
     header("Location: permission_denied.php");
     exit();
 }
-
-
 ?>
-<div class="container" style="padding-top: 200px; margin-bottom: 70px;">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<div class="container" style="padding-top: 240px; margin-bottom: 70px;">
     <div class="row">
-        <div class="col-md-12">        
-            <ol class="breadcrumb">
+        <div class="col-md-12" >        
+            <ol class="breadcrumb" style="text-align: center;">
                 <li><a href="#">My Account</a></li>
                 <li class="active">Users</li>
             </ol>
-            <h1>All Users</h1>
+            <h1 class="page-title" align="center" >All Users</h1>
+              
+            <div class="line thin"></div>
+            <div class ="row">
+                <div class="col-md-12"> 
+                    <h5>
+                        <a href="register.php">
+                            <i class="fas fa-user-plus"></i>&nbsp;&nbsp;Register a new User
+                        </a>
+                    </h5>
+                </div>
+            </div> 
 
             <?php
             $users = new Users();
