@@ -126,14 +126,13 @@
                             if(!empty($_SESSION['user_id'])){
                              echo'  <li class="dropdown magz-dropdown" style="margin-left: auto;"><a href="#">My Account <i class="ion-ios-arrow-right"></i></a>
                                 <ul class="dropdown-menu">';
-                                    
                                     if ($_SESSION['role'] == 'Author') {
-                                    echo '<li><a href="myArticles.php"><i class="icon ion-person"></i>My Articles</a></li>
-                                    <li><a href="addArticle.php"><i class="icon ion-plus"></i>Add Article</a></li>';    
-                                    }
+                                    echo '<li><a href="addArticle.php"><i class="icon ion-plus"></i>Add Article</a></li>
+                                       <li><a href="myArticles.php"><i class="icon ion-document-text"></i>My Articles</a></li>';                                    }
                                     elseif ($_SESSION['role'] == 'Admin') {
                                     echo '
                                     <li><a href="addArticle.php"><i class="icon ion-android-add"></i>Add Article</a></li>
+                                    <li><a href="myArticles.php"><i class="icon ion-document-text"></i>My Articles</a></li>
                                     <li><a href="view_Articles.php"><i class="icon ion-ios-list"></i>Manage Articles</a></li>
                                     <li><a href="view_Users.php"><i class="icon ion-person-stalker"></i>Manage Users</a></li>
                                     <li><a href="adminReports.php"><i class="icon ion-android-settings"></i>Administration Reports</a></li>';
