@@ -1,4 +1,14 @@
-<?php include 'header.php'; ?>
+<?php 
+ob_start();
+// Check if the user is not logged in or is not an admin, then redirect to permission denied page
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
+    header("Location: permission_denied.php");
+    exit();
+}
+include 'header.php'; 
+
+
+?>
 <div class="container" style="padding-top: 200px; margin-bottom: 70px;">
     <div class="row">
         <div class="col-md-12">        

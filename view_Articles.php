@@ -1,11 +1,12 @@
 <?php
-include 'header.php';
-
+ob_start();
 // Check if the user is not logged in or is not an admin, then redirect to permission denied page
 if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
     header("Location: permission_denied.php");
     exit();
 }
+include 'header.php';
+
 
 $articles = new Article();
 $list = $articles->getArticles();

@@ -1,9 +1,12 @@
 <?php
-//if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
-//    header("Location: permission_denied.php");
-//    exit();
-//}
+ob_start();
+// Check if the user is not logged in or is not an admin, then redirect to permission denied page
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
+    header("Location: permission_denied.php");
+    exit();
+}
 include 'header.php';
+
 ?>
 
 <div class="container" style="padding-top: 220px">
