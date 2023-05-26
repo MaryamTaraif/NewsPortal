@@ -383,4 +383,16 @@ class Article {
         return $data;
     }
     
+    public static function updateArticleLikes(){
+        
+            $db = Database::getInstance();
+            $q = 'UPDATE dbProj_Article SET likes = likes + 1 WHERE article_id = ' . $this->article_id;
+            $result = $db->querySql($q); 
+            if($result) {
+                return true;
+            }
+            else {
+                return false;
+            }
+    }
 }
