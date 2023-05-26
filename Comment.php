@@ -57,6 +57,21 @@ class Comment {
             return false;
         }
     }
+    
+    public static function removeComment($comment_id) {
+    try {
+        $db = Database::getInstance();
+        $query = 'DELETE FROM dbProj_Comment WHERE comment_id=' . $comment_id;
+        echo $query;
+        $db->querySql($query);
+
+        return true;
+    } catch (Exception $e) {
+        echo 'Exception: ' . $e->getMessage();
+        return false;
+    }
+}
+
 
     function initWithCid($cid) {
 

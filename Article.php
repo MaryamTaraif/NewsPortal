@@ -287,12 +287,6 @@ class Article {
         return $data;
     }
 
-    public static function getPublicArticles() {
-        $db = Database::getInstance();
-        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true AND views > 0 ORDER BY views DESC LIMIT 10");
-        return $data;
-    }
-    
     public static function getWeeklyTops(){
         //top articles for this week to display in the home banner 
         $db = Database::getInstance();
@@ -355,68 +349,24 @@ class Article {
     // Define a new function that takes a search query as a parameter
     public static function searchArticles($searchText) {
     $db = Database::getInstance();
-    $query = "SELECT * FROM dbProj_Article WHERE status = true and MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
+    $query = "SELECT * FROM dbProj_Article WHERE MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
     $result = $db->multiFetch($query);    
     return $result;
 }
 
     public static function searchByAuthor($authorName)
     {
-        
         $db = Database::getInstance();
-        $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE status = true and u.user_id = a.user_id and u.username like '$authorName%'";
+        $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE u.user_id = a.user_id and u.username like '$authorName%'";
         $data = $db->multiFetch($q);
-
         return $data;
     }
 
-    public static function searchByDate($fromDate, $ToDate)
-    {
+    public static function getMostPopular($from, $to){
+        //
         $db = Database::getInstance();
-        $query = "SELECT * FROM dbProj_Article WHERE status = true and publish_date BETWEEN '$fromDate' AND '$ToDate'";
-        $result = $db->multiFetch($query);    
-        return $result;
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
+        return $data;
     }
     
-    
-    function updateArticleViews(){
-        
-            $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET views = \'' . $this->views .'\''
-                    . 'WHERE article_id = ' . $this->article_id;
-            $result = $db->querySql($q); 
-            if($result) {
-                return true;
-            }
-            else {
-                return false;
-            }
-    }
-    
-    function updateArticleLikes(){
-        
-            $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET likes = \'' . $this->likes .'\''
-                    . 'WHERE article_id = ' . $this->article_id;
-            $result = $db->querySql($q); 
-            if($result) {
-                return true;
-            }
-            else {
-                return false;
-            }
-    }
-    
-    function updateArticleDislikes($articleId){
-        
-            $db = Database::getInstance();
-            $q = "UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE id = $articleId";
-            $result = $db->querySql($q); 
-            if($result) {
-                return true;
-            }
-            else {
-                return false;
-            }
-    }
 }

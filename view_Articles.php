@@ -1,72 +1,89 @@
 <?php
-
-
+ob_start();
+// Check if the user is not logged in or is not an admin, then redirect to permission denied page
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
+    header("Location: permission_denied.php");
+    exit();
+}
 include 'header.php';
 
-echo '<h1> Articles </h1>';
 
+$articles = new Article();
+$list = $articles->getArticles();
+?>
 
-$articles = new Articles();
-$row = $articles->getArticles();
+<div class="container" style="padding-top: 200px; padding-bottom: 70px;">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="#">My Account</a></li>
+                <li class="active">Articles</li>
+            </ol>
+            <h1 class="page-title">All Articles</h1>
+        </div>
+    </div>
+    <div class="line"></div>
 
-if (!empty($row)) {
-    echo '<br />';
-    echo '<br />';
-    echo '<br />';
-    echo '<br />';
-    echo '<br />';
-    echo '<br />';
-    echo '<br />';
-    //display a table of results
-    echo '<table align="center" cellspacing = "2" cellpadding = "4" width="75%">';
-    echo '<tr bgcolor="#87CEEB">
-          <td><b>Edit</b></td>
-          <td><b>Delete</b></td>
-          <td><b><a href="view_Articles.php">article_id</a></b></td>
-          <td><b><a href="view_Articles.php">title</a></b></td>
-          <td><b><a href="view_Articles.php">description</a></b></td>
-          <td><b><a href="view_Articles.php">content</a></b></td>
-          <td><b><a href="view_Articles.php">publish_date</a></b></td></tr>
-          <td><b><a href="view_Articles.php">likes</a></b></td></tr>
-          <td><b><a href="view_Articles.php">dislikes</a></b></td></tr>
-          <td><b><a href="view_Articles.php">user_id</a></b></td></tr>
-          <td><b><a href="view_Articles.php">category_id</a></b></td></tr>
-          <td><b><a href="view_Articles.php">status</a></b></td></tr>
-          <td><b><a href="view_Articles.php">views</a></b></td></tr>';
+    <div class="row">
+        <?php
+        // Check if the result is not empty
+        if (!empty($list)) {
+            // Loop through and display each article
+            foreach ($list as $article) {
+                echo '<article class="col-md-12 article-list">
+                        <div class="inner">
+                            <figure>
+                                <img src="'. Media::getPhotoURL($article->article_id)->URL .'">
+                            </figure>
+                            <div class="details">
+                                <div class="detail">
+                                    <div class="category">
+                                        <a href="#">'. Article::getCatName($article->category_id) .'</a>
+                                    </div>
+                                    <div class="time">'. $article->publish_date .'</div>
+                                </div>
+                                <h1><a href="singleArticle.php?aid='. $article->article_id .'">'. $article->title .'</a></h1>
+                                <p>'. $article->description .'</p>
+                                <footer>
+                                    <a class="btn btn-primary more" href="addArticle.php?id='.$article->article_id.'"> 
+                                        <div>Edit</div>
+                                        <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                    </a>
+                                    <a href="#" class="love" onclick="deleteArticle('. $article->article_id .')"><i class="ion-android-delete"></i></a>
+                                </footer>
+                            </div>
+                        </div>
+                    </article>';
+            }
+        } else {
+            echo '<div class="col-md-12">
+                    <p>No Articles found!</p>
+                  </div>';
+        }
+        ?>
+    </div>
+</div>
 
-
-//above is the header
-//loop below adds the Article details    
-    //use the following to set alternate backgrounds 
-    $bg = '#eeeeee';
-
-    for ($i = 0; $i < count($row); $i++) {
-        $bg = ($bg == '#eeeeee' ? '#ffffff' : '#eeeeee');
-
-        echo '<tr bgcolor="' . $bg . '">
-            <td><a href="edit_Article.php?id=' . $row[$i]->article_id . '">Edit</a></td>
-            <td><a href="delete_Article.php?id=' . $row[$i]->article_id . '">Delete</a></td>
-                <td>' . $row[$i]->article_id . '</td>
-            <td>' . $row[$i]->title . '</td>
-                <td>' . $row[$i]->description . '</td>
-            <td>' . $row[$i]->content . '</td>
-                <td>' . $row[$i]->publish_date . '</td>
-                    <td>' . $row[$i]->likes . '</td>
-                        <td>' . $row[$i]->dislikes . '</td>
-                     <td>' . $row[$i]->user_id . '</td>
-                         <td>' . $row[$i]->category_id . '</td>
-                             <td>' . $row[$i]->status . '</td>
-                                 <td>' . $row[$i]->views . '</td>
-              </tr>';   
+<script>
+    function deleteArticle(articleId) {
+        if (confirm("Are you sure you want to delete this article?")) {
+            // Make an AJAX request
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // Update the page
+                    if (this.responseText === "deleted") {
+                        location.reload();
+                        alert("Deleted Successfully");
+                    }
+                }
+            };
+            xhttp.open("GET", "deleteArticle.php?d_id=" + articleId, true);
+            xhttp.send();
+        }
     }
-    echo '</table>';
-    echo '<br />';
-} else {
-    echo '<p class="error">' . $q . '</p>';
-    echo '<p class="error"> Oh dear. There was an error</p>';
-    echo '<p class="error">' . mysqli_error($dbc) . '</p>';
-}
+</script>
 
-
+<?php
 include 'footer.html';
 ?>
