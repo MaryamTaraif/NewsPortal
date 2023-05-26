@@ -1,51 +1,40 @@
 <?php
-
-
 include 'header.php';
-
-echo '<h1> Users </h1>';
-
+echo '<div class="container" style="padding-top: 200px; margin-bottom: 70px;">';
+echo '<h1> All Users </h1>';
 
 $users = new Users();
 $row = $users->getAllusers();
 
 if (!empty($row)) {
     echo '<br />';
-    //display a table of results
-    echo '<table align="center" cellspacing = "2" cellpadding = "4" width="75%">';
-    echo '<tr bgcolor="#87CEEB">
-          <td><b>Edit</b></td>
-          <td><b>Delete</b></td>
-          <td><b><a href="view_Users.php">username</a></b></td>
-          <td><b><a href="view_Users.php">email</a></b></td>
-          <td><b><a href="view_Users.php">type_name</a></b></td></tr>';
+    // Display a table of results
+    echo '<table align="center" cellspacing="2" cellpadding="4" width="100%" style="font-family: \'Raleway\', sans-serif; border-collapse: collapse; border: 1px solid #ddd;">';
+    echo '<tr style="background-color: #f73f52; color: #ffffff;">
+          <th style="padding: 10px; text-align: center; border: 1px solid #ddd;"></th>
+          <th style="padding: 10px;  text-align: center;border: 1px solid #ddd;"></th>
+          <th style="padding: 10px;  text-align: center;border: 1px solid #ddd;"><a href="view_Users.php" style="color: #ffffff; text-decoration: none;">user_id</a></th>
+          <th style="padding: 10px;  text-align: center;border: 1px solid #ddd;"><a href="view_Users.php" style="color: #ffffff; text-decoration: none;">username</a></th>
+          <th style="padding: 10px; text-align: center; border: 1px solid #ddd;"><a href="view_Users.php" style="color: #ffffff; text-decoration: none;">email</a></th>
+          <th style="padding: 10px;  text-align: center;border: 1px solid #ddd;"><a href="view_Users.php" style="color: #ffffff; text-decoration: none;">type</a></th>
+          </tr>';
 
-
-//above is the header
-//loop below adds the User details    
-    //use the following to set alternate backgrounds 
-    $bg = '#eeeeee';
-
-    for ($i = 0; $i < count($row); $i++) {
-        $bg = ($bg == '#eeeeee' ? '#ffffff' : '#eeeeee');
-
-        echo '<tr bgcolor="' . $bg . '">
-            <td><a href="edit_User.php?id=' . $row[$i]->user_id . '">Edit</a></td>
-            <td><a href="delete_User.php?id=' . $row[$i]->user_id . '">Delete</a></td>
-                <td>' . $row[$i]->user_id . '</td>
-            <td>' . $row[$i]->username . '</td>
-                <td>' . $row[$i]->password . '</td>
-            <td>' . $row[$i]->email . '</td>
-                <td>' . $row[$i]->type_name . '</td>
-              </tr>';
+    foreach ($row as $user) {
+        echo '<tr style="background-color: #ffffff; border: 1px solid #ddd;">';
+        echo '<td style="padding: 10px; text-align: center;border: 1px solid #ddd;" ><a href="edit_User.php?id=' . $user->user_id . '">Edit</a></td>';
+        echo '<td style="padding: 10px; text-align: center;border: 1px solid #ddd;"><a href="delete_User.php?id=' . $user->user_id . '">Delete</a></td>';
+        echo '<td style="padding: 10px;text-align: center; border: 1px solid #ddd;  text-align: center;">' . $user->user_id . '</td>';
+        echo '<td style="padding: 10px; border: 1px solid #ddd;  text-align: center;">' . $user->username . '</td>';
+        echo '<td style="padding: 10px; border: 1px solid #ddd;  text-align: center;">' . $user->email . '</td>';
+        echo '<td style="padding: 10px; border: 1px solid #ddd;  text-align: center;">' . $user->type_name . '</td>';
+        echo '</tr>';
     }
+
     echo '</table>';
 } else {
-    echo '<p class="error">' . $q . '</p>';
-    echo '<p class="error"> Oh dear. There was an error</p>';
-    echo '<p class="error">' . mysqli_error($dbc) . '</p>';
+    echo '<p>No users found.</p>';
 }
 
-
+echo '</div>';
 include 'footer.html';
 ?>

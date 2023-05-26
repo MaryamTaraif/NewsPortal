@@ -2,7 +2,7 @@
 ob_start();
 // Check if the user is not logged in, then redirect to login
 include 'header.php';
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author') {
+if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION['role'] !== 'Admin') {
     header("Location: permission_denied.php");
     exit();
 }
@@ -59,8 +59,6 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author') {
 		              <li><a href="#">My Account</a></li>
 		              <li class="active">My Articles</li>
 		            </ol>
-                              <h1 class="page-title">Manage Users</h1>
-                              <a href="view_Users.php">Display Users</a>
                               <br /><h1 class="page-title">My Articles</h1>
 		            <p class="page-subtitle">Showing all articles written by <i><?php echo $_SESSION['username'] ?></i></p>
 		          </div>

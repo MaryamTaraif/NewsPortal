@@ -1,9 +1,9 @@
 <?php
 
 
-include 'debugging.php';
-
 include 'header.php';
+
+echo ' <div class="container" style="padding-top: 200px;">';
 
 echo '<h1> Comments </h1>';
 
@@ -41,6 +41,7 @@ if (!empty($row)) {
     echo '<p class="error"> No Comments to display</p>';
     echo '<p class="error">' . mysqli_error($dbc) . '</p>';
 }
+echo '</div>';
 
 
 include 'footer.html';

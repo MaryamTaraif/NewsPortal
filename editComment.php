@@ -1,11 +1,7 @@
 <?php
 
 
-include 'debugging.php';
-
 $page_title = 'Edit Comment';
-
-include 'header.php';
 
 $id = 0;
 
@@ -20,7 +16,7 @@ elseif (isset($_POST['id'])) {
     //no id parameter is present so we do not go any further
     echo '<p class="error">No User id Parameter</p>';
 
-    include 'footer.html';
+   
 
     exit();
 }
@@ -87,5 +83,4 @@ echo '<div id="stylized" class="myform">
 
 
 
-include 'footer.html';
 ?>
