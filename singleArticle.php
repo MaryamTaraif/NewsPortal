@@ -13,7 +13,8 @@ $author = new Users();
 $media = new Media();
 
 
-
+$article->setViews($article->getViews() + 1);
+$article->updateArticleViews();
 
 ?>
 <script>
@@ -194,6 +195,14 @@ function removeComment(comment_id) {
                         </div>
                     </div>
 
+                    <div class="line thin" >
+                        <p style="margin-top: 20px;">
+                            <?php echo $article->getViews() .' views';
+                    ?></p>
+                        
+                    </div>
+                    
+                    
                     <div class="line thin"></div>
         <div class="comments">
     <h2 class="title">
@@ -254,36 +263,25 @@ function removeComment(comment_id) {
 
 
 
-
-
-            <form class="row">
+<?php
+            if(!empty($_SESSION['user_id'])){
+            echo '<form class="row">
                 <div class="col-md-12">
                     <h3 class="title">Leave Your Comment</h3>
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="name">Name <span class="required"></span></label>
-                    <input type="text" id="name" name="" class="form-control">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="email">Email <span class="required"></span></label>
-                    <input type="email" id="email" name="" class="form-control">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="website">Website</label>
-                    <input type="url" id="website" name="" class="form-control">
                 </div>
                 <div class="form-group col-md-12">
                     <label for="message">Response <span class="required"></span></label>
                     <textarea class="form-control" name="message" placeholder="Write your response ..."></textarea>
                 </div>
                 <div class="form-group col-md-12">
-                    <?php if (isset($_SESSION['user_id'])): ?>
-                        <button class="btn btn-primary" onclick="performTask()">Perform Task</button>
-                    <?php else: ?>
-                        <a href="loginPage.php" class="btn btn-primary">submit</a>
-                    <?php endif; ?>
+                        
+                        <button class="btn btn-primary">Send Response</button>
                 </div>
-            </form>
+            </form>';} else {
+                 echo '<p style="text-align: center;">Please <a href="loginPage.php">login</a> first</p>';
+            }
+            
+             ?>
         </div>
     </div>
 </div>
