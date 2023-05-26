@@ -95,7 +95,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
 		                  </div>
                                   <div class="time">'.$list[$i]->publish_date .'</div>
 		                </div>
-		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
+		                <h1>'.$list[$i]->title .'</h1>
 		                <p>
 		                  '.$list[$i]->description .'
 		                </p>
@@ -143,17 +143,19 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
 		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
 		                <p>
 		                  '.$list[$i]->description .'
-		                </p>
-		                <footer>
-		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->likes .'</div></a>
-		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
-		                    <div>View</div>
-		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
-		                  </a>
-		                </footer>
-		              </div>
-		            </div>
-		          </article>';
+		                </p>';
+                                        if ($list[$i]->description !== "This article was removed by an administrator"){
+                                            echo '<footer>
+                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->likes .'</div></a>
+                                            <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
+                                              <div>View</div>
+                                              <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                            </a>
+                                            </footer>';
+                                        }
+		                echo'</div>
+                                      </div>
+                                    </article>';
                                     }
                             }
                             ?>
@@ -179,8 +181,11 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
                         <aside>
                         <div class="aside-body">
                             <div class="featured-author">
-                                <div class="featured-author-inner">
-                                    <div class="featured-author-cover" style="background-image: url('images/back2.jpg');">
+                            <?php 
+                            $author = Users::getUserStats($_SESSION['user_id']);
+                            if ($author){
+                                echo '<div class="featured-author-inner">
+                                    <div class="featured-author-cover" style="background-image: url(\'images/back2.jpg\');">
                                         <div class="badges">
                                             <div class="badge-item"><i class="ion-star"></i> PROFILE</div>
                                         </div>
@@ -189,8 +194,8 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
                                                 <img src="images/profilePic.png">
                                             </figure>
                                             <div class="featured-author-info">
-                                                <h2 class="name"><?php echo $_SESSION['username']?></h2>
-                                                <div class="desc"><?php echo $_SESSION['role']?></div>
+                                                <h2 class="name">'. $author['username'] .'</h2>
+                                                <div class="desc">'. $author['type_name'] .'</div>
                                             </div>
                                         </div>
                                     </div>
@@ -199,19 +204,19 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
                                             <div class="item">
                                                 <a href="#">
                                                     <div class="name">Articles</div>
-                                                    <div class="value">208</div>														
+                                                    <div class="value">'. $author['article_count']  .'</div>														
                                                 </a>
                                             </div>
                                             <div class="item">
                                                 <a href="#">
                                                     <div class="name">Views</div>
-                                                    <div class="value">3,729</div>														
+                                                    <div class="value">'. $author['total_views'] .'</div>														
                                                 </a>
                                             </div>
                                             <div class="item">
                                                 <a href="#">
                                                     <div class="name">Likes</div>
-                                                    <div class="value">3,729</div>														
+                                                    <div class="value">'. $author['total_views'] .'</div>														
                                                 </a>
                                             </div>
                                         </div>
@@ -221,36 +226,13 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
                                         
                                         
                                     </div>
-                                </div>
+                                </div>';
+                            }
+                            ?>
                             </div>
                         </div>
                     </aside>
-<!--               side bar          -->
-            <?php 
-            //get authors tops 
-            $tops = Article::getAuthorTops($_SESSION['user_id']);
-            if (!empty($tops)){
-                echo '<aside>
-                        <h1 class="aside-title">Your Top Articles </h1> <div class="aside-body">';
-                for ($i = 0; $i < count($tops); $i++) {
-                    echo '<article class="article-mini">
-                                            <div class="inner">
-                                                <figure>
-                                                    <a href="singleArticle.php?aid='. $tops[$i]->article_id .'">
-                                                      <img src="'. Media::getPhotoURL($tops[$i]->article_id)->URL .'">
-                                                    </a>
-                                                </figure>
-                                                <div class="padding">
-                                                    <h1><a href="singleArticle.php?aid='. $tops[$i]->article_id .'">'. $tops[$i]->title .'</a></h1>
-                                                </div>
-                                            </div>
-                                        </article>';
-                }
-                echo '</div> </aside>';
-            }
-            else 
 
-        ?>
  </div>
 		    </div>
 		  </div>

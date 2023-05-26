@@ -1,11 +1,11 @@
 <?php
 ob_start();
-// Check if the user is not logged in or is not an admin, then redirect to permission denied page
-if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Admin') {
+include 'header.php';
+// Check if the user not an admin, then redirect to permission denied page
+if ($_SESSION['role'] !== 'Admin') {
     header("Location: permission_denied.php");
     exit();
 }
-include 'header.php';
 
 
 $articles = new Article();
@@ -42,16 +42,19 @@ $list = $articles->getArticles();
                                     </div>
                                     <div class="time">'. $article->publish_date .'</div>
                                 </div>
-                                <h1><a href="singleArticle.php?aid='. $article->article_id .'">'. $article->title .'</a></h1>
-                                <p>'. $article->description .'</p>
-                                <footer>
+                                <h1>'. $article->title .'</h1>
+                                <p>'. $article->description .'</p>';
+                                if ($article->description !== "This article was removed by an administrator"){
+                                    echo '<footer>
                                     <a class="btn btn-primary more" href="addArticle.php?id='.$article->article_id.'"> 
                                         <div>Edit</div>
                                         <div><i class="ion-ios-arrow-thin-right"></i></div>
                                     </a>
                                     <a href="#" class="love" onclick="deleteArticle('. $article->article_id .')"><i class="ion-android-delete"></i></a>
-                                </footer>
-                            </div>
+                                </footer>';
+                                }
+                                
+                           echo  '</div>
                         </div>
                     </article>';
             }
@@ -78,7 +81,7 @@ $list = $articles->getArticles();
                     }
                 }
             };
-            xhttp.open("GET", "deleteArticle.php?d_id=" + articleId, true);
+            xhttp.open("GET", "deleteArticle.php?admin_d_id=" + articleId, true);
             xhttp.send();
         }
     }
