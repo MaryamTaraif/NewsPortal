@@ -267,9 +267,10 @@ $media = new Media();
 
 
 <?php 
+
+
  if( isset($_POST['submitted']) )
 {
-    echo 'Add attempt';
     include 'Comment.php';
 
     $comment = new Comment();

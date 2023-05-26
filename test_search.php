@@ -3,6 +3,8 @@ include 'header.php';
 if ($_GET['searchText']){
     $result = Article::searchArticles($_GET['searchText']);
 }
+
+
 ?>
 
 <section class="search">
@@ -95,8 +97,8 @@ if ($_GET['searchText']){
 		                  '.$result[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
-                                  <a href="#" id="dislike" class="love" onclick="updateDislikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
+		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes()"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
+                                  <a href="#" class="love"><i class="fas fa-thumbs-down" ></i><div>'. $result[$i]->dislikes .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -171,21 +173,33 @@ function activate(element) {
   element.querySelector('a').style.borderBottom = '2px solid #F73F52';
 }
 
-document.getElementById("dislike").addEventListener("click", function() {
-  // Increment dislikes  
-  incrementDislikes(<?php echo $result[$i]->id; ?>);
-});
-
-
-  function updateLikes(articleId) {
-    // TODO: Implement logic to update the likes count for the specified article ID
-    alert("Liked article " +articleId);
-  }
-
-  function updateDislikes(articleId) {
-    // TODO: Implement logic to update the dislikes count for the specified article ID
-    alert("Disliked article " + articleId);
-  }
+//function updateLike() {
+//    //create the AJAX request object
+//    xmlhttp = new XMLHttpRequest(article_id);
+//    xmlhttp.onreadystatechange = function () {
+//        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+//           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+//        }
+//    }
+//    fromDate = document.getElementById("start_date").value;
+//    toDate = document.getElementById("end_date").value;
+//    xmlhttp.open("GET", "update_likes.php?article_id="+ article_id, true);
+//    xmlhttp.send();
+//}
+  
+//
+//  function updateDislikes(articleId) {
+//      alert("clicked");
+//    // Send an AJAX request to increment the dislikes count for the article with the specified ID
+//   fetch('/increment-dislikes.php?article_id=' + articleId)
+//        .then(response => response.json())
+//        .then(data => {
+//            // Update the dislikes count on the client-side
+//            const dislikesElement = document.querySelector(`#dislike-${articleId} div`);
+//            dislikesElement.textContent = data.dislikes;
+//        })
+//        .catch(error => console.error(error));
+//}
 
 
 //function initDateFilter() {

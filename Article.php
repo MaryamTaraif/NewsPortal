@@ -289,7 +289,7 @@ class Article {
 
     public static function getPublicArticles() {
         $db = Database::getInstance();
-        $data = $db->singleFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' ORDER BY publish_date DESC LIMIT 1");
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true AND views > 0 ORDER BY views DESC LIMIT 10");
         return $data;
     }
     
@@ -396,7 +396,7 @@ class Article {
     function updateArticleLikes(){
         
             $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET views = \'' . $this->views .'\''
+            $q = 'UPDATE dbProj_Article SET likes = \'' . $this->likes .'\''
                     . 'WHERE article_id = ' . $this->article_id;
             $result = $db->querySql($q); 
             if($result) {
@@ -407,11 +407,10 @@ class Article {
             }
     }
     
-    function updateArticleDislikes(){
+    function updateArticleDislikes($articleId){
         
             $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET views = \'' . $this->views .'\''
-                    . 'WHERE article_id = ' . $this->article_id;
+            $q = "UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE id = $articleId";
             $result = $db->querySql($q); 
             if($result) {
                 return true;

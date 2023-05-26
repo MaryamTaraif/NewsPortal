@@ -76,6 +76,7 @@ class Comment {
 
     function addComment(){
         try{
+            
             $db = Database::getInstance();
             $db->querySql("INSERT INTO dbProj_Comment (comment_id, content, user_id, article_id) VALUES ('$this->cid', '$this->content' , '$this->uid', '$this->aid')");
             return true;
