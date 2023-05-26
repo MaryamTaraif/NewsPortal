@@ -15,6 +15,8 @@ class Upload {
     function __construct() {
     $this->upload_dir = '';
     $this->max_file_size = 1048576; //Max File Size in Bytes, 1MB
+    
+    //i think not used at all (wil remove later) > because i am restrictin the upload type from the form itself 
     $this->allowed_photo_mime_types =array('image/jpeg', 'image/png', 'image/gif', 'image/tiff');
     $this->allowed_video_mime_types = array('video/mp4', 'video/mpeg', 'video/quicktime');
     $this->allowed_audio_mime_types = array('audio/mpeg', 'audio/wav', 'audio/midi','audio/mp3', 'audio/x-wav');
@@ -91,7 +93,6 @@ class Upload {
     }
 
     public function upload($object) {
-
             if ($this->check_dir($this->upload_dir)) {
                 $files = $_FILES[$object];
                 switch ($files['error']) {
