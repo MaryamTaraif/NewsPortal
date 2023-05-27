@@ -1,11 +1,7 @@
 <?php
 include 'debugging.php';
 
-$fromDate = $_GET['start_date'];
-$toDate = $_GET['end_date'];
-
-
-$result = Article::searchByDate($_GET['start_date'], $_GET['end_date']);
+$result = Article::getArticles();
 //return $result;
 if (!empty($result)) {
                                 //loop through and display 

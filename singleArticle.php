@@ -36,6 +36,38 @@ $article->updateArticleViews();
             xhttp.send();
         }
     }
+    
+    function likeArticle() {
+        // prevent the default behavior of the click event
+        event.preventDefault();
+
+        // make an AJAX request to update the likes count in the database
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                // update the likes count on the page
+                var countElement = document.querySelector('.count');
+                countElement.innerText = this.responseText + ' likes';
+
+                // display a message to the user
+                alert("Liked Successfully");
+            }
+        };
+        xhttp.open("GET", "updateLikes.php?id=<?php echo $article_id ?>&action=like", true);
+        xhttp.send();
+    }
+
+    function dislikeArticle() {
+        // prevent the default behavior of the click event
+        event.preventDefault();
+        
+        // update the likes count in the database
+        <?php $article->updateArticleDislikes(); ?>
+      
+        // display a message to the user
+        alert("disliked Successfully");
+    }
+
 </script>
 
 
@@ -193,12 +225,42 @@ $article->updateArticleViews();
                         </div>
                     </div>
 
-                    <div class="line thin" >
-                        <p style="margin-top: 20px;">
-                            <?php echo $article->getViews() . ' views';
-                            ?></p>
-
+                    <div class="line">
+                        <div>Interaction</div>
                     </div>
+                    <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="interaction">
+                            <div class="icon-wrapper">
+                            <i class="fas fa-eye" style="font-size: 30px; color: #989898;"></i>
+                            </div>
+                            <div class="count"><?php echo $article->getViews() . ' views';?></div>
+                        </div>
+                        <div class="interaction" onclick="likeArticle()">
+                            <div class="icon-wrapper">
+                                <a href="#" class="love"><i class="fas fa-thumbs-up"></i></a>
+                            </div>
+                            <div class="count"><?php echo $article->getLikes() . ' likes'; ?></div>
+                        </div>
+                        <div class="interaction" >
+                            <div class="icon-wrapper">
+                                <a href="#" class="love" onclick="dislikeArticle()"><i class="fas fa-thumbs-down"></i></a>
+                            </div>
+                            <div class="count"><?php echo $article->getDislikes() . ' dislikes';?></div>
+                        </div>
+                    </div>
+
+                    <style>
+                        .interaction {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                          }
+
+                          .icon-wrapper {
+                            margin-bottom: 10px;
+                          }
+                    </style>
+
 
 
                     <div class="line thin"></div>
