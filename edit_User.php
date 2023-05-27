@@ -1,7 +1,18 @@
 <?php
 
-echo ' <div class="container" style="padding-top: 200px;">';
-$page_title = 'Edit User';
+echo ' 
+<div class="container" style="padding-top: 240px; margin-bottom: 70px;">
+    <div class="row">
+        <div class="col-md-12" >        
+            <ol class="breadcrumb" style="text-align: center;">
+                <li><a href="#">My Account</a></li>
+                <li class="active">Users</li>
+                <li class="active">Edit User</li>
+            </ol>
+            <h1 class="page-title" align="center" >Edit Users</h1>
+              
+            <div class="line thin"></div>';
+
 
 include 'header.php';
 
@@ -61,40 +72,22 @@ if (isset($_POST['submitted'])) {
     }
 } // end if submitted conditional
 
-echo '<h1>Edit User</h1>';
 
 
-//create a new user data object and populate it using the get() method
-//this will show the form with the fields already populated with values from the $user object created above 
-//see the CSS file to see what effect the id="stylized" properties have on the form 
-//echo '<div id="stylized" class="myform"> 
-//         <form action="edit_User.php" method="post">
-//        <br />
-//        <h3>Edit User: ' . $user->getUsername() . '</h3>
-//        <br />
-//           <label>Username</label>    <input type="text" name="username" value="' . $user->getUsername() . '" />
-//           <label>Email Address</label> <input type="text" name="email" value="' . $user->getEmail() . '"/>
-//           <label>Password</label>      <input type="password" name="password" value="' . $user->getPassword() . '"/>
-//           <label>Type_name</label> <input type="text" name="type_name" value="' . $user->getType_name() . '"/>
-//        
-//         <input type ="hidden" name="submitted" value="TRUE">
-//         <input type ="hidden" name="id" value="' . $id . '"/>
-//         </form>
-//        <div class="spacer"></div>
-//        </div>';
+
 
 echo '<form action="edit_User.php" method="post">
     <div class="col-md-12">
         <div class="form-group">
-            <label>UserName</label>
-            <input type="text" class="form-control" name="username" value="' . $user->getUsername() . '" />
+            <label>Username</label>
+            <input type="text" style="width: 50%;" class="form-control form-control-lg" name="username" value="' . $user->getUsername() . '" />
         </div>
     </div>
 
     <div class="col-md-12">
         <div class="form-group">
             <label>Email</label>
-            <input type="text" class="form-control" name="email" value="' . $user->getEmail() . '" />
+            <input type="text" class="form-control form-control-lg" style="width: 50%;" name="email" value="' . $user->getEmail() . '" />
         </div>
     </div>';
 
@@ -102,7 +95,7 @@ echo '<form action="edit_User.php" method="post">
 echo '<div class="col-md-12">
     <div class="form-group">
         <label>User Type</label>
-        <select class="form-control" name="type_name">';
+        <select class="form-control form-control-lg" style="width: 50%;" name="type_name">';
 
 $typesList = Users::getTypes();
 if (!empty($typesList)) {
@@ -124,6 +117,7 @@ echo '<input type="submit" class="btn btn-primary" name="submit" value="update" 
 <div class="spacer"></div>
 </div>';
 
+echo '</div>';
 echo '</div>';
 include 'footer.html';
 ?>
