@@ -12,7 +12,6 @@ $author = new Users();
 //get media details
 $media = new Media();
 
-
 $article->setViews($article->getViews() + 1);
 $article->updateArticleViews();
 ?>
@@ -35,37 +34,43 @@ $article->updateArticleViews();
             xhttp.open("GET", "removeComment.php?c_id=" + comment_id, true);
             xhttp.send();
         }
-    }
-    
+
     function likeArticle() {
+    // prevent the default behavior of the click event
+    event.preventDefault();
+    // make an AJAX request to update the likes count in the database
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            // update the likes count on the page
+            var countElement = document.querySelector('.likes-count');
+            countElement.innerText = this.responseText + ' likes';
+
+            // display a message to the user
+            alert("Liked Successfully");
+        }
+    };
+    xhttp.open("GET", "updateLikes.php?id=" + <?php echo $id; ?>, true);
+    xhttp.send();
+}
+
+    function dislikeArticle() {
         // prevent the default behavior of the click event
         event.preventDefault();
-
         // make an AJAX request to update the likes count in the database
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 // update the likes count on the page
-                var countElement = document.querySelector('.count');
-                countElement.innerText = this.responseText + ' likes';
+                var countElement = document.querySelector('.dislikes-count');
+                countElement.innerText = this.responseText + ' dislikes';
 
                 // display a message to the user
-                alert("Liked Successfully");
+                alert("Disliked Successfully");
             }
         };
-        xhttp.open("GET", "updateLikes.php?id=<?php echo $article_id ?>&action=like", true);
+        xhttp.open("GET", "updateDislikes.php?id=" + <?php echo $id; ?>, true);
         xhttp.send();
-    }
-
-    function dislikeArticle() {
-        // prevent the default behavior of the click event
-        event.preventDefault();
-        
-        // update the likes count in the database
-        <?php $article->updateArticleDislikes(); ?>
-      
-        // display a message to the user
-        alert("disliked Successfully");
     }
 
 </script>
@@ -88,15 +93,15 @@ $article->updateArticleViews();
                     <h1 class="aside-title">Recent Post</h1>
                     <div class="aside-body">
                         <!-- get the recent article-->
-                        <?php
-                        $recentArticle = Article::getRecentArticle();
+<?php
+$recentArticle = Article::getRecentArticle();
 
-                        if ($recentArticle) {
-                            $recentId = $recentArticle->article_id;
-                            $recentTitle = $recentArticle->title;
-                            $recentDescription = $recentArticle->description;
+if ($recentArticle) {
+    $recentId = $recentArticle->article_id;
+    $recentTitle = $recentArticle->title;
+    $recentDescription = $recentArticle->description;
 
-                            echo '<article class="article-fw">
+    echo '<article class="article-fw">
                                 <div class="inner">
                                     <figure>
                                         <a href="singleArticle.php?aid=' . $recentId . '">
@@ -112,10 +117,10 @@ $article->updateArticleViews();
                                     </div>
                                 </div>
                             </article>';
-                        } else {
-                            echo "<p>No recent articles found.</p>";
-                        }
-                        ?>
+} else {
+    echo "<p>No recent articles found.</p>";
+}
+?>
                     </div>
                 </aside>
 
@@ -133,10 +138,10 @@ $article->updateArticleViews();
                             <li>Posted on <?php echo $article->getPublish_date() ?></li>
                             <li><?php echo $article->getCatName($article->getCategory_id()) ?></li>
                             <li>
-                                <?php
-                                $author->initWithUid($article->getUser_id());
-                                echo 'By ' . $author->getUsername();
-                                ?>
+<?php
+$author->initWithUid($article->getUser_id());
+echo 'By ' . $author->getUsername();
+?>
                             </li>
                         </ul>
                     </header>
@@ -152,10 +157,10 @@ $article->updateArticleViews();
                         <p><?php echo $article->getContent(); ?> </p>
 
                         <!-- Check each media existence and display it if found -->
-                        <?php
-                        $videoURL = $media->getVideoURL($id);
-                        if ($videoURL) {
-                            echo '
+<?php
+$videoURL = $media->getVideoURL($id);
+if ($videoURL) {
+    echo '
                                 <div class="line">
                                     <div>Video</div>
                                 </div>
@@ -166,8 +171,8 @@ $article->updateArticleViews();
                                         </video>
                                     </div>
                                 </aside>';
-                        }
-                        ?>
+}
+?>
 
                         <?php
                         $audioURL = $media->getAudioURL($id);
@@ -213,14 +218,14 @@ $article->updateArticleViews();
                         <!-- show author details -->
                         <div class="details">
                             <h5 class="name"  >
-                                <?php
-                                $author->initWithUid($article->getUser_id());
-                                echo $author->getUsername();
-                                ?>
+<?php
+$author->initWithUid($article->getUser_id());
+echo $author->getUsername();
+?>
                             </h5>
                             <h7>
                                 <a href="mailto:<?php echo $author->getEmail(); ?>">
-                                    <?php echo $author->getEmail(); ?></a>
+<?php echo $author->getEmail(); ?></a>
                             </h7>
                         </div>
                     </div>
@@ -231,21 +236,21 @@ $article->updateArticleViews();
                     <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="interaction">
                             <div class="icon-wrapper">
-                            <i class="fas fa-eye" style="font-size: 30px; color: #989898;"></i>
+                                <i class="fas fa-eye" style="font-size: 30px; color: #989898;"></i>
                             </div>
-                            <div class="count"><?php echo $article->getViews() . ' views';?></div>
+                            <div class="count"><?php echo $article->getViews() . ' views'; ?></div>
                         </div>
                         <div class="interaction" onclick="likeArticle()">
                             <div class="icon-wrapper">
                                 <a href="#" class="love"><i class="fas fa-thumbs-up"></i></a>
                             </div>
-                            <div class="count"><?php echo $article->getLikes() . ' likes'; ?></div>
+                            <div class="count likes-count"><?php echo $article->getLikes() . ' likes'; ?></div>
                         </div>
-                        <div class="interaction" >
+                        <div class="interaction" onclick="dislikeArticle()">
                             <div class="icon-wrapper">
-                                <a href="#" class="love" onclick="dislikeArticle()"><i class="fas fa-thumbs-down"></i></a>
+                                <a href="#" class="love"><i class="fas fa-thumbs-down"></i></a>
                             </div>
-                            <div class="count"><?php echo $article->getDislikes() . ' dislikes';?></div>
+                            <div class="count dislikes-count"><?php echo $article->getDislikes() . ' dislikes'; ?></div>
                         </div>
                     </div>
 
@@ -254,11 +259,11 @@ $article->updateArticleViews();
                             display: flex;
                             flex-direction: column;
                             align-items: center;
-                          }
+                        }
 
-                          .icon-wrapper {
+                        .icon-wrapper {
                             margin-bottom: 10px;
-                          }
+                        }
                     </style>
 
 
@@ -267,47 +272,47 @@ $article->updateArticleViews();
                     <div class="comments">
                         <h2 class="title">
                             <!-- Retrieve the total number of comments on this article and display them -->
-                            <?php
-                            $commentCount = Article::countComments($id);
-                            echo $commentCount . ' Comments';
-                            ?>
+<?php
+$commentCount = Article::countComments($id);
+echo $commentCount . ' Comments';
+?>
                             <a href="#">Write a Comment</a>
                         </h2>
                         <div class="comment-list">
-                            <?php
-                            $comments = Article::getComments($id);
-                            $commenterUsername = new Users();
+<?php
+$comments = Article::getComments($id);
+$commenterUsername = new Users();
 
-                            if (!empty($comments)) {
-                                for ($i = 0; $i < count($comments); $i++) {
-                                    echo '<div class="item">
+if (!empty($comments)) {
+    for ($i = 0; $i < count($comments); $i++) {
+        echo '<div class="item">
                     <div class="details">
                         <div class="user">
                             <figure style="margin-right: 10px;">
                                 <img src="images/user.png">
                             </figure>';
 
-                                    $commenterUsername->initWithUid($comments[$i]->user_id);
-                                    echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
+        $commenterUsername->initWithUid($comments[$i]->user_id);
+        echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
                     <div class="time" style="margin-top: -5px;">' . $commenterUsername->getType_name() . '</div>
                     <div class="description" style="margin-top: 10px; padding-left: 10px;">' . $comments[$i]->content . '</div>';
 
-                                    //show delete icon just if the logged-in user is admin, comment is not already deleted, and and not written by an admin  
-                                    if ($_SESSION['role'] == 'Admin' && $comments[$i]->content != "This comment was removed by an administrator" && $commenterUsername->getType_name() != "Admin") {
-                                        echo '<a href="#" class="love" style="float: right; margin-left: 3px;" onclick="removeComment(' . $comments[$i]->comment_id . ')"><i class="ion-android-delete" ></i></a>';
-                                    }
+        //show delete icon just if the logged-in user is admin, comment is not already deleted, and and not written by an admin  
+        if ($_SESSION['role'] == 'Admin' && $comments[$i]->content != "This comment was removed by an administrator" && $commenterUsername->getType_name() != "Admin") {
+            echo '<a href="#" class="love" style="float: right; margin-left: 3px;" onclick="removeComment(' . $comments[$i]->comment_id . ')"><i class="ion-android-delete" ></i></a>';
+        }
 
-                                    echo '
+        echo '
                     </div>
                 </div>
             </div>';
-                                }
-                            }
+    }
+}
 // Verify if no comments are found on the article
-                            else {
-                                echo '<p>No comments found on this article.</p>';
-                            }
-                            ?>
+else {
+    echo '<p>No comments found on this article.</p>';
+}
+?>
                         </div>
                     </div>
 
@@ -323,9 +328,9 @@ $article->updateArticleViews();
 
 
 
-            <?php
-            if (!empty($_SESSION['user_id'])) {
-                echo '<form class="row" action="" method="post">
+<?php
+if (!empty($_SESSION['user_id'])) {
+    echo '<form class="row" action="" method="post">
                 <fieldset>
                 <div class="col-md-12">
                     <h3 class="title">Leave Your Comment</h3>
@@ -342,10 +347,10 @@ $article->updateArticleViews();
                 </div>
                 </fieldset>
             </form>';
-            } else {
-                echo '<p style="text-align: center;">Please <a href="loginPage.php">login</a> first</p>';
-            }
-            ?>
+} else {
+    echo '<p style="text-align: center;">Please <a href="loginPage.php">login</a> first</p>';
+}
+?>
         </div>
     </div>
 </div>
@@ -358,8 +363,6 @@ $article->updateArticleViews();
 
 
 <?php
-
-
 if (isset($_POST['submitted'])) {
 
     echo 'Add attempt';

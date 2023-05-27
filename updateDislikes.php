@@ -8,7 +8,7 @@ $id = $_GET['id'];
 $article = new Article();
 $article->initWithId($id);
 
-$result = Article::updateArticleLikes($id);
+$result = Article::updateArticleDislikes($id);
 
 echo $article->getLikes();
 ?>
