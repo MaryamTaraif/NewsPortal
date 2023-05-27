@@ -28,7 +28,7 @@ $article->updateArticleViews();
                         location.reload();
                         alert("Deleted Successfully");
                     } else {
-                        alert(this.responseText);
+                        alert("Sorry, an error occurred.");
                     }
                 }
             };

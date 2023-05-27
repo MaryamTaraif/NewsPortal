@@ -50,7 +50,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                     </div>
                                     <div class="time">'. $article->publish_date .'</div>
                                 </div>
-                                <h1>'. $article->title .'</h1>
+                                <h1><a href="singleArticle.php?aid='.$article->article_id.'"">'.$article->title .'</a></h1> 
                                 <p>'. $article->description .'</p>';
                                 if ($article->description !== "This article was removed by an administrator"){
                                     echo '<footer>

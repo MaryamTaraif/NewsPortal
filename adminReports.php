@@ -36,7 +36,7 @@ if ($_SESSION['role'] !== 'Admin') {
                                             $authors = Users::getAuthors();
                                             if (!empty($authors)) {
                                                 for ($i = 0; $i < count($authors); $i++) {
-                                                    echo '<option value="' . $authors[$i]->user_id . '">' . $authors[$i]->username . '</option>';
+                                                    echo '<option value="' . $authors[$i]->username. '">' . $authors[$i]->username . '</option>';
                                                 }
                                             }
                                             ?>

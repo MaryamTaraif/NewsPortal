@@ -391,6 +391,11 @@ class Article {
         return $data;
     }
     
+    public static function getPopularReport($from, $to){
+        $db = Database::getInstance();
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
+        return $data;
+    }
     
 
 }

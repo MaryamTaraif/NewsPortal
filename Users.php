@@ -121,7 +121,12 @@ class Users {
         try {
             $db = Database::getInstance();
             $data = $db->querySql('Delete from dbProj_User where user_id=' . $this->user_id);
-            return true;
+            if ($data > 0){
+                return true;
+            }
+            else {
+                return false;
+            }
         } catch (Exception $e) {
             echo 'Exception: ' . $e;
             return false;
@@ -185,16 +190,16 @@ class Users {
         return $data;
     }
     
-    
-    public static function getAuthorId($authorName){
-        $db = Database::getInstance();
-        $data = $db->singleFetch('select user_id from dbProj_User where username  ');
-        return $data;
-    }
+//    
+//    public static function getAuthorId($authorName){
+//        $db = Database::getInstance();
+//        $data = $db->singleFetch('select user_id from dbProj_User where username ');
+//        return $data;
+//    }
     
     public static function getAuthors(){
         $db = Database::getInstance();
-        $data = $db->multiFetch("select * from dbProj_User where type_name = 'Author'");
+        $data = $db->multiFetch("select * from dbProj_User where type_name = 'Author' or type_name = 'Admin'");
         return $data;
     }
     

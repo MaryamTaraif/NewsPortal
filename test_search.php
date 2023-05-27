@@ -87,7 +87,7 @@ if ($_GET['searchText']){
 		              <div class="details">
 		                <div class="detail">
 		                  <div class="category">
-		                   <a href="#">'. $name .'</a>
+		                   <a href="#">'. Article::getCatName($result[$i]->category_id) .'</a>
 		                  </div>
 		                  <div class="time">'.$result[$i]->publish_date .'</div>
 		                </div>
@@ -111,13 +111,8 @@ if ($_GET['searchText']){
                             else {
                                echo '<h6>Oops, no articles yet.</h6>';
                             }
-//?>
-
-                    
-
-
-
-
+                            
+                            ?>
                 </div>
             </div>
         </div>
