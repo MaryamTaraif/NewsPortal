@@ -4,7 +4,6 @@ if ($_GET['searchText']){
     $result = Article::searchArticles($_GET['searchText']);
 }
 
-
 ?>
 
 <section class="search">
@@ -97,7 +96,7 @@ if ($_GET['searchText']){
 		                  '.$result[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes()"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
+		                  <a href="#" class="love" id="likes" style="display: inline-block; margin-right: 10px;" onclick="updateLike()"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
                                   <a href="#" class="love"><i class="fas fa-thumbs-down" ></i><div>'. $result[$i]->dislikes .'</div></a>
 		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
 		                    <div>More</div>
@@ -173,20 +172,22 @@ function activate(element) {
   element.querySelector('a').style.borderBottom = '2px solid #F73F52';
 }
 
-//function updateLike() {
-//    //create the AJAX request object
-//    xmlhttp = new XMLHttpRequest(article_id);
-//    xmlhttp.onreadystatechange = function () {
-//        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-//           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
-//        }
-//    }
-//    fromDate = document.getElementById("start_date").value;
-//    toDate = document.getElementById("end_date").value;
-//    xmlhttp.open("GET", "update_likes.php?article_id="+ article_id, true);
-//    xmlhttp.send();
-//}
-  
+   function updateLike() {
+    //create the AJAX request object
+    alert("hi");
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {  
+        
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("likes").innerHTML = xmlhttp.responseText;
+           alert("hi2");
+        }
+    }
+    
+    article_id = $result[$i]->article_id;
+    xmlhttp.open("GET", "update_likes.php?article_id="+ article_id, true);
+    xmlhttp.send();
+}
 //
 //  function updateDislikes(articleId) {
 //      alert("clicked");

@@ -20,8 +20,14 @@ $name = Article::getCatName($id);
 		        <div class="line"></div>
 		        <div class="row">
                             <?php
+                            if(isset($_GET['pageno']))
+                                $start = $_GET['pageno'];
+                            else $start = 0;
+                            $end = 10;
+                            $table = 'dbProj_Article';
+                            $articles = new Article();
                             //get the list of articles 
-                            $list = Article::getCatArticles($id);
+                            $list = $articles -> getCatArticles($id, $start, $end);
                             //if the result if not empty 
                             if (!empty($list)) {
                                 //loop through and display 
@@ -53,6 +59,14 @@ $name = Article::getCatName($id);
 		            </div>
 		          </article>';
                                     }
+            $pagination = new Pagination();
+            $pagination->totalRecords($table);
+            $pagination->setLimit($end);
+            $pagination->page("");
+            echo $pagination->firstBack();
+            echo $pagination->where();
+            echo $pagination->nextLast();
+            echo '</td></tr></table>';
                             }
                             else {
                                 echo '<h6>Oops, no articles yet.</h6>';

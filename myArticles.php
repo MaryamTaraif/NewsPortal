@@ -232,32 +232,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
                             </div>
                         </div>
                     </aside>
-<!--               side bar          -->
-            <?php 
-            //get authors tops 
-            $tops = Article::getAuthorTops($_SESSION['user_id']);
-            if (!empty($tops)){
-                echo '<aside>
-                        <h1 class="aside-title">Your Top Articles </h1> <div class="aside-body">';
-                for ($i = 0; $i < count($tops); $i++) {
-                    echo '<article class="article-mini">
-                                            <div class="inner">
-                                                <figure>
-                                                    <a href="singleArticle.php?aid='. $tops[$i]->article_id .'">
-                                                      <img src="'. Media::getPhotoURL($tops[$i]->article_id)->URL .'">
-                                                    </a>
-                                                </figure>
-                                                <div class="padding">
-                                                    <h1><a href="singleArticle.php?aid='. $tops[$i]->article_id .'">'. $tops[$i]->title .'</a></h1>
-                                                </div>
-                                            </div>
-                                        </article>';
-                }
-                echo '</div> </aside>';
-            }
-            else 
 
-        ?>
  </div>
 		    </div>
 		  </div>
