@@ -22,6 +22,44 @@ if ($_GET['searchText']){
 }
 
 function showArticleByDate() {
+    
+    // Get the current date
+    var currentDate = new Date();
+
+    // Add one day to the current date
+    var checkDate = new Date();
+    checkDate.setDate(currentDate.getDate() + 1);
+
+    // Get the selected dates
+  var fromDate = document.getElementById("start_date").value;
+  var toDate = document.getElementById("end_date").value;
+
+  // Check if both dates are selected
+  if (fromDate === "" || toDate === "") {
+    alert("Please select both a From Date and a To Date");
+    return false;
+  }
+
+        // Get the current date
+      var currentDate = new Date();
+
+      // Convert the selected dates to Date objects
+      var fromDateTime = new Date(fromDate);
+      var toDateTime = new Date(toDate);
+
+      // Check if the selected "To Date" is earlier than the "From Date"
+      if (toDateTime < fromDateTime) {
+        alert("Please select a valid date range");
+        return false;
+      }
+
+      // Check if the selected dates are earlier than the current date
+      if (fromDateTime > checkDate || toDateTime > checkDate) {
+        alert("Please select a date that has not yet occurred");
+        return false;
+      }
+
+//If all the validations pass, you can continue with the AJAX request to filter the articles as before.
     //create the AJAX request object
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -29,8 +67,6 @@ function showArticleByDate() {
            document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
         }
     }
-    var fromDate = document.getElementById("start_date").value;
-    var toDate = document.getElementById("end_date").value;
     xmlhttp.open("GET", "filterDate.php?start_date="+ fromDate + "&end_date=" +toDate, true);
     xmlhttp.send();
     return false;
