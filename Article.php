@@ -406,7 +406,7 @@ class Article {
         $db = Database::getInstance();
            $q = "SELECT *
            FROM dbProj_Article
-           WHERE  status = true and publish_date BETWEEN '$startDate' AND '$endDate' order by publish_date desc";
+           WHERE  status = true and publish_date BETWEEN '$startDate' AND '$endDate' order by publish_date asc";
             
         $data = $db->multiFetch($q);
         return $data;
@@ -425,23 +425,18 @@ class Article {
         return $data;
     }
     
-    function updateArticleLikes(){
+    public static function updateArticleLikes($article_id){
         
             $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET likes = likes + 1 WHERE article_id = ' . $this->article_id;
+            $q = 'UPDATE dbProj_Article SET likes = likes + 1 WHERE article_id = ' . $article_id;
             $result = $db->querySql($q); 
-            if($result) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return $result;
     }
     
-    function updateArticleDislikes(){
+    public static function updateArticleDislikes($article_id){
         
             $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE article_id = ' . $this->article_id;
+            $q = 'UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE article_id = ' . $article_id;
             $result = $db->querySql($q); 
             if($result) {
                 return true;
