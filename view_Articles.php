@@ -6,10 +6,15 @@ if ($_SESSION['role'] !== 'Admin') {
     header("Location: permission_denied.php");
     exit();
 }
-
-
+if(isset($_GET['pageno']))
+    $start = $_GET['pageno'];
+        else $start = 0;
+ 
+        $end = 10;
+        
+        $table = 'dbProj_Article';
 $articles = new Article();
-$list = $articles->getArticles();
+$list = $articles->getArticles($start, $end);
 ?>
 
 <div class="container" style="padding-top: 200px; padding-bottom: 70px;">
@@ -58,6 +63,15 @@ $list = $articles->getArticles();
                         </div>
                     </article>';
             }
+             echo '<table align="center" cellspacing = "2" cellpadding = "4" width="75%"><tr><td>';
+    $pagination = new Pagination();
+    $pagination->totalRecords($table);
+    $pagination->setLimit($end);
+    $pagination->page("");
+    echo $pagination->firstBack();
+    echo $pagination->where();
+    echo $pagination->nextLast();
+    echo '</td></tr></table>';
         } else {
             echo '<div class="col-md-12">
                     <p>No Articles found!</p>

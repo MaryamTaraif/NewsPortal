@@ -286,13 +286,18 @@ class Article {
 
     
     //get all articles ordered from the latest date 
-    public static function getArticles() {
-        $db = Database::getInstance();
-        $data = $db->multiFetch('Select * from dbProj_Article where status = true order by publish_date desc');
-        return $data;
+    public static function getArticles($start, $end) {
+    $db = Database::getInstance();
+    $q = 'SELECT * FROM dbProj_Article WHERE status = true ORDER BY publish_date DESC';
+    if (isset($start)) {
+        $q .= ' LIMIT ' . (int)$start . ',' . (int)$end;
     }
-    
-    
+
+    $data = $db->multiFetch($q);
+    return $data;
+}
+
+       
     //categories functions 
     public static function getAllCat(){
         $db = Database::getInstance();
@@ -355,10 +360,16 @@ class Article {
     }
     
      //get the list of articles in the passed category 
-    public static function getCatArticles($category_id) {
+    public static function getCatArticles($category_id, $start, $end) {
         $db = Database::getInstance();
-        $data = $db->multiFetch('Select * from dbProj_Article where status = true and category_id = ' . $category_id .' order by publish_date desc');
-        return $data;
+    $q = 'SELECT * FROM dbProj_Article WHERE category_id =\''. $category_id . '\' AND status = true ORDER BY publish_date DESC';
+
+    if (isset($start)) {
+        $q .= ' LIMIT ' . (int)$start . ',' . (int)$end;
+    }
+
+    $data = $db->multiFetch($q);
+    return $data;
     }
     
     //count the number of comments in the artcile
