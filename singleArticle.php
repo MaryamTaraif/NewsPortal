@@ -15,29 +15,27 @@ $media = new Media();
 
 $article->setViews($article->getViews() + 1);
 $article->updateArticleViews();
-
 ?>
 <script>
-function removeComment(comment_id) {
-    if (confirm("Are you sure you want to remove this comment?")) {
-        // make an AJAX request
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
-                // update the page
-                if (this.responseText == true) {
-                    location.reload();
-                    alert("Deleted Successfully");
+    function removeComment(comment_id) {
+        if (confirm("Are you sure you want to remove this comment?")) {
+            // make an AJAX request
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the page
+                    if (this.responseText == true) {
+                        location.reload();
+                        alert("Deleted Successfully");
+                    } else {
+                        alert(this.responseText);
+                    }
                 }
-                else {
-                    alert(this.responseText);
-                }
-            }
-        };
-        xhttp.open("GET", "removeComment.php?c_id=" + comment_id, true);
-        xhttp.send();
+            };
+            xhttp.open("GET", "removeComment.php?c_id=" + comment_id, true);
+            xhttp.send();
+        }
     }
-}
 </script>
 
 
@@ -69,7 +67,7 @@ function removeComment(comment_id) {
                             echo '<article class="article-fw">
                                 <div class="inner">
                                     <figure>
-                                        <a href="singleArticle.php?aid='.$recentId . '">
+                                        <a href="singleArticle.php?aid=' . $recentId . '">
                                             <img src="images/news/img16.jpg">
                                         </a>
                                     </figure>
@@ -197,59 +195,59 @@ function removeComment(comment_id) {
 
                     <div class="line thin" >
                         <p style="margin-top: 20px;">
-                            <?php echo $article->getViews() .' views';
-                    ?></p>
-                        
+                            <?php echo $article->getViews() . ' views';
+                            ?></p>
+
                     </div>
-                    
-                    
+
+
                     <div class="line thin"></div>
-        <div class="comments">
-    <h2 class="title">
-        <!-- Retrieve the total number of comments on this article and display them -->
-        <?php
-        $commentCount = Article::countComments($id);
-        echo $commentCount . ' Comments';
-        ?>
-        <a href="#">Write a Comment</a>
-    </h2>
-    <div class="comment-list">
-        <?php
-        $comments = Article::getComments($id);
-        $commenterUsername = new Users();
-        
-        if (!empty($comments)) {
-            for ($i = 0; $i < count($comments); $i++) {
-                echo '<div class="item">
+                    <div class="comments">
+                        <h2 class="title">
+                            <!-- Retrieve the total number of comments on this article and display them -->
+                            <?php
+                            $commentCount = Article::countComments($id);
+                            echo $commentCount . ' Comments';
+                            ?>
+                            <a href="#">Write a Comment</a>
+                        </h2>
+                        <div class="comment-list">
+                            <?php
+                            $comments = Article::getComments($id);
+                            $commenterUsername = new Users();
+
+                            if (!empty($comments)) {
+                                for ($i = 0; $i < count($comments); $i++) {
+                                    echo '<div class="item">
                     <div class="details">
                         <div class="user">
                             <figure style="margin-right: 10px;">
                                 <img src="images/user.png">
                             </figure>';
-                
-                $commenterUsername->initWithUid($comments[$i]->user_id);
-                echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
+
+                                    $commenterUsername->initWithUid($comments[$i]->user_id);
+                                    echo '<h5 class="name">' . $commenterUsername->getUsername() . '</h5>
                     <div class="time" style="margin-top: -5px;">' . $commenterUsername->getType_name() . '</div>
                     <div class="description" style="margin-top: 10px; padding-left: 10px;">' . $comments[$i]->content . '</div>';
-                
-                //show delete icon just if the logged-in user is admin, comment is not already deleted, and and not written by an admin  
-                if ($_SESSION['role'] == 'Admin' && $comments[$i]->content != "This comment was removed by an administrator" && $commentCount->getType_name() != "Admin" ) {
-                    echo '<a href="#" class="love" style="float: right; margin-left: 3px;" onclick="removeComment(' . $comments[$i]->comment_id . ')"><i class="ion-android-delete" ></i></a>';
-                }
-                
-                echo '
+
+                                    //show delete icon just if the logged-in user is admin, comment is not already deleted, and and not written by an admin  
+                                    if ($_SESSION['role'] == 'Admin' && $comments[$i]->content != "This comment was removed by an administrator" && $commenterUsername->getType_name() != "Admin") {
+                                        echo '<a href="#" class="love" style="float: right; margin-left: 3px;" onclick="removeComment(' . $comments[$i]->comment_id . ')"><i class="ion-android-delete" ></i></a>';
+                                    }
+
+                                    echo '
                     </div>
                 </div>
             </div>';
-            }
-        }
-        // Verify if no comments are found on the article
-        else {
-            echo '<p>No comments found on this article.</p>';
-        }
-        ?>
-    </div>
-</div>
+                                }
+                            }
+// Verify if no comments are found on the article
+                            else {
+                                echo '<p>No comments found on this article.</p>';
+                            }
+                            ?>
+                        </div>
+                    </div>
 
 
 
@@ -263,28 +261,29 @@ function removeComment(comment_id) {
 
 
 
-<?php
-            if(!empty($_SESSION['user_id'])){
-            echo '<form class="row" action="singleArticle.php" method="post">
+            <?php
+            if (!empty($_SESSION['user_id'])) {
+                echo '<form class="row" action="" method="post">
                 <fieldset>
                 <div class="col-md-12">
                     <h3 class="title">Leave Your Comment</h3>
                 </div>
                 <div class="form-group col-md-12">
                     <label for="message">Response <span class="required"></span></label>
-                    <textarea class="form-control" name="content" placeholder="Write your response ..."></textarea>
+                    <textarea class="form-control" name="content" placeholder="Write your Comment ..."></textarea>
                 </div>
                 <div class="form-group col-md-12">
                         
-                        <button class="btn btn-primary">Send Response</button>
-                </div>
+                        <input type="submit" value="Send Response" id="addComment" class="btn btn-primary">
                 <input type="hidden" name="submitted" value="1" />
+
+                </div>
                 </fieldset>
-            </form>';} else {
-                 echo '<p style="text-align: center;">Please <a href="loginPage.php">login</a> first</p>';
+            </form>';
+            } else {
+                echo '<p style="text-align: center;">Please <a href="loginPage.php">login</a> first</p>';
             }
-            
-             ?>
+            ?>
         </div>
     </div>
 </div>
@@ -296,31 +295,32 @@ function removeComment(comment_id) {
 
 
 
-<?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+<?php
 
-if(isset($_POST['submitted'])){
-    
+
+if (isset($_POST['submitted'])) {
+
     echo 'Add attempt';
     $comment = new Comment();
-    $comment->setContent(trim($_POST['Comment']));
-    
+    $comment->setContent(trim($_POST['content']));
+    $comment->setUid($_SESSION['user_id']);
+    $comment->setAid($id);
+
     $errors = $comment->isValid();
-    
-    if(empty($errors)){
-        if($comment->addComment()){
+
+    if (empty($errors)) {
+        if ($comment->addComment()) {
             echo "<p>Your comment was added successfully</p>";
         }
-    }else{
+    } else {
         echo'<p> class="error"> Error </p>';
-        
-        foreach($errors as $comment)
+
+        foreach ($errors as $comment)
             echo " - $comment<br />";
     }
 }
-include 'footer.html' ?>;
+include 'footer.html'
+?>;
 
 
 
