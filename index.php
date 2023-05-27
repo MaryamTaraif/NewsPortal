@@ -40,7 +40,7 @@ include 'header.php';
                             <div class="row">
                                 <?php
                                     //get all articles 
-                                $list = Article::getArticles();
+                                $list = Article::getArticles($start, $end);
                                 if (!empty($list)){
                                     //display them 
                                     for ($i = 0; $i < count($list); $i++){
@@ -81,7 +81,7 @@ include 'header.php';
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <div class="row">
                                 <?php 
-                                $list = Article::getArticles();
+                                $list = Article::getArticles($start, $end);
                                 if (!empty($list)){
                                     //display them 
                                     for ($i = 0; $i < count($list); $i++){
