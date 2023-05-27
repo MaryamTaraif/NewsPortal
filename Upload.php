@@ -4,10 +4,6 @@ class Upload {
 
     private $upload_dir;
     private $max_file_size;
-    private $allowed_photo_mime_types;
-    private $allowed_video_mime_types;
-    private $allowed_audio_mime_types;
-    private $allowed_file_mime_types;
     private $denied_mime_types;
     private $filepath;
     private $fileType;
@@ -15,19 +11,11 @@ class Upload {
     function __construct() {
     $this->upload_dir = '';
     $this->max_file_size = 1048576; //Max File Size in Bytes, 1MB
-    
-    //i think not used at all (wil remove later) > because i am restrictin the upload type from the form itself 
-    $this->allowed_photo_mime_types =array('image/jpeg', 'image/png', 'image/gif', 'image/tiff');
-    $this->allowed_video_mime_types = array('video/mp4', 'video/mpeg', 'video/quicktime');
-    $this->allowed_audio_mime_types = array('audio/mpeg', 'audio/wav', 'audio/midi','audio/mp3', 'audio/x-wav');
-    $this->allowed_file_mime_types = array('text/plain', 'text/html', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel');
     $this->denied_mime_types = array('application/x-php', 'application/x-javascript', 'application/zip');
     $this->filepath = '';
     $this->fileType = ''; 
     }
     
-    
-
     function setFilepath($file) {
         $this->filepath = $file;
     }
@@ -142,8 +130,6 @@ class Upload {
         return $error;
     }
 
-
-    
     function make_safe($file){
         $file = str_replace('-', '_', $file);
         $file = str_replace('/', '_', $file);

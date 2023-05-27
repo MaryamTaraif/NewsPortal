@@ -4,27 +4,27 @@ include 'header.php';
 
 <body>
     <section class="home">
-        <div class="container" >
+        <div class="container">
             <div class="row">
                 <div class="col-md-8 col-sm-12 col-xs-12">
                     <div class="owl-carousel owl-theme slide" id="featured">
                         <?php 
                         $list = Article::getWeeklyTops();
-                            for ($i = 0; $i < count($list); $i++){
-                                echo '<div class="item">
-                            <article class="featured">
-                                <div class="overlay"></div>
-                                <figure>
-                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
-                                </figure>
-                                <div class="details">
-                                    <div class="category"><a href="category.html">'. Article::getCatName($list[$i]->category_id) .'</a></div>
-                                    <h1><a href="singleArticle.php?aid='.$list[$i]->article_id .'">'. $list[$i]->title .'</a></h1>
-                                    <div class="time">'.  $list[$i]->publish_date  .'</div>
-                                </div>
-                            </article>
-                        </div>';
-                            }
+                        for ($i = 0; $i < count($list); $i++){
+                            echo '<div class="item">
+                                <article class="featured">
+                                    <div class="overlay"></div>
+                                    <figure>
+                                        <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
+                                    </figure>
+                                    <div class="details">
+                                        <div class="category"><a href="category.html">'. Article::getCatName($list[$i]->category_id) .'</a></div>
+                                        <h1><a href="singleArticle.php?aid='.$list[$i]->article_id .'">'. $list[$i]->title .'</a></h1>
+                                        <div class="time">'.  $list[$i]->publish_date  .'</div>
+                                    </div>
+                                </article>
+                            </div>';
+                        }
                         ?>
                     </div>
                     <!-- Add navigation arrows -->
@@ -35,90 +35,121 @@ include 'header.php';
                     <div class="line">
                         <div>Latest News</div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="row">
-                                <?php
-                                    //get all articles 
-                                $list = Article::getArticles($start, $end);
-                                if (!empty($list)){
-                                    //display them 
-                                    for ($i = 0; $i < count($list); $i++){
-                                        if ($i %2 == 0){
-                                            echo ' <article class="article col-md-12">
-                                    <div class="inner">
-                                        <figure>
-                                            <a href="singleArticle.php?aid='.$list[$i]->article_id.'">
-                                            <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
-                                            </a>
-                                        </figure>
-                                        <div class="padding">
-                                            <div class="detail">
-                                                <div class="time">'. $list[$i]->publish_date .'</div>
-                                                <div class="category"><a href="category.php?cid='. $list[$i]->category_id.'">'. Article::getCatName($list[$i]->category_id) .'</a></div>
-                                            </div>
-                                            <h2>'. $list[$i]->title .'</h2>
-                                            <p>'.  $list[$i]->description .'</p>';
-                                            if ($list[$i]->description !== "This article was removed by an administrator"){
-                                                echo '<footer>
-                                                <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->likes .'</div></a>
-                                                <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'">
-                                                    <div>More</div>
-                                                    <div><i class="ion-ios-arrow-thin-right"></i></div>
-                                                </a>
-                                            </footer>';
-                                            }
-                                        echo '</div>
-                                                </div>
-                                            </article>';
-                                        }
-                                       
-                                    }
-                                }
-                                ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <div class="row">
-                                <?php 
-                                $list = Article::getArticles($start, $end);
-                                if (!empty($list)){
-                                    //display them 
-                                    for ($i = 0; $i < count($list); $i++){
-                                        if ($i % 2 != 0) {
-                                            echo ' <article class="article col-md-12">
-                                    <div class="inner">
-                                        <figure>
-                                            <a href="singleArticle.php?aid='.$list[$i]->article_id.'">
-                                            <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
-                                            </a>
-                                        </figure>
-                                        <div class="padding">
-                                            <div class="detail">
-                                                <div class="time">'. $list[$i]->publish_date .'</div>
-                                                <div class="category"><a href="category.php?cid='. $list[$i]->category_id.'">'. Article::getCatName($list[$i]->category_id) .'</a></div>
-                                            </div>
-                                            <h2>'. $list[$i]->title .'</h2>
-                                            <p>'.  $list[$i]->description .'</p>
-                                            <footer>
-                                                <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->likes .'</div></a>
-                                                <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'">
-                                                    <div>More</div>
-                                                    <div><i class="ion-ios-arrow-thin-right"></i></div>
-                                                </a>
-                                            </footer>
-                                        </div>
-                                    </div>
-                                </article>';
-                                    }
-                                    }
-                                }
-                                ?>
+                    <?php
+                    $list = Article::getArticles();
 
-                            </div>
-                        </div>
-                    </div>
-                    
+                    if (!empty($list)) {
+                        // Display the articles
+                        $articlesPerPage = 10; // Number of articles to display per page
+                        $totalArticles = count($list);
+                        $totalPages = ceil($totalArticles / $articlesPerPage);
+
+                        // Check if a page number is specified in the URL
+                        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+                        $offset = ($currentPage - 1) * $articlesPerPage;
+                        $articlesToDisplay = array_slice($list, $offset, $articlesPerPage);
+
+                        
+                        for ($i = 0; $i < count($articlesToDisplay); $i += 2) {
+                            echo '<div class="row">';
+                            // Display the first article in the row
+                            echo '<div class="col-md-6 col-sm-6 col-xs-12">
+                                <article class="article">
+                                    <div class="inner">
+                                        <figure>
+                                            <a href="singleArticle.php?aid='.$articlesToDisplay[$i]->article_id.'">
+                                                <img src="'. Media::getPhotoURL($articlesToDisplay[$i]->article_id)->URL .'">
+                                            </a>
+                                        </figure>
+                                        <div class="padding">
+                                            <div class="detail">
+                                                <div class="time">'. $articlesToDisplay[$i]->publish_date .'</div>
+                                                <div class="category"><a href="category.php?cid='. $articlesToDisplay[$i]->category_id.'">'. Article::getCatName($articlesToDisplay[$i]->category_id) .'</a></div>
+                                            </div>
+                                            <h2>'. $articlesToDisplay[$i]->title .'</h2>
+                                            <p>'. $articlesToDisplay[$i]->description .'</p>';
+                            if ($articlesToDisplay[$i]->description !== "This article was removed by an administrator") {
+                                echo '<footer>
+                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i]->likes .'</div></a>
+                                        <a class="btn btn-primary more" href="singleArticle.php?aid='.$articlesToDisplay[$i]->article_id.'">
+                                            <div>More</div>
+                                            <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                        </a>
+                                    </footer>';
+                            } else {
+                                echo '<footer>
+                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i]->likes .'</div></a>
+                                        <a class="btn btn-primary more" href="#">
+                                            <div>More</div>
+                                            <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                        </a>
+                                    </footer>';
+                            }
+                            echo '</div>
+                                </article>
+                            </div>';
+
+                            // Check if there is a second article in the row
+                            if ($i + 1 < count($articlesToDisplay)) {
+                                // Display the second article in the row
+                                echo '<div class="col-md-6 col-sm-6 col-xs-12">
+                                    <article class="article">
+                                        <div class="inner">
+                                            <figure>
+                                                <a href="singleArticle.php?aid='.$articlesToDisplay[$i + 1]->article_id.'">
+                                                    <img src="'. Media::getPhotoURL($articlesToDisplay[$i + 1]->article_id)->URL .'">
+                                                </a>
+                                            </figure>
+                                            <div class="padding">
+                                                <div class="detail">
+                                                    <div class="time">'. $articlesToDisplay[$i + 1]->publish_date .'</div>
+                                                    <div class="category"><a href="category.php?cid='. $articlesToDisplay[$i + 1]->category_id.'">'. Article::getCatName($articlesToDisplay[$i + 1]->category_id) .'</a></div>
+                                                </div>
+                                                <h2>'. $articlesToDisplay[$i + 1]->title .'</h2>
+                                                <p>'. $articlesToDisplay[$i + 1]->description .'</p>';
+                                if ($articlesToDisplay[$i + 1]->description !== "This article was removed by an administrator") {
+                                    echo '<footer>
+                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i + 1]->likes .'</div></a>
+                                            <a class="btn btn-primary more" href="singleArticle.php?aid='.$articlesToDisplay[$i + 1]->article_id.'">
+                                                <div>More</div>
+                                                <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                            </a>
+                                        </footer>';
+                                } else {
+                                    echo '<footer>
+                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i + 1]->likes .'</div></a>
+                                            <a class="btn btn-primary more" href="#">
+                                                <div>More</div>
+                                                <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                            </a>
+                                        </footer>';
+                                }
+                                echo '</div>
+                                    </article>
+                                </div>';
+                            }
+                            echo '</div>';
+                        }
+                        
+
+                        // Pagination
+                        if ($totalPages > 1 ){
+                        echo '  <div class="col-md-12 text-center"> <ul class="pagination">';
+                        if ($currentPage > 1) {
+                            echo '<li><a href="?page='.($currentPage - 1).'">&laquo;</a></li>';
+                        }
+                        for ($page = 1; $page <= $totalPages; $page++) {
+                            echo '<li '.($page == $currentPage ? 'class="active"' : '').'><a href="?page='.$page.'">'.$page.'</a></li>';
+                        }
+                        if ($currentPage < $totalPages) {
+                            echo '<li><a href="?page='.($currentPage + 1).'">&raquo;</a></li>';
+                        }
+                        echo '</ul></div>';
+                        }
+                    } else {
+                        echo '<p>No articles found.</p>';
+                    }
+                    ?>
                 </div>
                 <div class="col-xs-6 col-md-4 sidebar" id="sidebar">
                     <div class="sidebar-title for-tablet">Sidebar</div>
@@ -184,6 +215,7 @@ include 'header.php';
 </body>
 <!-- footer -->
 <?php  include 'footer.html'?>
+
 <!-- JS -->
 <script src="js/jquery.js"></script>
 <script src="js/jquery.migrate.js"></script>

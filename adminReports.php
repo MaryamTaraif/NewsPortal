@@ -30,14 +30,13 @@ if ($_SESSION['role'] !== 'Admin') {
                         <p>Extract all news articles published by selected author.</p>
                             <div class="form-group">
                                 <div class="input-group">
-<!--                                    <input type="text" id="author" class="form-control" oninput="showArticleByAuthor(this.value)" placeholder="Enter writer name ...">-->
                                     <select id="author" name="author" class="form-control" >
                                             <?php
                                             //populate the dropdown with authors names
                                             $authors = Users::getAuthors();
                                             if (!empty($authors)) {
                                                 for ($i = 0; $i < count($authors); $i++) {
-                                                    echo '<option value="' . $authors[$i]->user_id . '">' . $authors[$i]->username . '</option>';
+                                                    echo '<option value="' . $authors[$i]->username. '">' . $authors[$i]->username . '</option>';
                                                 }
                                             }
                                             ?>

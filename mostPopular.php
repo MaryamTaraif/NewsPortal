@@ -1,6 +1,6 @@
 <?php
 include 'debugging.php';
-$result = Article::getMostPopular($_GET['from'], $_GET['to']);
+$result = Article::getPopularReport($_GET['from'], $_GET['to']);
 if (!empty($result)) {
                                 //loop through and display 
                                     for ($i = 0; $i < count($result); $i++) {

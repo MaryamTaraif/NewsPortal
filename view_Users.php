@@ -49,7 +49,9 @@ if ($_SESSION['role'] !== 'Admin') {
                 foreach ($row as $user) {
                     echo '<tr style="background-color: #ffffff; border: 1px solid #ddd;">';
                     echo '<td style="padding: 10px; text-align: center;border: 1px solid #ddd;"><a href="edit_User.php?id=' . $user->user_id . '">Edit</a></td>';
-                    echo '<td style="padding: 10px; text-align: center;border: 1px solid #ddd;"><a href="delete_User.php?id=' . $user->user_id . '">Delete</a></td>';
+                    echo '<td style="padding: 10px; text-align: center; border: 1px solid #ddd; text-align: center;">
+                            <a href="#" onclick="deleteUser(' . $user->user_id . ')">Delete</a>
+                          </td>';
                     echo '<td style="padding: 10px;text-align: center; border: 1px solid #ddd;  text-align: center;">' . $user->user_id . '</td>';
                     echo '<td style="padding: 10px; border: 1px solid #ddd;  text-align: center;">' . $user->username . '</td>';
                     echo '<td style="padding: 10px; border: 1px solid #ddd;  text-align: center;">' . $user->email . '</td>';
@@ -65,4 +67,29 @@ if ($_SESSION['role'] !== 'Admin') {
         </div>
     </div>
 </div>
+
+
+<script>
+    function deleteUser(userId) {
+        if (confirm("Are you sure you want to delete this user?")) {
+            // Make an AJAX request
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    // Update the page
+                    if (this.responseText == true) {
+                        location.reload();
+                        alert("Deleted Successfully");
+                    }
+                    else {
+                        alert("Sorry, an error occurred." + this.responseText);
+                    }
+                }
+            };
+            xhttp.open("GET", "delete_User.php?u_id=" + userId, true);
+            xhttp.send();
+        }
+    }
+</script>
+
 <?php include 'footer.html'; ?>
