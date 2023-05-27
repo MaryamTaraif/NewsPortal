@@ -274,30 +274,14 @@ class Article {
         return $total;
     }
     
-    //get the list of articles in the passed category 
-   public static function getPageArticles($category_id, $page, $page_size) {
-        $db = Database::getInstance();
-        $offset = $page * $page_size;
-        $sql = "SELECT * FROM dbProj_Article WHERE category_id = $category_id LIMIT $offset, $page_size";
-        $data = $db->multiFetch($sql);
-        return $data;
-    }
-
-
-    
     //get all articles ordered from the latest date 
-    public static function getArticles($start, $end) {
+    public static function getArticles() {
     $db = Database::getInstance();
     $q = 'SELECT * FROM dbProj_Article WHERE status = true ORDER BY publish_date DESC';
-    if (isset($start)) {
-        $q .= ' LIMIT ' . (int)$start . ',' . (int)$end;
-    }
-
     $data = $db->multiFetch($q);
     return $data;
 }
-
-       
+  
     //categories functions 
     public static function getAllCat(){
         $db = Database::getInstance();
@@ -312,7 +296,7 @@ class Article {
     }
     
 
-   
+
   public static function getRecentArticle() {
         $db = Database::getInstance();
         $today = date('Y-m-d');

@@ -30,7 +30,6 @@ if ($_SESSION['role'] !== 'Admin') {
                         <p>Extract all news articles published by selected author.</p>
                             <div class="form-group">
                                 <div class="input-group">
-<!--                                    <input type="text" id="author" class="form-control" oninput="showArticleByAuthor(this.value)" placeholder="Enter writer name ...">-->
                                     <select id="author" name="author" class="form-control" >
                                             <?php
                                             //populate the dropdown with authors names

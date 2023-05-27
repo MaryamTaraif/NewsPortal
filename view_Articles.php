@@ -1,20 +1,11 @@
 <?php
 ob_start();
 include 'header.php';
-// Check if the user not an admin, then redirect to permission denied page
+// Check if the user is not an admin, then redirect to the permission denied page
 if ($_SESSION['role'] !== 'Admin') {
     header("Location: permission_denied.php");
     exit();
 }
-if(isset($_GET['pageno']))
-    $start = $_GET['pageno'];
-        else $start = 0;
- 
-        $end = 10;
-        
-        $table = 'dbProj_Article';
-$articles = new Article();
-$list = $articles->getArticles($start, $end);
 ?>
 
 <div class="container" style="padding-top: 200px; padding-bottom: 70px;">
@@ -31,8 +22,20 @@ $list = $articles->getArticles($start, $end);
 
     <div class="row">
         <?php
+        $initialList = Article::getArticles();
+       
+
         // Check if the result is not empty
-        if (!empty($list)) {
+        if (!empty($initialList)) {
+             // Display the articles
+            $articlesPerPage = 10; // Number of articles to display per page
+            $totalArticles = count($initialList);
+            $totalPages = ceil($totalArticles / $articlesPerPage);
+
+            // Check if a page number is specified in the URL
+            $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+            $offset = ($currentPage - 1) * $articlesPerPage;
+            $list = array_slice($initialList, $offset, $articlesPerPage);
             // Loop through and display each article
             foreach ($list as $article) {
                 echo '<article class="col-md-12 article-list">
@@ -63,15 +66,23 @@ $list = $articles->getArticles($start, $end);
                         </div>
                     </article>';
             }
-             echo '<table align="center" cellspacing = "2" cellpadding = "4" width="75%"><tr><td>';
-    $pagination = new Pagination();
-    $pagination->totalRecords($table);
-    $pagination->setLimit($end);
-    $pagination->page("");
-    echo $pagination->firstBack();
-    echo $pagination->where();
-    echo $pagination->nextLast();
-    echo '</td></tr></table>';
+
+            // Pagination
+            if ($totalPages > 1) {
+            echo '<div class="col-md-12 text-center">
+                   <ul class="pagination">';
+            if ($currentPage > 1) {
+                echo '<li><a href="?page='.($currentPage - 1).'">Prev</a></li>';
+            }
+            for ($i = 1; $i <= $totalPages; $i++) {
+                echo '<li'. ($i == $currentPage ? ' class="active"' : '') .'><a href="?page='.$i.'">'.$i.'</a></li>';
+            }
+            if ($currentPage < $totalPages) {
+                echo '<li><a href="?page='.($currentPage + 1).'">Next</a></li>';
+            }
+            echo '</ul>
+            </div>';
+            }
         } else {
             echo '<div class="col-md-12">
                     <p>No Articles found!</p>
