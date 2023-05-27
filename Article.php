@@ -372,7 +372,7 @@ class Article {
     // Define a new function that takes a search query as a parameter
     public static function searchArticles($searchText) {
     $db = Database::getInstance();
-    $query = "SELECT * FROM dbProj_Article WHERE MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
+    $query = "SELECT * FROM dbProj_Article WHERE status = true and MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
     $result = $db->multiFetch($query);    
     return $result;
 }
@@ -380,22 +380,63 @@ class Article {
     public static function searchByAuthor($authorName)
     {
         $db = Database::getInstance();
-        $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE u.user_id = a.user_id and u.username like '$authorName%'";
+        $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE status = true and u.user_id = a.user_id and u.username like '$authorName%' order by publish_date desc";
         $data = $db->multiFetch($q);
         return $data;
     }
-
-    public static function getMostPopular($from, $to){
+    
+    public static function searchByDate($startDate, $endDate)
+    {
         $db = Database::getInstance();
-        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true ORDER BY views DESC limit 10");
+           $q = "SELECT *
+           FROM dbProj_Article
+           WHERE  status = true and publish_date BETWEEN '$startDate' AND '$endDate' order by publish_date asc";
+            
+        $data = $db->multiFetch($q);
         return $data;
     }
     
+    public static function getMostPopular(){
+        $db = Database::getInstance();
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true ORDER BY views DESC limit 5");
+        return $data;
+    }
+    
+
     public static function getPopularReport($from, $to){
         $db = Database::getInstance();
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
         return $data;
     }
+
+    public static function getRecentArticles() {
+        $db = Database::getInstance();
+        $today = date('Y-m-d');
+        $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' ORDER BY publish_date DESC LIMIT 5");
+        return $data;
+    }
     
+    public static function updateArticleLikes($article_id){
+        
+            $db = Database::getInstance();
+            $q = 'UPDATE dbProj_Article SET likes = likes + 1 WHERE article_id = ' . $article_id;
+            $result = $db->querySql($q); 
+            return $result;
+    }
+
+    
+    public static function updateArticleDislikes($article_id){
+        
+            $db = Database::getInstance();
+            $q = 'UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE article_id = ' . $article_id;
+            $result = $db->querySql($q); 
+            if($result) {
+                return true;
+            }
+            else {
+                return false;
+            }
+    }
+
 
 }

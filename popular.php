@@ -1,6 +1,8 @@
 <?php
 include 'debugging.php';
-$result = Article::searchByAuthor($_GET['author']);
+
+$result = Article::getMostPopular();
+//return $result;
 if (!empty($result)) {
                                 //loop through and display 
                                     for ($i = 0; $i < count($result); $i++) {
@@ -12,7 +14,7 @@ if (!empty($result)) {
 		              <div class="details">
 		                <div class="detail">
 		                  <div class="category">
-		                   <a href="#">'. Article::getCatName($result[$i]->category_id) .'</a>
+		                   <a href="#">'. $name .'</a>
 		                  </div>
 		                  <div class="time">'.$result[$i]->publish_date .'</div>
 		                </div>
@@ -34,4 +36,4 @@ if (!empty($result)) {
                             else {
                                 echo '<h6>Oops, no articles yet.</h6>';
                             }
-?>
+                            ?>
