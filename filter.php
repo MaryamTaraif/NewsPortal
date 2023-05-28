@@ -1,9 +1,23 @@
 <?php
 include 'debugging.php';
-$result = Article::searchByAuthor($_GET['author']);
+if (isset($_GET['adminAuthor'])){
+    $result = Article::searchByAuthor($_GET['adminAuthor']);
+}
+else if (isset ($_GET['author'])){
+    $result = Article::searchByAuthor($_GET['author']);
+}
+else {
+    exit;
+}
+$itemsPerPage = 10; // Number of items per page
+$currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
+
+// Calculate the start and end positions for the current page
+$start = ($currentPage - 1) * $itemsPerPage;
+$end = $start + $itemsPerPage;
 if (!empty($result)) {
                                 //loop through and display 
-                                    for ($i = 0; $i < count($result); $i++) {
+                    for ($i = $start; $i < min($end, count($result)); $i++) {
                                         echo '<article class="col-md-12 article-list">
 		            <div class="inner">
 		              <figure>
@@ -32,6 +46,43 @@ if (!empty($result)) {
                                     }
                             }
                             else {
-                                echo '<h6>Oops, no articles yet.</h6>';
+                                echo '<h6>Oops, no articles found with that author name.</h6>';
+                            }
+                            // Pagination links
+                            $totalPages = ceil(count($result) / $itemsPerPage);
+                            if (isset($_GET['author'])){
+                            if ($totalPages > 1) {
+                                echo '<div class="col-md-12 text-center">
+                                        <ul class="pagination">';
+                            if ($currentPage > 1) {
+                              echo '<li class="prev"><a href="#" onclick="showArticleByAuthor(\'' . $_GET['author'] . '\', ' . ($currentPage - 1) . ')"><i class="ion-ios-arrow-left"></i></a></li>';
+                            }
+                            for ($i = 1; $i <= $totalPages; $i++) {
+                              echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="#" onclick="showArticleByAuthor(\'' . $_GET['author'] . '\', ' . $i . ')">' . $i . '</a></li>';
+                            }
+                            if ($currentPage < $totalPages) {
+                              echo '<li class="next"><a href="#" onclick="showArticleByAuthor(\'' . $_GET['author'] . '\', ' . ($currentPage + 1) . ')"><i class="ion-ios-arrow-right"></i></a></li>';
+                            }
+                            echo '</ul>
+                                  </div>';
+                          }
+
+                            }
+                            else if (isset($_GET['adminAuthor'])){
+                                if ($totalPages > 1) {
+                                    echo '<div class="col-md-12 text-center">
+                                        <ul class="pagination">';
+                                if ($currentPage > 1) {
+                                    echo '<li class="prev"><a href="#" onclick="showArticleByAuthor(' . ($currentPage - 1) . ')"><i class="ion-ios-arrow-left"></i></a></li>';
+                                  }
+                                  for ($i = 1; $i <= $totalPages; $i++) {
+                                    echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="#" onclick="showArticleByAuthor(' . $i . ')">' . $i . '</a></li>';
+                                  }
+                                  if ($currentPage < $totalPages) {
+                                    echo '<li class="next"><a href="#" onclick="showArticleByAuthor(' . ($currentPage + 1) . ')"><i class="ion-ios-arrow-right"></i></a></li>';
+                                  }
+                                  echo '</ul>
+                                  </div>';
+                                 }
                             }
 ?>
