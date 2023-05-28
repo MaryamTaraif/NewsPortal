@@ -88,40 +88,7 @@ $article->updateArticleViews();
                         </figure>
                     </div>
                 </aside>
-                <aside>
-                    <h1 class="aside-title">Recent Post</h1>
-                    <div class="aside-body">
-                        <!-- get the recent article-->
-                        <?php
-                        $recentArticle = Article::getRecentArticle();
-
-                        if ($recentArticle) {
-                            $recentId = $recentArticle->article_id;
-                            $recentTitle = $recentArticle->title;
-                            $recentDescription = $recentArticle->description;
-
-                            echo '<article class="article-fw">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="singleArticle.php?aid=' . $recentId . '">
-                                            <img src="images/news/img16.jpg">
-                                        </a>
-                                    </figure>
-                                    <div class="details">
-                                        <h1><a href="singleArticle.php?aid=' . $recentId . '">' . $recentTitle . '</a></h1>
-                                        <p>' . $recentDescription . '</p>
-                                        <div class="detail">
-                                            <div class="time">' . $recentArticle->publish_date . '</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>';
-                        } else {
-                            echo "<p>No recent articles found.</p>";
-                        }
-                        ?>
-                    </div>
-                </aside>
+               
 
             </div>
             <!-- show artcile details -->
