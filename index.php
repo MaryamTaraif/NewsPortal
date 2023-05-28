@@ -70,6 +70,7 @@ include 'header.php';
                                             <p>'. $articlesToDisplay[$i]->description .'</p>';
                             if ($articlesToDisplay[$i]->description !== "This article was removed by an administrator") {
                                 echo '<footer>
+                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i]->likes .'</div></a>
                                         <a class="btn btn-primary more" href="singleArticle.php?aid='.$articlesToDisplay[$i]->article_id.'">
                                             <div>More</div>
                                             <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -77,6 +78,7 @@ include 'header.php';
                                     </footer>';
                             } else {
                                 echo '<footer>
+                                        <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i]->likes .'</div></a>
                                         <a class="btn btn-primary more" href="#">
                                             <div>More</div>
                                             <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -107,6 +109,7 @@ include 'header.php';
                                                 <p>'. $articlesToDisplay[$i + 1]->description .'</p>';
                                 if ($articlesToDisplay[$i + 1]->description !== "This article was removed by an administrator") {
                                     echo '<footer>
+                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i + 1]->likes .'</div></a>
                                             <a class="btn btn-primary more" href="singleArticle.php?aid='.$articlesToDisplay[$i + 1]->article_id.'">
                                                 <div>More</div>
                                                 <div><i class="ion-ios-arrow-thin-right"></i></div>
@@ -114,6 +117,7 @@ include 'header.php';
                                         </footer>';
                                 } else {
                                     echo '<footer>
+                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $articlesToDisplay[$i + 1]->likes .'</div></a>
                                             <a class="btn btn-primary more" href="#">
                                                 <div>More</div>
                                                 <div><i class="ion-ios-arrow-thin-right"></i></div>
