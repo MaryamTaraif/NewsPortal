@@ -25,6 +25,7 @@ if (isset($_GET['id'])) {
         $file = Media::getDownloadableFile($article->getArticle_id());
     }
 }
+
 ?>
 <script>
     //AJAX, function to send a request to remove attached file (as it's optional)
@@ -80,13 +81,17 @@ if (isset($_GET['id'])) {
                                         <label>Category <span class="required"></span></label>
                                         <select id="category" name="category" class="form-control" required>
                                             <?php
-                                            //oppulate the dropdown list with categories and select the desired one if edit form 
+                                            //populate the dropdown list with categories and select specified one if form is submitted before or an edit form
                                             $list = Article::getAllCat();
                                             if (!empty($list)) {
                                                 for ($i = 0; $i < count($list); $i++) {
                                                     if ($edit && $list[$i]->category_id == $article->getCategory_id()) {
                                                         echo '<option value="' . $list[$i]->category_id . '" selected>' . $list[$i]->category_name . '</option>';
-                                                    } else {
+                                                    } 
+                                                    else if ($list[$i]->category_id == $_POST['category']){
+                                                        echo '<option value="' . $list[$i]->category_id . '" selected>' . $list[$i]->category_name . '</option>';
+                                                    }
+                                                    else {
                                                         echo '<option value="' . $list[$i]->category_id . '">' . $list[$i]->category_name . '</option>';
                                                     }
                                                 }
@@ -98,14 +103,14 @@ if (isset($_GET['id'])) {
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Title <span class="required"></span></label>
-                                        <input type="text" class="form-control" name="title" required value="<?php if ($edit) echo $article->getTitle(); ?>">
+                                        <input type="text" class="form-control" name="title" required value="<?php if ($edit) {echo $article->getTitle();} if (isset($_POST['title'])) { echo $_POST['title']; } ?>">
 
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Description <span class="required"></span></label>
-                                        <input type="text" class="form-control" name="description" required value="<?php if ($edit) echo $article->getDescription(); ?>">
+                                        <input type="text" class="form-control" name="description" required value="<?php if ($edit) {echo $article->getDescription();} if (isset($_POST['description'])) { echo $_POST['description']; } ?>">
 
 
                                     </div>
@@ -113,7 +118,7 @@ if (isset($_GET['id'])) {
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Content <span class="required"></span></label>
-                                        <textarea class="form-control" name="content" required><?php if ($edit) echo $article->getContent(); ?></textarea>
+                                        <textarea class="form-control" name="content" required><?php if ($edit) { echo $article->getContent(); } if (isset($_POST['content'])) { echo $_POST['content']; }  ?></textarea>
 
                                     </div>
                                 </div>
@@ -136,15 +141,13 @@ if (isset($_GET['id'])) {
                                         <label>Video/Audio <span class="required"></span></label>
                                         <?php
                                         if (!empty($video)) {
-
                                             echo '<br><video controls>
-                                        <source src="' . $video->URL . '" type="video/*">
-                                       </video>';
-                                        } elseif (!empty($audio)) {
+                                                <source src="' . $video->URL . '" type="video/*"></video>
+                                                <input type="file"  name="video/audio" accept="audio/*, video/*">';
+                                        } else if (!empty($audio)) {
                                             echo '<br><audio controls>
-                                                                                                            <source src="' . $audio->URL . '" type="audio/wav">
-                                                                                                          </audio>
-                                                                                                          <input type="file"  name="video/audio" accept="audio/*, video/*">';
+                                                <source src="' . $audio->URL . '" type="audio/wav"></audio>
+                                                <input type="file"  name="video/audio" accept="audio/*, video/*">';
                                         } else {
                                             echo '<input type="file"  name="video/audio" accept="audio/*, video/*" required>';
                                         }
