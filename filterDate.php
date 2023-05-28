@@ -7,11 +7,9 @@ $result = Article::searchByDate($_POST['from_date'], $_POST['to_date']);
 $itemsPerPage = 10; // Number of items per page
 $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
 $start = ($currentPage - 1) * $itemsPerPage;
-$end = $start + $itemsPerPage;
-
-//return $result;
+$end = $start + $itemsPerPage;//return $result;
 if (!empty($result)) {
-                                //loop through and display 
+                                //loop through and display
                     for ($i = $start; $i < min($end, count($result)); $i++) {
                                         echo '<article class="col-md-12 article-list">
 		            <div class="inner">
@@ -30,9 +28,7 @@ if (!empty($result)) {
 		                  '.$result[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love" style="display: inline-block; margin-right: 10px;" onclick="updateLikes(<?php echo $result[$i]->id; ?>)"><i class="fas fa-thumbs-up"></i><div>'. $result[$i]->likes .'</div></a>
-                                  <a href="#" class="love"><i class="fas fa-thumbs-down"></i><div>'. $result[$i]->dislikes .'</div></a>
-		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
+		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'">
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>

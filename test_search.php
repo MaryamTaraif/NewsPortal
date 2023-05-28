@@ -6,6 +6,76 @@ if ($_GET['searchText']){
 
 ?>
 
+<script>
+
+
+   function showArticleByAuthor(str) {
+    //create the AJAX request object
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET", "filter.php?author="+ str, true);
+    xmlhttp.send();
+}
+
+function showArticleByDate() {
+    //create the AJAX request object
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+        }
+    }
+    var fromDate = document.getElementById("start_date").value;
+    var toDate = document.getElementById("end_date").value;
+    xmlhttp.open("GET", "filterDate.php?start_date="+ fromDate + "&end_date=" +toDate, true);
+    xmlhttp.send();
+    return false;
+}
+
+function showPopular() {
+    //create the AJAX request object
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET", "popular.php?", true);
+    xmlhttp.send();
+    return false;
+}
+
+function showRecent() {
+    //create the AJAX request object
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET", "recent.php?", true);
+    xmlhttp.send();
+    return false;
+}
+
+function showAll() {
+    //create the AJAX request object
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+        }
+    }
+    xmlhttp.open("GET", "allArticles.php?", true);
+    xmlhttp.send();
+    return false;
+}
+</script>
+
 <section class="search">
     <div class="container" style="padding-top: 200px">
         <div class="row">
@@ -35,12 +105,11 @@ if ($_GET['searchText']){
                     <div class="aside-body">
 
                         <p>Search Within certain period for more accurate results.</p>
-                        <p>Your search texts will be cleared when searching by date</p>
-                        <form method="POST">
+                        <form method="POST" onsubmit="showArticleByDate(); return false;">
                             <div class="form-group">
                               <div class="input-daterange">
                                 <div class="input-group">
-                                    <input type="date" name="from_date" id="start_date" class="form-control" placeholder="From Date" />  
+                                    <input type="date" name="from_date" id="start_date" class="form-control" placeholder="From Date" />
                                 </div>
                                 <p> </p>
                                 <div class="input-group">
@@ -48,8 +117,8 @@ if ($_GET['searchText']){
                                 </div>
                               </div>
                               <p> </p>
-                              <div class="input-group-btn">  
-                                  <button class="btn btn-primary" name="filter_date" id="filter_date" value="filter_date" onclick="showArticleByDate()">Filter</button>  
+                              <div class="input-group-btn">
+                                  <button class="btn btn-primary" name="filter_date" id="filter_date" value="filter_date">Filter</button>
                               </div>
                             </div>
                           </form>
@@ -59,11 +128,11 @@ if ($_GET['searchText']){
             <div class="col-md-9">
                 <div class="nav-tabs-group">
                     <ul class="nav-tabs-list">
-                        <li class="active" id="all" data-function="all" onclick="activate(this)"><a href="#">All</a></li>
-                        
-                        <li data-function="latest" id="latest" onclick="activate(this)"><a href="#">Latest</a></li>
-                        
-                        <li data-function="mostPopular" id="popular" onclick="activate(this)"><a href="#">Popular</a></li>
+                        <li class="active" id="all" data-function="all" onclick="activate(this), showAll()"><a href="#">All</a></li>
+
+                        <li data-function="latest" id="latest" onclick="activate(this), showRecent()"><a href="#">Latest</a></li>
+
+                        <li data-function="mostPopular" id="popular" onclick="activate(this), showPopular()"><a href="#">Popular</a></li>
 
                     </ul>
 
@@ -101,9 +170,7 @@ if ($_GET['searchText']){
 		                  '.$searchresult[$i]->description .'
 		                </p>
 		                <footer>
-		                  <a href="#" class="love" id="likes" style="display: inline-block; margin-right: 10px;" onclick="updateLike()"><i class="fas fa-thumbs-up"></i><div>'. $searchresult[$i]->likes .'</div></a>
-                                  <a href="#" class="love"><i class="fas fa-thumbs-down" ></i><div>'. $searchresult[$i]->dislikes .'</div></a>
-		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$searchresult[$i]->article_id.'"> 
+		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'">
 		                    <div>More</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>
@@ -115,7 +182,7 @@ if ($_GET['searchText']){
                             }
                             else {
                                echo '<h6>Oops, no articles found.</h6>';
-                            } 
+                            }
                             // Pagination links
                             $totalPages = ceil(count($searchresult) / $itemsPerPage);
                             if ($totalPages > 1) {
@@ -216,20 +283,17 @@ function activate(element) {
     //create the AJAX request object
     alert("hi");
     xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function () {  
-        
+    xmlhttp.onreadystatechange = function () {
+
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
            document.getElementById("likes").innerHTML = xmlhttp.responseText;
            alert("hi2");
         }
     }
-    
+
     article_id = $result[$i]->article_id;
     xmlhttp.open("GET", "update_likes.php?article_id="+ article_id, true);
     xmlhttp.send();
 }
 
 </script>
-
-
-   
