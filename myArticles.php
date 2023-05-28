@@ -158,6 +158,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
 		                </p>';
                                         if ($article->description !== "This article was removed by an administrator"){
                                             echo '<footer>
+                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $article->likes .'</div></a>
                                             <a class="btn btn-primary more" href="singleArticle.php?aid='.$article->article_id.'"> 
                                               <div>View</div>
                                               <div><i class="ion-ios-arrow-thin-right"></i></div>
