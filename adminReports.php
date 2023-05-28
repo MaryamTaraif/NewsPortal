@@ -80,19 +80,18 @@ if ($_SESSION['role'] !== 'Admin') {
 </div>
 
 <script>
-function showArticleByAuthor(page = 1) {
-   author = document.getElementById("author").value;
-  // Create the AJAX request object
-   xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function () {
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+function showArticleByAuthor() {
+    user_id = document.getElementById("author").value;
+    //create the AJAX request object
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+           document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
+        }
     }
-  };
-  xmlhttp.open("GET", "filter.php?adminAuthor=" + author + "&page=" + page, true);
-  xmlhttp.send();
+    xmlhttp.open("GET", "filter.php?author="+ user_id, true);
+    xmlhttp.send();
 }
-
 
 function showMostPopular() {
     //create the AJAX request object
