@@ -11,18 +11,18 @@ include 'header.php';
                     <h4>Register</h4>
                     <form id="registrationForm" action="register.php" method="post">
                         <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" name="username" class="form-control" value="">
+                            <label>Username<span class="required"></span></label>
+                            <input type="text" name="username" class="form-control " value=""  >
                         </div>
 
                         <div class="form-group">
-                            <label class="fw">Password</label>
-                            <input type="password" name="password" class="form-control" value="">
+                            <label class="fw">Password<span class="required"></span></label>
+                            <input type="password" name="password" class="form-control"  value="">
                         </div>
 
                         <div class="form-group">
-                            <label>Role</label>
-                            <select id="roles" name="role" class="form-control" value="">
+                            <label>Role<span class="required"></span></label>
+                            <select id="roles" name="role" class="form-control"  value="">
                                 <!-- retrive roles list -->
                                 <?php
                                 $typesList = Users::getTypes();
@@ -46,8 +46,8 @@ include 'header.php';
                         </div>
 
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" name="email" class="form-control" value="">
+                            <label>Email<span class="required"></span></label>
+                            <input type="email" name="email" class="form-control"  value="">
                         </div>
 
                         <div class="form-group text-right">
