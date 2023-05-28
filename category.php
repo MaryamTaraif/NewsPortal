@@ -55,6 +55,7 @@ $name = Article::getCatName($id);
                                         <h1><a href="singleArticle.php?aid='.$article->article_id.'">'. $article->title .'</a></h1>
                                         <p>'. $article->description .'</p>
                                         <footer>
+                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $article->likes .'</div></a>
                                             <a class="btn btn-primary more" href="singleArticle.php?aid='.$article->article_id.'">
                                                 <div>More</div>
                                                 <div><i class="ion-ios-arrow-thin-right"></i></div>
