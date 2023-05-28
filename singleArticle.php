@@ -36,41 +36,41 @@ $article->updateArticleViews();
         }
     }
 
-    function likeArticle() {
-        // prevent the default behavior of the click event
-        event.preventDefault();
-        // make an AJAX request to update the likes count in the database
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                // update the likes count on the page
-                document.getElementById("likes_count").innerHTML = this.responseText;
+        function likeArticle() {
+            // prevent the default behavior of the click event
+            event.preventDefault();
+            // make an AJAX request to update the likes count in the database
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the likes count on the page
+                    document.getElementById("likes_count").innerHTML = this.responseText;
 
-                // display a message to the user
-                alert("Liked Successfully");
-            }
-        };
-        xhttp.open("GET", "updateLikes.php?id=" + <?php echo $id; ?>, true);
-        xhttp.send();
-    }
+                    // display a message to the user
+                    alert("Liked Successfully");
+                }
+            };
+            xhttp.open("GET", "updateLikes.php?id=" + <?php echo $id; ?>, true);
+            xhttp.send();
+        }
 
-    function dislikeArticle() {
-        // prevent the default behavior of the click event
-        event.preventDefault();
-        // make an AJAX request to update the likes count in the database
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                // update the likes count on the page
-                document.getElementById("dislikes_count").innerHTML = this.responseText;
+        function dislikeArticle() {
+            // prevent the default behavior of the click event
+            event.preventDefault();
+            // make an AJAX request to update the likes count in the database
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    // update the likes count on the page
+                    document.getElementById("dislikes_count").innerHTML = this.responseText;
 
-                // display a message to the user
-                alert("Disliked Successfully");
-            }
-        };
-        xhttp.open("GET", "updateDislikes.php?id=" + <?php echo $id; ?>, true);
-        xhttp.send();
-    }
+                    // display a message to the user
+                    alert("Disliked Successfully");
+                }
+            };
+            xhttp.open("GET", "updateDislikes.php?id=" + <?php echo $id; ?>, true);
+            xhttp.send();
+        }
 
 </script>
 
@@ -88,7 +88,40 @@ $article->updateArticleViews();
                         </figure>
                     </div>
                 </aside>
+                <aside>
+                    <h1 class="aside-title">Recent Post</h1>
+                    <div class="aside-body">
+                        <!-- get the recent article-->
+                        <?php
+                        $recentArticle = Article::getRecentArticle();
 
+                        if ($recentArticle) {
+                            $recentId = $recentArticle->article_id;
+                            $recentTitle = $recentArticle->title;
+                            $recentDescription = $recentArticle->description;
+
+                            echo '<article class="article-fw">
+                                <div class="inner">
+                                    <figure>
+                                        <a href="singleArticle.php?aid=' . $recentId . '">
+                                            <img src="images/news/img16.jpg">
+                                        </a>
+                                    </figure>
+                                    <div class="details">
+                                        <h1><a href="singleArticle.php?aid=' . $recentId . '">' . $recentTitle . '</a></h1>
+                                        <p>' . $recentDescription . '</p>
+                                        <div class="detail">
+                                            <div class="time">' . $recentArticle->publish_date . '</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>';
+                        } else {
+                            echo "<p>No recent articles found.</p>";
+                        }
+                        ?>
+                    </div>
+                </aside>
 
             </div>
             <!-- show artcile details -->
@@ -160,19 +193,17 @@ $article->updateArticleViews();
                         <?php
                         $fileURL = $media->getDownloadableFile($id);
                         if ($fileURL) {
-                            $fileName = basename($fileURL->URL); // Extract the file name from the URL
                             echo '
-    <div class="line">
-        <div>Downloadable File</div>
-    </div>
-    <aside style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
-        <div class="aside-body">
-            <a href="' . $fileURL->URL . '" download="' . $fileName . '">Download File</a>
-        </div>
-    </aside>';
+                                <div class="line">
+                                    <div>Downloadable File</div>
+                                </div>
+                                <aside style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
+                                    <div class="aside-body">
+                                        <a href="' . $fileURL->URL . '">Download File</a>
+                                    </div>
+                                </aside>';
                         }
                         ?>
-
                     </div>
 
                     <div class="line">
@@ -337,7 +368,7 @@ if (isset($_POST['submitted'])) {
     $comment->setContent(trim($_POST['content']));
     $comment->setUid($_SESSION['user_id']);
     $comment->setAid($id);
-
+    
     // Check if the comment is empty
     if (empty($comment->getContent())) {
         echo '<script>alert("Please enter a comment.");</script>';
