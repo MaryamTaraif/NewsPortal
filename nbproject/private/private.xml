@@ -13,17 +13,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/Upload.php</file>
+            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/filterDate.php</file>
             <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/Database.php</file>
             <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/Article.php</file>
-            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/header.php</file>
-            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/edit_User.php</file>
-            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/delete_User.php</file>
-            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/deleteArticle.php</file>
-            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/permission_denied.php</file>
             <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/allArticles.php</file>
-            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/Media.php</file>
             <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/category.php</file>
-            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/footer.html</file>
+            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/filter.php</file>
+            <file>file:/C:/Users/user/Documents/Uni/Year%203/Database%20Prog%202/NewsPortal/test_search.php</file>
         </group>
     </open-files>
 </project-private>
