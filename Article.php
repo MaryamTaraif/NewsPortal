@@ -209,7 +209,6 @@ class Article {
     }
     
     function updateArticleViews(){
-        
             $db = Database::getInstance();
             $q = 'UPDATE dbProj_Article SET views = \'' . $this->views .'\''
                     . 'WHERE article_id = ' . $this->article_id;
@@ -266,36 +265,22 @@ class Article {
             }
     }
     
-    public static function getAllCatArticles($category_id){
-        $db = Database::getInstance();
-        // get the total number of articles for the category
-        $totalSql = "SELECT COUNT(*) as total FROM dbProj_Article WHERE status = true and category_id = $category_id";
-        $total = $db->singleFetch($totalSql);
-        return $total;
-    }
+//    public static function getAllCatArticles($category_id){
+//        $db = Database::getInstance();
+//        // get the total number of articles for the category
+//        $totalSql = "SELECT COUNT(*) as total FROM dbProj_Article WHERE status = true and category_id = $category_id";
+//        $total = $db->singleFetch($totalSql);
+//        return $total;
+//    }
     
     //get all articles ordered from the latest date 
     public static function getArticles() {
-    $db = Database::getInstance();
-    $q = 'SELECT * FROM dbProj_Article WHERE status = true ORDER BY publish_date DESC';
-    $data = $db->multiFetch($q);
-    return $data;
-}
-  
-    //categories functions 
-    public static function getAllCat(){
         $db = Database::getInstance();
-        $data = $db->multiFetch('Select * from dbProj_Category');
+        $q = 'SELECT * FROM dbProj_Article WHERE status = true ORDER BY publish_date DESC';
+        $data = $db->multiFetch($q);
         return $data;
     }
-    
-    public static function getCatName($category_id){
-        $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $category_id . '\'');
-        return $data->category_name;
-    }
-    
-
+  
 
   public static function getRecentArticle() {
         $db = Database::getInstance();
@@ -317,12 +302,6 @@ class Article {
         return $data;
     }
     
-    public static function getAuthorTops($author_id){
-        $db = Database::getInstance();
-        $q = "SELECT * FROM dbProj_Article WHERE status = true and user_id = $author_id ORDER BY likes DESC LIMIT 3";
-        $data = $db->multiFetch($q);
-        return $data;
-    }
 
     public static function getComments($article_id) {
       $db = Database::getInstance();
@@ -356,20 +335,20 @@ class Article {
     return $data;
     }
     
-    //count the number of comments in the artcile
-     public static function countComments($article_id) {
-    $db = Database::getInstance();
-    $query = 'SELECT COUNT(*) AS comment_count FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'';
-    $result = $db->singleFetch($query);
-    
-    if ($result !== false && isset($result->comment_count)) {
-        return $result->comment_count;
-    } else {
-        return 0; // No comments found
+    //count the number of comments in the article
+    public static function countComments($article_id) {
+        $db = Database::getInstance();
+        $query = 'SELECT COUNT(*) AS comment_count FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'';
+        $result = $db->singleFetch($query);
+
+        if ($result !== false && isset($result->comment_count)) {
+            return $result->comment_count;
+        } else {
+            return 0; // No comments found
+        }
     }
-}
     
-    // Define a new function that takes a search query as a parameter
+    
     public static function searchArticles($searchText) {
     $db = Database::getInstance();
     $query = "SELECT * FROM dbProj_Article WHERE status = true and MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
@@ -396,13 +375,14 @@ class Article {
         return $data;
     }
     
+    //most popular in search tab (most read)
     public static function getMostPopular(){
         $db = Database::getInstance();
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true ORDER BY views DESC limit 5");
         return $data;
     }
     
-
+    //most popular (by rating) for administration reports 
     public static function getPopularReport($from, $to){
         $db = Database::getInstance();
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
@@ -426,7 +406,6 @@ class Article {
 
     
     public static function updateArticleDislikes($article_id){
-        
             $db = Database::getInstance();
             $q = 'UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE article_id = ' . $article_id;
             $result = $db->querySql($q); 
@@ -438,5 +417,16 @@ class Article {
             }
     }
 
-
+    //categories related functions 
+    public static function getAllCat(){
+        $db = Database::getInstance();
+        $data = $db->multiFetch('Select * from dbProj_Category');
+        return $data;
+    }
+    
+    public static function getCatName($category_id){
+        $db = Database::getInstance();
+        $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $category_id . '\'');
+        return $data->category_name;
+    }
 }
