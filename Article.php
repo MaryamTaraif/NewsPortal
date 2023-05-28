@@ -265,13 +265,13 @@ class Article {
             }
     }
     
-//    public static function getAllCatArticles($category_id){
-//        $db = Database::getInstance();
-//        // get the total number of articles for the category
-//        $totalSql = "SELECT COUNT(*) as total FROM dbProj_Article WHERE status = true and category_id = $category_id";
-//        $total = $db->singleFetch($totalSql);
-//        return $total;
-//    }
+    public static function getAllCatArticles($category_id){
+        $db = Database::getInstance();
+        // get the total number of articles for the category
+        $totalSql = "SELECT COUNT(*) as total FROM dbProj_Article WHERE status = true and category_id = $category_id";
+        $total = $db->singleFetch($totalSql);
+        return $total;
+    }
     
     //get all articles ordered from the latest date 
     public static function getArticles() {
@@ -321,6 +321,15 @@ class Article {
         $data = $db->multiFetch('SELECT * FROM dbProj_Article WHERE user_id ='. $author_id .' and status = false order by publish_date desc');
         return $data;
     }
+    
+    //get total articles 
+    public static function totalArticles($category_id){
+        $db = Database::getInstance();
+        $q = 'SELECT * FROM dbProj_Article WHERE category_id =\''. $category_id . '\' AND status = true ORDER BY publish_date DESC';
+        $data = $db->multiFetch($q);
+        return $data;
+    }
+    
     
      //get the list of articles in the passed category 
     public static function getCatArticles($category_id, $start, $end) {

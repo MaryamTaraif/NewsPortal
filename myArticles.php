@@ -74,7 +74,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
 		        <div class="row">
                             <?php
                             // Pagination variables
-                            $itemsPerPage = 5; // Number of items per page
+                            $itemsPerPage = 5; // Number of items per page (5 for each section so total of max 10 is oermitted for a page)
                             $currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
 
                             // Draft articles section

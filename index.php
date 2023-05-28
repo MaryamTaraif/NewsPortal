@@ -27,11 +27,7 @@ include 'header.php';
                         }
                         ?>
                     </div>
-                    <!-- Add navigation arrows -->
-                    <div class="custom-navigation">
-                        <a class="btn prev"><i class="fas fa-chevron-left"></i></a>
-                        <a class="btn next"><i class="fas fa-chevron-right"></i></a>
-                    </div>
+                    
                     <div class="line">
                         <div>Latest News</div>
                     </div>
