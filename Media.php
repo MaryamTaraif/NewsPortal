@@ -120,8 +120,13 @@ class Media {
             $db = Database::getInstance();
             $query = 'UPDATE dbProj_Media SET url = \'' . $this->url .'\','
                     . ' type_name = \'' . $this->type_name .'\' WHERE media_id = ' . $this->media_id;
-            $db->querySql($query); 
-            return true;
+            $result = $db->querySql($query); 
+            if ($result){
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
     

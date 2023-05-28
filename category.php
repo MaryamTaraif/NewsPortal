@@ -22,7 +22,7 @@ $name = Article::getCatName($id);
                 <div class="row">
                     <?php
                     // Get the total number of articles in the category
-                    $totalArticles = Article::getAllCatArticles($id);
+                    $totalArticles = count(Article::getCatArticles($id));
 
                     // Check if there are any articles in the category
                     if ($totalArticles > 0) {
