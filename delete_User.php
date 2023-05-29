@@ -1,14 +1,13 @@
 <?php
+
 include 'debugging.php';
-if(!isset($_GET['u_id']) )
-{
+if (!isset($_GET['u_id'])) {
     exit;
-}
-else {
+} else {
     $user = new Users();
     $user->initWithUid($_GET['u_id']);
     $deleted = $user->deleteuser();
-    if ($deleted){
+    if ($deleted) {
         echo true;
     }
 }

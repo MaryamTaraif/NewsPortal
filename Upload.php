@@ -9,13 +9,13 @@ class Upload {
     private $fileType;
 
     function __construct() {
-    $this->upload_dir = '';
-    $this->max_file_size = 1048576; //Max File Size in Bytes, 1MB
-    $this->denied_mime_types = array('application/x-php', 'application/x-javascript', 'application/zip');
-    $this->filepath = '';
-    $this->fileType = ''; 
+        $this->upload_dir = '';
+        $this->max_file_size = 1048576; //Max File Size in Bytes, 1MB
+        $this->denied_mime_types = array('application/x-php', 'application/x-javascript', 'application/zip');
+        $this->filepath = '';
+        $this->fileType = '';
     }
-    
+
     function setFilepath($file) {
         $this->filepath = $file;
     }
@@ -31,7 +31,7 @@ class Upload {
     function getUploadDir() {
         return $this->upload_dir;
     }
-    
+
     function setFileType($fileType) {
         $this->fileType = $fileType;
     }
@@ -81,34 +81,33 @@ class Upload {
     }
 
     public function upload($object) {
-            if ($this->check_dir($this->upload_dir)) {
-                $files = $_FILES[$object];
-                switch ($files['error']) {
-                    case 0 : break;
-                    case 1 : $error[] = $files['name'] . ' exceeds the upload_max_filesize directive in php.ini';
-                        break;
-                    case 2 : $error[] = $files['name'] . ' exceeds the MAX_FILE_SIZE directive that was specified in the HTML form';
-                        break;
-                    case 3 : $error[] = $files['name'] . ' was only partially uploaded';
-                        break;
-                    case 4 : $error[] = $files['name'] . ' uploading failed 1';
-                        break;
-                    case 6 : $error[] = 'Missing a temporary folder';
-                        break;
-                    case 7 : $error[] = 'Failed to write ' . $files['name'] . ' to disk';
-                        break;
-                    case 8 : $error[] = $files['name'] . ' stopped by extension';
-                        break;
-                    default : $error[] = 'Unidentified Error, caused by ' . $files['name'];
-                        break;
-                }
+        if ($this->check_dir($this->upload_dir)) {
+            $files = $_FILES[$object];
+            switch ($files['error']) {
+                case 0 : break;
+                case 1 : $error[] = $files['name'] . ' exceeds the upload_max_filesize directive in php.ini';
+                    break;
+                case 2 : $error[] = $files['name'] . ' exceeds the MAX_FILE_SIZE directive that was specified in the HTML form';
+                    break;
+                case 3 : $error[] = $files['name'] . ' was only partially uploaded';
+                    break;
+                case 4 : $error[] = $files['name'] . ' uploading failed 1';
+                    break;
+                case 6 : $error[] = 'Missing a temporary folder';
+                    break;
+                case 7 : $error[] = 'Failed to write ' . $files['name'] . ' to disk';
+                    break;
+                case 8 : $error[] = $files['name'] . ' stopped by extension';
+                    break;
+                default : $error[] = 'Unidentified Error, caused by ' . $files['name'];
+                    break;
             }
-            else {
-                $error[] = 'No Directory Permissions';
-            }
+        } else {
+            $error[] = 'No Directory Permissions';
+        }
 
         if (empty($error)) {
-            
+
             $files['name'] = $this->make_safe($files['name']);
             $files['name'] = $this->check_file_exists($files['name']);
 
@@ -130,7 +129,7 @@ class Upload {
         return $error;
     }
 
-    function make_safe($file){
+    function make_safe($file) {
         $file = str_replace('-', '_', $file);
         $file = str_replace('/', '_', $file);
         $file = str_replace('\\', '_', $file);

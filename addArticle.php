@@ -54,11 +54,11 @@ if (isset($_GET['id'])) {
                 <ol class="breadcrumb">
                     <li><a href="#">My Account</a></li>
                     <li class="active"><?php
-if ($edit)
-    echo 'Edit Article';
-else
-    echo 'Add Article';
-?></li>
+                        if ($edit)
+                            echo 'Edit Article';
+                        else
+                            echo 'Add Article';
+                        ?></li>
                 </ol>
                 <h1 class="page-title">
                     <?php
@@ -100,22 +100,26 @@ else
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Title <span class="required"></span></label>
-                                        <input type="text" class="form-control" name="title" required value="<?php if ($edit) {
-                                                echo $article->getTitle();
-                                            } if (isset($_POST['title'])) {
-                                                echo $_POST['title'];
-                                            } ?>">
+                                        <input type="text" class="form-control" name="title" required value="<?php
+                                        if ($edit) {
+                                            echo $article->getTitle();
+                                        } if (isset($_POST['title'])) {
+                                            echo $_POST['title'];
+                                        }
+                                        ?>">
 
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Description <span class="required"></span></label>
-                                        <input type="text" class="form-control" name="description" required value="<?php if ($edit) {
-                                                echo $article->getDescription();
-                                            } if (isset($_POST['description'])) {
-                                                echo $_POST['description'];
-                                            } ?>">
+                                        <input type="text" class="form-control" name="description" required value="<?php
+                                        if ($edit) {
+                                            echo $article->getDescription();
+                                        } if (isset($_POST['description'])) {
+                                            echo $_POST['description'];
+                                        }
+                                        ?>">
 
 
                                     </div>
@@ -123,11 +127,13 @@ else
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Content <span class="required"></span></label>
-                                        <textarea class="form-control" name="content" required><?php if ($edit) {
-                                                echo $article->getContent();
-                                            } if (isset($_POST['content'])) {
-                                                echo $_POST['content'];
-                                            } ?></textarea>
+                                        <textarea class="form-control" name="content" required><?php
+                                        if ($edit) {
+                                            echo $article->getContent();
+                                        } if (isset($_POST['content'])) {
+                                            echo $_POST['content'];
+                                        }
+                                        ?></textarea>
 
                                     </div>
                                 </div>
@@ -136,14 +142,14 @@ else
                                     <div class="form-group">
                                         <label>Attachments </label> <br>
                                         <label>Photo <span class="required"></span></label>
-<?php
-if ($edit) {
-    echo '<br><img src="' . $photo->URL . '" alt="Selected photo" style="width:350px; height:350px;">'
-    . '<input type="file"  name="photo" accept="image/*" >';
-} else {
-    echo '<input type="file"  name="photo" accept="image/*" required>';
-}
-?>
+                                        <?php
+                                        if ($edit) {
+                                            echo '<br><img src="' . $photo->URL . '" alt="Selected photo" style="width:350px; height:350px;">'
+                                            . '<input type="file"  name="photo" accept="image/*" >';
+                                        } else {
+                                            echo '<input type="file"  name="photo" accept="image/*" required>';
+                                        }
+                                        ?>
 
                                     </div>
                                     <div class="form-group">
@@ -181,9 +187,9 @@ if (!empty($file)) {
                                 </div>
                                 <input type="hidden" name="submitted" value="1"/>
                                 <input type ="hidden" name="id" value="<?php
-                                if ($edit) {
-                                    echo $article->getArticle_id();
-                                }
+if ($edit) {
+    echo $article->getArticle_id();
+}
 ?>">
                             </form>
                         </div>

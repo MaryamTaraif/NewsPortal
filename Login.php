@@ -23,8 +23,7 @@ Class Login extends Users {
         if (!empty($_SESSION['user_id'])) {
             $this->ok = true;
             return true;
-        }
-        else
+        } else
             return false;
     }
 
@@ -32,8 +31,7 @@ Class Login extends Users {
         if (!empty($_COOKIE['user_id'])) {
             $this->ok = true;
             return $this->check($_COOKIE['user_id']);
-        }
-        else
+        } else
             return false;
     }
 
@@ -43,13 +41,12 @@ Class Login extends Users {
             $this->ok = true;
             $_SESSION['user_id'] = $this->getUser_id();
             $_SESSION['username'] = $this->getUsername();
-            
+
             setcookie('user_id', $_SESSION['user_id'], time() + 60 * 60 * 24 * 7, '/', $this->domain);
             setcookie('username', $_SESSION['username'], time() + 60 * 60 * 24 * 7, '/', $this->domain);
 
             return true;
-        }
-        else
+        } else
             $error[] = 'Wrong Username';
 
 
@@ -59,9 +56,9 @@ Class Login extends Users {
     function login($username, $password) {
 
         try {
-            
+
             $this->checkUser($username, $password);
-            if ($this->getUser_id() != null ) {
+            if ($this->getUser_id() != null) {
                 $this->ok = true;
 
                 $_SESSION['user_id'] = $this->getUser_id();
@@ -72,7 +69,7 @@ Class Login extends Users {
                 setcookie('role', $_SESSION['role'], time() + 60 * 60 * 24 * 7, '/', $this->domain);
                 return true;
             } else {
-                
+
                 $error[] = 'Wrong Username OR password';
             }
             return false;
