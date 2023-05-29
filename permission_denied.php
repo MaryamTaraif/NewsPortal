@@ -2,7 +2,7 @@
 include 'header.php';
 ?>
 <section class="not-found">
-    <div class="container" style="padding-top: 200px;">
+    <div class="container" >
         <div class="row">
             <div class="col-md-12">
                 <div class="code">

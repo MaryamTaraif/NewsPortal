@@ -77,7 +77,7 @@ $article->updateArticleViews();
 
 
 <section class="single">
-    <div class="container" style="padding-top: 180px;">
+    <div class="container" >
         <div class="row">
             <div class="col-md-4 sidebar" id="sidebar">
                 <aside>

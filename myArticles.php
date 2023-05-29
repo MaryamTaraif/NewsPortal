@@ -50,7 +50,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
    
 </script>
 		<section class="category">
-		  <div class="container" style="padding-top: 200px;">
+		  <div class="container" >
 		    <div class="row">
 		      <div class="col-md-8 text-left">
 		        <div class="row">

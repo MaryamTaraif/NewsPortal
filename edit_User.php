@@ -1,7 +1,7 @@
 <?php
 
 echo ' 
-<div class="container" style="padding-top: 240px; margin-bottom: 70px;">
+<div class="container" margin-bottom: 70px;">
     <div class="row">
         <div class="col-md-12" >        
             <ol class="breadcrumb" style="text-align: center;">
