@@ -1,6 +1,5 @@
 <?php include 'debugging.php'; ?>
 
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +12,7 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="http://github.com/nauvalazhar/Magz" />
     <meta property="og:image" content="https://raw.githubusercontent.com/nauvalazhar/Magz/master/images/preview.png" />
-    <title>Magz &mdash; Responsive HTML5 &amp; CSS3 Magazine Template</title>
+    <title>Magz</title>
     <!-- Bootstrap -->
     <link rel="stylesheet" href="scripts/bootstrap/bootstrap.min.css">
     <!-- IonIcons -->
@@ -47,7 +46,6 @@
 <script src="scripts/toast/jquery.toast.min.js"></script>
 <script src="js/demo.js"></script>
 <script src="js/e-magz.js"></script>
-
 </head>
 
 <body>
