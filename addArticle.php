@@ -25,7 +25,6 @@ if (isset($_GET['id'])) {
         $file = Media::getDownloadableFile($article->getArticle_id());
     }
 }
-
 ?>
 <script>
     //AJAX, function to send a request to remove attached file (as it's optional)
@@ -55,11 +54,11 @@ if (isset($_GET['id'])) {
                 <ol class="breadcrumb">
                     <li><a href="#">My Account</a></li>
                     <li class="active"><?php
-                        if ($edit)
-                            echo 'Edit Article';
-                        else
-                            echo 'Add Article';
-                        ?></li>
+if ($edit)
+    echo 'Edit Article';
+else
+    echo 'Add Article';
+?></li>
                 </ol>
                 <h1 class="page-title">
                     <?php
@@ -87,11 +86,9 @@ if (isset($_GET['id'])) {
                                                 for ($i = 0; $i < count($list); $i++) {
                                                     if ($edit && $list[$i]->category_id == $article->getCategory_id()) {
                                                         echo '<option value="' . $list[$i]->category_id . '" selected>' . $list[$i]->category_name . '</option>';
-                                                    } 
-                                                    else if ($list[$i]->category_id == $_POST['category']){
+                                                    } else if ($list[$i]->category_id == $_POST['category']) {
                                                         echo '<option value="' . $list[$i]->category_id . '" selected>' . $list[$i]->category_name . '</option>';
-                                                    }
-                                                    else {
+                                                    } else {
                                                         echo '<option value="' . $list[$i]->category_id . '">' . $list[$i]->category_name . '</option>';
                                                     }
                                                 }
@@ -103,14 +100,22 @@ if (isset($_GET['id'])) {
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Title <span class="required"></span></label>
-                                        <input type="text" class="form-control" name="title" required value="<?php if ($edit) {echo $article->getTitle();} if (isset($_POST['title'])) { echo $_POST['title']; } ?>">
+                                        <input type="text" class="form-control" name="title" required value="<?php if ($edit) {
+                                                echo $article->getTitle();
+                                            } if (isset($_POST['title'])) {
+                                                echo $_POST['title'];
+                                            } ?>">
 
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Description <span class="required"></span></label>
-                                        <input type="text" class="form-control" name="description" required value="<?php if ($edit) {echo $article->getDescription();} if (isset($_POST['description'])) { echo $_POST['description']; } ?>">
+                                        <input type="text" class="form-control" name="description" required value="<?php if ($edit) {
+                                                echo $article->getDescription();
+                                            } if (isset($_POST['description'])) {
+                                                echo $_POST['description'];
+                                            } ?>">
 
 
                                     </div>
@@ -118,7 +123,11 @@ if (isset($_GET['id'])) {
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Content <span class="required"></span></label>
-                                        <textarea class="form-control" name="content" required><?php if ($edit) { echo $article->getContent(); } if (isset($_POST['content'])) { echo $_POST['content']; }  ?></textarea>
+                                        <textarea class="form-control" name="content" required><?php if ($edit) {
+                                                echo $article->getContent();
+                                            } if (isset($_POST['content'])) {
+                                                echo $_POST['content'];
+                                            } ?></textarea>
 
                                     </div>
                                 </div>
@@ -127,14 +136,14 @@ if (isset($_GET['id'])) {
                                     <div class="form-group">
                                         <label>Attachments </label> <br>
                                         <label>Photo <span class="required"></span></label>
-                                        <?php
-                                        if ($edit) {
-                                            echo '<br><img src="' . $photo->URL . '" alt="Selected photo" style="width:350px; height:350px;">'
-                                            . '<input type="file"  name="photo" accept="image/*" >';
-                                        } else {
-                                            echo '<input type="file"  name="photo" accept="image/*" required>';
-                                        }
-                                        ?>
+<?php
+if ($edit) {
+    echo '<br><img src="' . $photo->URL . '" alt="Selected photo" style="width:350px; height:350px;">'
+    . '<input type="file"  name="photo" accept="image/*" >';
+} else {
+    echo '<input type="file"  name="photo" accept="image/*" required>';
+}
+?>
 
                                     </div>
                                     <div class="form-group">
@@ -158,12 +167,12 @@ if (isset($_GET['id'])) {
 
                                     <div class="form-group">
                                         <label>Downloadable File </label>
-                                        <?php
-                                        if (!empty($file)) {
-                                            echo '<br><a href="' . $file->URL . '"> ' . $file->URL . ' </a>';
-                                            echo '<a href="#" onclick="removeFile(' . $file->media_id . ')">   <b>REMOVE</b></a>';
-                                        }
-                                        ?>
+<?php
+if (!empty($file)) {
+    echo '<br><a href="' . $file->URL . '"> ' . $file->URL . ' </a>';
+    echo '<a href="#" onclick="removeFile(' . $file->media_id . ')">   <b>REMOVE</b></a>';
+}
+?>
                                         <input type="file"  name="downloadable">
                                     </div>
                                 </div>
@@ -175,7 +184,7 @@ if (isset($_GET['id'])) {
                                 if ($edit) {
                                     echo $article->getArticle_id();
                                 }
-                                ?>">
+?>">
                             </form>
                         </div>
                     </div>
@@ -191,37 +200,7 @@ if (isset($_POST['submitted'])) {
     // Initialize an array to store error messages
     $errors = array();
 
-    // if not an edited form, create a new object
-    if (!$edit) {
-        $article = new Article();
-    } else {
-        //if edited, it's the id passed to this page 
-        $article->setArticle_id($_GET['id']);
-    }
-
-    // populate the object with fields values
-    $article->setCategory_id($_POST['category']);
-    $article->setTitle($_POST['title']);
-    $article->setDescription($_POST['description']);
-    $article->setContent($_POST['content']);
-    $article->setPublish_date(date('Y-m-d')); // set to the current date (last modification)
-    if (!$edit) {
-        //set current user as author for new article
-        $article->setUser_id($_SESSION['user_id']);
-    }
-
-    // save changes (add or update the article)
-    if ($edit) {
-        if (!$article->updateArticle()) {
-            $errors[] = 'Failed to update the article.';
-        }
-    } else {
-        if (!$article->addArticle()) {
-            $errors[] = 'Failed to add the article.';
-        }
-    }
-
-    //upload all files 
+    //first thing, check for media and upload files to the server 
     if (!empty($_FILES)) {
         $upload = new Upload();
         $upload->setUploadDir('media/');
@@ -232,25 +211,13 @@ if (isset($_POST['submitted'])) {
             $msg = $upload->upload('photo');
             //if uploaded to the server, create new object to insert/update to db 
             if (empty($msg)) {
-                $media = new Media();
+                $photo = new Media();
                 if ($edit) {
                     //if this is an editedarticle, get the photo record to replace data 
-                    $media->initWithId($photo->media_id);
+                    $photo->initWithId($photo->media_id);
                 }
-                $media->setArticle_id($article->getArticle_id());
-                $media->setType_name($upload->getFileType());
-                $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
-
-                // save changes (add or update photo record)
-                if ($edit) {
-                    if (!$media->updateMedia()) {
-                        $errors[] = 'Failed to update the photo.';
-                    }
-                } else {
-                    if (!$media->addMedia()) {
-                        $errors[] = 'Failed to add the photo.';
-                    }
-                }
+                $photo->setType_name($upload->getFileType());
+                $photo->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
             } else {
                 if (is_array($msg)) {
                     foreach ($msg as $errorMessage) {
@@ -274,29 +241,16 @@ if (isset($_POST['submitted'])) {
             }
             $upload->setFileType($fileType);
             $msg = $upload->upload('video/audio');
-            //if uploaded to server, create object to add/update to db media table
+            //if uploaded to server, create object to add/update to db media table later 
             if (empty($msg)) {
-                $media = new Media();
+                $videoAudio = new Media();
                 if ($edit && $video) {
-                    $media->initWithId($video->media_id);
+                    $videoAudio->initWithId($video->media_id);
                 } elseif ($edit && $audio) {
-                    $media->initWithId($audio->media_id);
+                    $videoAudio->initWithId($audio->media_id);
                 }
-                
-                $media->setArticle_id($article->getArticle_id());
-                $media->setType_name($upload->getFileType());
-                $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
-
-                // save changes
-                if ($edit) {
-                    if (!$media->updateMedia()) {
-                        $errors[] = 'Failed to update the video/audio.';
-                    }
-                } else {
-                    if (!$media->addMedia()) {
-                        $errors[] = 'Failed to add the video/audio.';
-                    }
-                }
+                $videoAudio->setType_name($upload->getFileType());
+                $videoAudio->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
             } else {
                 if (is_array($msg)) {
                     foreach ($msg as $errorMessage) {
@@ -313,24 +267,12 @@ if (isset($_POST['submitted'])) {
             $upload->setFileType('file');
             $msg = $upload->upload('downloadable');
             if (empty($msg)) {
-                $media = new Media();
+                $fileMedia = new Media();
                 if ($edit && $file) {
-                    $media->initWithId($file->media_id);
+                    $fileMedia->initWithId($file->media_id);
                 }
-                $media->setArticle_id($article->getArticle_id());
-                $media->setType_name($upload->getFileType());
-                $media->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
-
-                // save changes
-                if ($edit && $file) {
-                    if (!$media->updateMedia()) {
-                        $errors[] = 'Failed to update the downloadable file.';
-                    }
-                } else {
-                    if (!$media->addMedia()) {
-                        $errors[] = 'Failed to add the downloadable file.';
-                    }
-                }
+                $fileMedia->setType_name($upload->getFileType());
+                $fileMedia->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
             } else {
                 if (is_array($msg)) {
                     foreach ($msg as $errorMessage) {
@@ -338,6 +280,82 @@ if (isset($_POST['submitted'])) {
                     }
                 } else {
                     $errors[] = $msg;
+                }
+            }
+        }
+    }
+
+    //add or update aricle only if no errors yet (if files uploaded successfully)
+    if (count($errors) == 0) {
+        // if not an edited form, create a new object
+        if (!$edit) {
+            $article = new Article();
+        } else {
+            //if edited, it's the id passed to this page 
+            $article->setArticle_id($_GET['id']);
+        }
+
+        // populate the object with fields values
+        $article->setCategory_id($_POST['category']);
+        $article->setTitle($_POST['title']);
+        $article->setDescription($_POST['description']);
+        $article->setContent($_POST['content']);
+        $article->setPublish_date(date('Y-m-d')); // set to the current date (last modification)
+        if (!$edit) {
+            //set current user as author for new article
+            $article->setUser_id($_SESSION['user_id']);
+        }
+
+        // save changes (add or update the article)
+        if ($edit) {
+            if (!$article->updateArticle()) {
+                $errors[] = 'Failed to update the article.';
+            }
+        } else {
+            if (!$article->addArticle()) {
+                $errors[] = 'Failed to add the article.';
+            }
+        }
+
+
+
+        //add or update media that were uploaded  
+        //photo 
+        if ($photo) {
+            $photo->setArticle_id($article->getArticle_id());
+            if ($edit) {
+                if (!$photo->updateMedia()) {
+                    $errors[] = 'Failed to update the photo.';
+                }
+            } else {
+                if (!$photo->addMedia()) {
+                    $errors[] = 'Failed to add the photo.';
+                }
+            }
+        }
+        //video/audio 
+        if ($videoAudio != null) {
+            $videoAudio->setArticle_id($article->getArticle_id());
+            if ($edit) {
+                if (!$videoAudio->updateMedia()) {
+                    $errors[] = 'Failed to update the video/audio.';
+                }
+            } else {
+                if (!$videoAudio->addMedia()) {
+                    $errors[] = 'Failed to add the video/audio.';
+                }
+            }
+        }
+        //downloadable file   
+        if ($fileMedia != null) {
+            $fileMedia->setArticle_id($article->getArticle_id());
+            if ($edit && $file) {
+                if (!$fileMedia->updateMedia()) {
+                    $errors[] = 'Failed to update the downloadable file.';
+                }
+            } else {
+                if (!$fileMedia->addMedia()) {
+                    $errors[] = 'Failed to add the downloadable file.';
                 }
             }
         }
@@ -355,13 +373,13 @@ if (isset($_POST['submitted'])) {
                 </div>';
 
         echo '<script>document.getElementById("messageContainer").innerHTML = ' . json_encode($errorMessage) . ';</script>';
-    } 
+    }
     //if everything is perfect, redirec to my article page with success message 
     else {
         $action = $edit ? "updated" : "added";
         $successMessage = 'Your article has been ' . $action . ' successfuly.';
         $encodedSuccessMessage = urlencode($successMessage);
-        header("Location: myArticles.php?message=$encodedSuccessMessage");
+        header("Location: myArticles.php?successmessage=$encodedSuccessMessage");
         exit;
     }
 }

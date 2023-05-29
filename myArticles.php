@@ -64,8 +64,8 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
 		          </div>
 		        </div>
                             <?php 
-                            if (isset($_GET['message'])) {
-                                $successMessage = urldecode($_GET['message']);
+                            if (isset($_GET['successmessage'])) {
+                                $successMessage = urldecode($_GET['successmessage']);
                                 echo '<div class="alert alert-success" style="color:seagreen">'.$successMessage.'<button class="close" type="button" onclick="this.parentElement.style.display=\'none\';">
                                 <span>&times;</span>
                             </button> </div>';
