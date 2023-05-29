@@ -112,7 +112,7 @@ if ($_GET['searchText']) {
 </script>
 
 <section class="search">
-    <div class="container" style="padding-top: 200px">
+    <div class="container" >
         <div class="row">
             <div class="col-md-3">
 

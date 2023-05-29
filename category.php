@@ -5,7 +5,7 @@ $name = Article::getCatName($id);
 ?>
 
 <section class="category">
-    <div class="container" style="padding-top: 200px;">
+    <div class="container" >
         <div class="row">
             <div class="col-md-8 text-left">
                 <div class="row">
