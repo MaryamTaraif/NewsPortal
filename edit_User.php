@@ -13,7 +13,6 @@ echo '
               
             <div class="line thin"></div>';
 
-
 include 'header.php';
 
 $id = 0;
@@ -46,7 +45,6 @@ if (isset($_POST['submitted'])) {
     $user->setUsername($_POST['username']);
     $user->setEmail($_POST['email']);
     $user->setType_name($_POST['type_name']);
-
 
     if ($oldName != $user->getUsername() && !$user->initWithUsername()) {// username exists
         echo "<h2> Thankyou </h2><p>" . $user->getUsername() . " Exists</p>";
@@ -91,7 +89,6 @@ echo '<form action="edit_User.php" method="post">
         </div>
     </div>';
 
-
 echo '<div class="col-md-12">
     <div class="form-group">
         <label>User Type</label>
@@ -108,7 +105,6 @@ if (!empty($typesList)) {
 echo '</select>
     </div>
 </div>';
-
 
 echo '<input type="submit" class="btn btn-primary" name="submit" value="update" />
     <input type="hidden" name="submitted" value="TRUE">

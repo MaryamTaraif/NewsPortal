@@ -43,19 +43,19 @@ $name = Article::getCatName($id);
                             echo '<article class="col-md-12 article-list">
                                 <div class="inner">
                                     <figure>
-                                        <img src="'. Media::getPhotoURL($article->article_id)->URL .'">
+                                        <img src="' . Media::getPhotoURL($article->article_id)->URL . '">
                                     </figure>
                                     <div class="details">
                                         <div class="detail">
                                             <div class="category">
-                                                <a href="#">'. $name .'</a>
+                                                <a href="#">' . $name . '</a>
                                             </div>
-                                            <div class="time">'. $article->publish_date .'</div>
+                                            <div class="time">' . $article->publish_date . '</div>
                                         </div>
-                                        <h1><a href="singleArticle.php?aid='.$article->article_id.'">'. $article->title .'</a></h1>
-                                        <p>'. $article->description .'</p>
+                                        <h1><a href="singleArticle.php?aid=' . $article->article_id . '">' . $article->title . '</a></h1>
+                                        <p>' . $article->description . '</p>
                                         <footer>
-                                            <a class="btn btn-primary more" href="singleArticle.php?aid='.$article->article_id.'">
+                                            <a class="btn btn-primary more" href="singleArticle.php?aid=' . $article->article_id . '">
                                                 <div>More</div>
                                                 <div><i class="ion-ios-arrow-thin-right"></i></div>
                                             </a>
@@ -67,18 +67,18 @@ $name = Article::getCatName($id);
 
                         // Pagination
                         if ($totalPages > 1) {
-                        echo '<div class="col-md-12 text-center">
+                            echo '<div class="col-md-12 text-center">
                             <ul class="pagination">';
-                        if ($currentPage > 1) {
-                            echo '<li><a href="?cid='.$id.'&page='.($currentPage - 1).'">Prev</a></li>';
-                        }
-                        for ($i = 1; $i <= $totalPages; $i++) {
-                            echo '<li'. ($i == $currentPage ? ' class="active"' : '') .'><a href="?cid='.$id.'&page='.$i.'">'.$i.'</a></li>';
-                        }
-                        if ($currentPage < $totalPages) {
-                            echo '<li><a href="?cid='.$id.'&page='.($currentPage + 1).'">Next</a></li>';
-                        }
-                        echo '</ul>
+                            if ($currentPage > 1) {
+                                echo '<li><a href="?cid=' . $id . '&page=' . ($currentPage - 1) . '">Prev</a></li>';
+                            }
+                            for ($i = 1; $i <= $totalPages; $i++) {
+                                echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="?cid=' . $id . '&page=' . $i . '">' . $i . '</a></li>';
+                            }
+                            if ($currentPage < $totalPages) {
+                                echo '<li><a href="?cid=' . $id . '&page=' . ($currentPage + 1) . '">Next</a></li>';
+                            }
+                            echo '</ul>
                         </div>';
                         }
                     } else {
@@ -92,6 +92,6 @@ $name = Article::getCatName($id);
 </section>
 
 <!-- footer -->
-<?php  
+<?php
 include 'footer.html';
 ?>

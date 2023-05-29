@@ -1,7 +1,7 @@
 <?php
 
 class Article {
-    
+
     private $article_id;
     private $title;
     private $description;
@@ -13,7 +13,7 @@ class Article {
     private $category_id;
     private $status;
     private $views;
-     
+
     public function __construct() {
         $this->article_id = null;
         $this->title = null;
@@ -27,6 +27,7 @@ class Article {
         $this->status = false;
         $views = null;
     }
+
     public function getArticle_id() {
         return $this->article_id;
     }
@@ -63,7 +64,6 @@ class Article {
         $this->dislikes = $dislikes;
     }
 
-    
     public function getUser_id() {
         return $this->user_id;
     }
@@ -79,7 +79,7 @@ class Article {
     public function getViews() {
         return $this->views;
     }
-    
+
     public function setArticle_id($article_id): void {
         $this->article_id = $article_id;
     }
@@ -115,17 +115,16 @@ class Article {
     public function setStatus($status): void {
         $this->status = $status;
     }
-    
+
     public function setViews($views): void {
         $this->views = $views;
     }
 
-        
-    function initWith($article_id, $title, $description, $content, $publish_date,$likes,$dislikes,$user_id,$category_id, $status, $views) {
+    function initWith($article_id, $title, $description, $content, $publish_date, $likes, $dislikes, $user_id, $category_id, $status, $views) {
         $this->article_id = $article_id;
         $this->title = $title;
         $this->description = $description;
-        $this->content =  $content;
+        $this->content = $content;
         $this->publish_date = $publish_date;
         $this->likes = $likes;
         $this->dislikes = $dislikes;
@@ -137,11 +136,10 @@ class Article {
 
     function initWithId($article_id) {
         $db = Database::getInstance();
-        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id .  '\'');
-        $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date,$data->likes, $data->dislikes, $data->user_id,$data->category_id, $data->status, $data->views );
-
+        $data = $db->singleFetch('SELECT * FROM dbProj_Article WHERE article_id = \'' . $article_id . '\'');
+        $this->initWith($data->article_id, $data->title, $data->description, $data->content, $data->publish_date, $data->likes, $data->dislikes, $data->user_id, $data->category_id, $data->status, $data->views);
     }
-    
+
     public function isValid() {
         $errors = true;
 
@@ -153,25 +151,24 @@ class Article {
 
         if (empty($this->content))
             $errors = false;
-        
+
         if (empty($this->user_id))
             $errors = false;
-        
+
         if (empty($this->category_id))
             $errors = false;
-        
+
         return $errors;
     }
-    
+
     //add article 
-    function addArticle()
-    {
+    function addArticle() {
         if ($this->isValid()) {
             $db = Database::getInstance();
             $query = 'INSERT INTO dbProj_Article (title, description, content, publish_date, user_id, category_id, views)'
-                     . ' VALUES ("' . $this->title . '","' . $this->description . '","' . $this->content 
-                     . '","' . $this->publish_date .'","' . $this->user_id .'","' . $this->category_id .'","0")';
-            $result = $db->querySql($query); 
+                    . ' VALUES ("' . $this->title . '","' . $this->description . '","' . $this->content
+                    . '","' . $this->publish_date . '","' . $this->user_id . '","' . $this->category_id . '","0")';
+            $result = $db->querySql($query);
             if ($result) {
                 // Retrieve the article ID just inserted
                 $articleId = mysqli_insert_id($db->dblink);
@@ -184,95 +181,87 @@ class Article {
         }
     }
 
-                 
-    
     //update article
-    function updateArticle(){
-        if ($this->isValid()){
+    function updateArticle() {
+        if ($this->isValid()) {
             $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET title = \'' . $this->title .'\','
-                    . ' content = \'' . $this->content .'\','
-                    . ' description = \'' . $this->description .'\','
+            $q = 'UPDATE dbProj_Article SET title = \'' . $this->title . '\','
+                    . ' content = \'' . $this->content . '\','
+                    . ' description = \'' . $this->description . '\','
                     . ' category_id = \'' . $this->category_id . '\','
                     . ' user_id = \'' . $this->user_id . '\','
                     . ' publish_date = \'' . $this->publish_date . '\','
-                    . ' status = \'' . $this->status .'\' '
+                    . ' status = \'' . $this->status . '\' '
                     . 'WHERE article_id = ' . $this->article_id;
-            $result = $db->querySql($q); 
-            if($result) {
+            $result = $db->querySql($q);
+            if ($result) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
     }
-    
-    function updateArticleViews(){
-            $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET views = \'' . $this->views .'\''
-                    . 'WHERE article_id = ' . $this->article_id;
-            $result = $db->querySql($q); 
-            if($result) {
-                return true;
-            }
-            else {
-                return false;
-            }
-    }
-    
-    //delete article 
-    public static function deleteArticle($article_id) {
+
+    function updateArticleViews() {
         $db = Database::getInstance();
-        $result = $db->querySql('CALL deleteArticle('. $article_id .')');
-        if ($result){
+        $q = 'UPDATE dbProj_Article SET views = \'' . $this->views . '\''
+                . 'WHERE article_id = ' . $this->article_id;
+        $result = $db->querySql($q);
+        if ($result) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-    
-    public static function adminDeleteArticle($article_id){
+
+    //delete article 
+    public static function deleteArticle($article_id) {
+        $db = Database::getInstance();
+        $result = $db->querySql('CALL deleteArticle(' . $article_id . ')');
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function adminDeleteArticle($article_id) {
         $db = Database::getInstance();
         $text = "This article was removed by an administrator";
-        $q = 'UPDATE dbProj_Article SET content = \'' . $text .'\','
-                    . ' description = \'' . $text .'\' '
-                    . 'WHERE article_id = ' . $article_id;
-            $result = $db->querySql($q); 
-            if($result) {
-                return true;
-            }
-            else {
-                return false;
-            }
+        $q = 'UPDATE dbProj_Article SET content = \'' . $text . '\','
+                . ' description = \'' . $text . '\' '
+                . 'WHERE article_id = ' . $article_id;
+        $result = $db->querySql($q);
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
 
     //publish article 
-    public static function publish($article_id){
-         $db = Database::getInstance();
-         $today = date('Y-m-d');
-            $q = 'UPDATE dbProj_Article SET publish_date = \'' . $today .'\','
-                    . ' status = 1 '
-                    . 'WHERE article_id = ' . $article_id;
-            $result = $db->querySql($q); 
-            if ($result){
-                return true;
-            }
-            else {
-                return false;
-            }
+    public static function publish($article_id) {
+        $db = Database::getInstance();
+        $today = date('Y-m-d');
+        $q = 'UPDATE dbProj_Article SET publish_date = \'' . $today . '\','
+                . ' status = 1 '
+                . 'WHERE article_id = ' . $article_id;
+        $result = $db->querySql($q);
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
-    public static function getAllCatArticles($category_id){
+
+    public static function getAllCatArticles($category_id) {
         $db = Database::getInstance();
         // get the total number of articles for the category
         $totalSql = "SELECT COUNT(*) as total FROM dbProj_Article WHERE status = true and category_id = $category_id";
         $total = $db->singleFetch($totalSql);
         return $total;
     }
-    
+
     //get all articles ordered from the latest date 
     public static function getArticles() {
         $db = Database::getInstance();
@@ -280,70 +269,66 @@ class Article {
         $data = $db->multiFetch($q);
         return $data;
     }
-  
 
-  public static function getRecentArticle() {
+    public static function getRecentArticle() {
         $db = Database::getInstance();
         $today = date('Y-m-d');
         $data = $db->singleFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' ORDER BY publish_date DESC LIMIT 1");
         return $data;
     }
 
-    public static function getWeeklyTops(){
+    public static function getWeeklyTops() {
         //top articles for this week to display in the home banner 
         $db = Database::getInstance();
         $today = date('Y-m-d');
         $one_week_ago = date('Y-m-d', strtotime('-1 week'));
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$one_week_ago' ORDER BY likes DESC LIMIT 3");
         //if nothing added this week, return just the latest article to be in the banner 
-        if (empty($data)){
+        if (empty($data)) {
             $data = $db->singleFetch("SELECT * FROM dbProj_Article where status = true order by publish_date desc limit 1");
         }
         return $data;
     }
-    
 
     public static function getComments($article_id) {
-      $db = Database::getInstance();
-      $data = $db->multiFetch('SELECT * FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'');
-      return $data;
-    } 
-
-
-    public static function authorPublishedArticles($author_id){
         $db = Database::getInstance();
-        $data = $db->multiFetch('SELECT * FROM dbProj_Article WHERE user_id ='. $author_id .' and status = true order by publish_date desc');
+        $data = $db->multiFetch('SELECT * FROM dbProj_Comment WHERE article_id = \'' . $article_id . '\'');
         return $data;
     }
-    
-    public static function authorDraftArticles($author_id){
+
+    public static function authorPublishedArticles($author_id) {
         $db = Database::getInstance();
-        $data = $db->multiFetch('SELECT * FROM dbProj_Article WHERE user_id ='. $author_id .' and status = false order by publish_date desc');
+        $data = $db->multiFetch('SELECT * FROM dbProj_Article WHERE user_id =' . $author_id . ' and status = true order by publish_date desc');
         return $data;
     }
-    
+
+    public static function authorDraftArticles($author_id) {
+        $db = Database::getInstance();
+        $data = $db->multiFetch('SELECT * FROM dbProj_Article WHERE user_id =' . $author_id . ' and status = false order by publish_date desc');
+        return $data;
+    }
+
     //get total articles 
-    public static function totalArticles($category_id){
+    public static function totalArticles($category_id) {
         $db = Database::getInstance();
-        $q = 'SELECT * FROM dbProj_Article WHERE category_id =\''. $category_id . '\' AND status = true ORDER BY publish_date DESC';
+        $q = 'SELECT * FROM dbProj_Article WHERE category_id =\'' . $category_id . '\' AND status = true ORDER BY publish_date DESC';
         $data = $db->multiFetch($q);
         return $data;
     }
-    
-    
-     //get the list of articles in the passed category 
+
+    //get the list of articles in the passed category 
     public static function getCatArticles($category_id, $start, $end) {
         $db = Database::getInstance();
-    $q = 'SELECT * FROM dbProj_Article WHERE category_id =\''. $category_id . '\' AND status = true ORDER BY publish_date DESC';
+        $q = 'SELECT * FROM dbProj_Article WHERE category_id =\'' . $category_id . '\' AND status = true ORDER BY publish_date DESC';
 
-    if (isset($start)) {
-        $q .= ' LIMIT ' . (int)$start . ',' . (int)$end;
+        if (isset($start)) {
+            $q .= ' LIMIT ' . (int) $start . ',' . (int) $end;
+        }
+
+        $data = $db->multiFetch($q);
+        return $data;
     }
 
-    $data = $db->multiFetch($q);
-    return $data;
-    }
-    
     //count the number of comments in the article
     public static function countComments($article_id) {
         $db = Database::getInstance();
@@ -356,43 +341,40 @@ class Article {
             return 0; // No comments found
         }
     }
-    
-    
-    public static function searchArticles($searchText) {
-    $db = Database::getInstance();
-    $query = "SELECT * FROM dbProj_Article WHERE status = true and MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*".$searchText."*' IN BOOLEAN MODE) DESC";
-    $result = $db->multiFetch($query);    
-    return $result;
-}
 
-    public static function searchByAuthor($authorName)
-    {
+    public static function searchArticles($searchText) {
+        $db = Database::getInstance();
+        $query = "SELECT * FROM dbProj_Article WHERE status = true and MATCH(title, description, content) AGAINST('*" . $searchText . "*' IN BOOLEAN MODE) ORDER BY MATCH(title, description, content) AGAINST('*" . $searchText . "*' IN BOOLEAN MODE) DESC";
+        $result = $db->multiFetch($query);
+        return $result;
+    }
+
+    public static function searchByAuthor($authorName) {
         $db = Database::getInstance();
         $q = "SELECT * FROM dbProj_Article a, dbProj_User u WHERE status = true and u.user_id = a.user_id and u.username like '$authorName%' order by publish_date desc";
         $data = $db->multiFetch($q);
         return $data;
     }
-    
-    public static function searchByDate($startDate, $endDate)
-    {
+
+    public static function searchByDate($startDate, $endDate) {
         $db = Database::getInstance();
-           $q = "SELECT *
+        $q = "SELECT *
            FROM dbProj_Article
            WHERE  status = true and publish_date BETWEEN '$startDate' AND '$endDate' order by publish_date asc";
-            
+
         $data = $db->multiFetch($q);
         return $data;
     }
-    
+
     //most popular in search tab (most read)
-    public static function getMostPopular(){
+    public static function getMostPopular() {
         $db = Database::getInstance();
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true ORDER BY views DESC limit 5");
         return $data;
     }
-    
+
     //most popular (by rating) for administration reports 
-    public static function getPopularReport($from, $to){
+    public static function getPopularReport($from, $to) {
         $db = Database::getInstance();
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$to' AND STR_TO_DATE(publish_date, '%Y-%m-%d') >= '$from' ORDER BY likes DESC");
         return $data;
@@ -404,38 +386,37 @@ class Article {
         $data = $db->multiFetch("SELECT * FROM dbProj_Article WHERE status = true and STR_TO_DATE(publish_date, '%Y-%m-%d') <= '$today' ORDER BY publish_date DESC LIMIT 5");
         return $data;
     }
-    
-    public static function updateArticleLikes($article_id){
-        
-            $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET likes = likes + 1 WHERE article_id = ' . $article_id;
-            $result = $db->querySql($q); 
-            return $result;
+
+    public static function updateArticleLikes($article_id) {
+
+        $db = Database::getInstance();
+        $q = 'UPDATE dbProj_Article SET likes = likes + 1 WHERE article_id = ' . $article_id;
+        $result = $db->querySql($q);
+        return $result;
     }
 
-    
-    public static function updateArticleDislikes($article_id){
-            $db = Database::getInstance();
-            $q = 'UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE article_id = ' . $article_id;
-            $result = $db->querySql($q); 
-            if($result) {
-                return true;
-            }
-            else {
-                return false;
-            }
+    public static function updateArticleDislikes($article_id) {
+        $db = Database::getInstance();
+        $q = 'UPDATE dbProj_Article SET dislikes = dislikes + 1 WHERE article_id = ' . $article_id;
+        $result = $db->querySql($q);
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //categories related functions 
-    public static function getAllCat(){
+    public static function getAllCat() {
         $db = Database::getInstance();
         $data = $db->multiFetch('Select * from dbProj_Category');
         return $data;
     }
-    
-    public static function getCatName($category_id){
+
+    public static function getCatName($category_id) {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Category WHERE category_id = \'' . $category_id . '\'');
         return $data->category_name;
     }
+
 }
