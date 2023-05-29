@@ -23,11 +23,10 @@ if ($_SESSION['role'] !== 'Admin') {
     <div class="row">
         <?php
         $initialList = Article::getArticles();
-       
 
         // Check if the result is not empty
         if (!empty($initialList)) {
-             // Display the articles
+            // Display the articles
             $articlesPerPage = 10; // Number of articles to display per page
             $totalArticles = count($initialList);
             $totalPages = ceil($totalArticles / $articlesPerPage);
@@ -41,46 +40,46 @@ if ($_SESSION['role'] !== 'Admin') {
                 echo '<article class="col-md-12 article-list">
                         <div class="inner">
                             <figure>
-                                <img src="'. Media::getPhotoURL($article->article_id)->URL .'">
+                                <img src="' . Media::getPhotoURL($article->article_id)->URL . '">
                             </figure>
                             <div class="details">
                                 <div class="detail">
                                     <div class="category">
-                                        <a href="#">'. Article::getCatName($article->category_id) .'</a>
+                                        <a href="#">' . Article::getCatName($article->category_id) . '</a>
                                     </div>
-                                    <div class="time">'. $article->publish_date .'</div>
+                                    <div class="time">' . $article->publish_date . '</div>
                                 </div>
-                                <h1><a href="singleArticle.php?aid='.$article->article_id.'"">'.$article->title .'</a></h1> 
-                                <p>'. $article->description .'</p>';
-                                if ($article->description !== "This article was removed by an administrator"){
-                                    echo '<footer>
-                                    <a class="btn btn-primary more" href="addArticle.php?id='.$article->article_id.'"> 
+                                <h1><a href="singleArticle.php?aid=' . $article->article_id . '"">' . $article->title . '</a></h1> 
+                                <p>' . $article->description . '</p>';
+                if ($article->description !== "This article was removed by an administrator") {
+                    echo '<footer>
+                                    <a class="btn btn-primary more" href="addArticle.php?id=' . $article->article_id . '"> 
                                         <div>Edit</div>
                                         <div><i class="ion-ios-arrow-thin-right"></i></div>
                                     </a>
-                                    <a href="#" class="love" onclick="deleteArticle('. $article->article_id .')"><i class="ion-android-delete"></i></a>
+                                    <a href="#" class="love" onclick="deleteArticle(' . $article->article_id . ')"><i class="ion-android-delete"></i></a>
                                 </footer>';
-                                }
-                                
-                           echo  '</div>
+                }
+
+                echo '</div>
                         </div>
                     </article>';
             }
 
             // Pagination
             if ($totalPages > 1) {
-            echo '<div class="col-md-12 text-center">
+                echo '<div class="col-md-12 text-center">
                    <ul class="pagination">';
-            if ($currentPage > 1) {
-                echo '<li><a href="?page='.($currentPage - 1).'">Prev</a></li>';
-            }
-            for ($i = 1; $i <= $totalPages; $i++) {
-                echo '<li'. ($i == $currentPage ? ' class="active"' : '') .'><a href="?page='.$i.'">'.$i.'</a></li>';
-            }
-            if ($currentPage < $totalPages) {
-                echo '<li><a href="?page='.($currentPage + 1).'">Next</a></li>';
-            }
-            echo '</ul>
+                if ($currentPage > 1) {
+                    echo '<li><a href="?page=' . ($currentPage - 1) . '">Prev</a></li>';
+                }
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="?page=' . $i . '">' . $i . '</a></li>';
+                }
+                if ($currentPage < $totalPages) {
+                    echo '<li><a href="?page=' . ($currentPage + 1) . '">Next</a></li>';
+                }
+                echo '</ul>
             </div>';
             }
         } else {
@@ -97,7 +96,7 @@ if ($_SESSION['role'] !== 'Admin') {
         if (confirm("Are you sure you want to delete this article?")) {
             // Make an AJAX request
             var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
+            xhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
                     // Update the page
                     if (this.responseText === "deleted") {

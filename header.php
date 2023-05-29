@@ -1,4 +1,4 @@
-<?php include 'debugging.php';?>
+<?php include 'debugging.php'; ?>
 
 
     <head>
@@ -32,41 +32,40 @@
         <link rel="stylesheet" href="css/demo.css">
         <link rel="stylesheet" href="scripts/ionicons/css/ionicons.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
 
+<body>
+    <header class="primary">
+        <div class="firstbar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="brand">
+                            <a href="index.php">
+                                <img src="images/logo.png" alt="Magz Logo">
+                            </a>
+                        </div>						
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <form class="search" action="test_search.php">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input type="text" name="searchText" class="form-control" placeholder="Search by words in article title, description or content..">									
+                                    <div class="input-group-btn">
 
-    </head>
+                                        <button class="btn btn-primary"><i class="ion-search"></i></button>
 
-    <body>
-        <header class="primary">
-            <div class="firstbar">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <div class="brand">
-                                <a href="index.php">
-                                    <img src="images/logo.png" alt="Magz Logo">
-                                </a>
-                            </div>						
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <form class="search" action="test_search.php">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <input type="text" name="searchText" class="form-control" placeholder="Search by words in article title, description or content..">									
-                                        <div class="input-group-btn">
-                                            
-                                            <button class="btn btn-primary"><i class="ion-search"></i></button>
-                                            
-                                        </div>
                                     </div>
                                 </div>
+                            </div>
 
-                            </form>								
-                        </div>
-                        <div class="col-md-3 col-sm-12 text-right">
-                            <ul class="nav-icons">
-                                <?php if(empty($_SESSION['user_id'])){
-                                    echo '<li><a href="register.php"><i class="ion-person-add"></i><div>Register</div></a></li>
+                        </form>								
+                    </div>
+                    <div class="col-md-3 col-sm-12 text-right">
+                        <ul class="nav-icons">
+                            <?php
+                            if (empty($_SESSION['user_id'])) {
+                                echo '<li><a href="register.php"><i class="ion-person-add"></i><div>Register</div></a></li>
                        
                                 <li><a href="loginPage.php"><i class="ion-person"></i><div>Login</div></a></li>
                                  </ul>
@@ -75,81 +74,77 @@
                 </div>
             </div>
 ';
-                                }else{
-                                    echo '<h5>Welcome, '.$_SESSION['username'].'</h5>'.
-                                            
-                                            '<h6 style="text-align: center;">'.$_SESSION['role'].'</h6>';
-                                }
-                                ?>
-                                
-                            </ul>
-                        </div>
+                            } else {
+                                echo '<h5>Welcome, ' . $_SESSION['username'] . '</h5>' .
+                                '<h6 style="text-align: center;">' . $_SESSION['role'] . '</h6>';
+                            }
+                            ?>
+
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Start nav -->
-            <nav class="menu">
-                <div class="container">
-                    <div class="brand">
-                        <a href="#">
-                            <img src="images/logo.png" alt="Magz Logo">
-                        </a>
-                    </div>
-                    <div class="mobile-toggle">
-                        <a href="#" data-toggle="menu" data-target="#menu-list"><i class="ion-navicon-round"></i></a>
-                    </div>
-                    <div class="mobile-toggle">
-                        <a href="#" data-toggle="sidebar" data-target="#sidebar"><i class="ion-ios-arrow-left"></i></a>
-                    </div>
-                    <div id="menu-list">
-                        <ul class="nav-list">
-                            <li class="for-tablet nav-title"><a>Menu</a></li>
-                            <li class="for-tablet"><a href="loginPage.php">Login</a></li>
-                            <li class="for-tablet"><a href="register.php">Register</a></li>
-                            <?php 
-                                //retrieve all categories and disaply 
-                            $list = Article::getAllCat();
-                            if (!empty($list)){
-                                 for ($i = 0; $i < count($list); $i++) {
-                                    echo '<li>
-                                    <a href="category.php?cid='. $list[$i]->category_id .'">'. $list[$i]->category_name;
-                                    if ($list[$i]->category_id == 60)
-                                         echo '<div class="badge">Hot</div>';
-                                    echo '</a></li>';
-                                 }
-                            }
-                            
-                            ?>
-                            
+        <!-- Start nav -->
+        <nav class="menu">
+            <div class="container">
+                <div class="brand">
+                    <a href="#">
+                        <img src="images/logo.png" alt="Magz Logo">
+                    </a>
+                </div>
+                <div class="mobile-toggle">
+                    <a href="#" data-toggle="menu" data-target="#menu-list"><i class="ion-navicon-round"></i></a>
+                </div>
+                <div class="mobile-toggle">
+                    <a href="#" data-toggle="sidebar" data-target="#sidebar"><i class="ion-ios-arrow-left"></i></a>
+                </div>
+                <div id="menu-list">
+                    <ul class="nav-list">
+                        <li class="for-tablet nav-title"><a>Menu</a></li>
+                        <li class="for-tablet"><a href="loginPage.php">Login</a></li>
+                        <li class="for-tablet"><a href="register.php">Register</a></li>
                             <?php
-                            if(!empty($_SESSION['user_id'])){
-                             echo'  <li class="dropdown magz-dropdown" style="margin-left: auto;"><a href="#">My Account <i class="ion-ios-arrow-right"></i></a>
+                            //retrieve all categories and disaply 
+                            $list = Article::getAllCat();
+                            if (!empty($list)) {
+                                for ($i = 0; $i < count($list); $i++) {
+                                    echo '<li>
+                                    <a href="category.php?cid=' . $list[$i]->category_id . '">' . $list[$i]->category_name;
+                                    if ($list[$i]->category_id == 60)
+                                        echo '<div class="badge">Hot</div>';
+                                    echo '</a></li>';
+                                }
+                            }
+                            ?>
+
+                        <?php
+                        if (!empty($_SESSION['user_id'])) {
+                            echo'  <li class="dropdown magz-dropdown" style="margin-left: auto;"><a href="#">My Account <i class="ion-ios-arrow-right"></i></a>
                                 <ul class="dropdown-menu">';
-                                    if ($_SESSION['role'] == 'Author') {
-                                    echo '<li><a href="addArticle.php"><i class="icon ion-plus"></i>Add Article</a></li>
-                                       <li><a href="myArticles.php"><i class="icon ion-document-text"></i>My Articles</a></li>';                                    }
-                                    elseif ($_SESSION['role'] == 'Admin') {
-                                    echo '
+                            if ($_SESSION['role'] == 'Author') {
+                                echo '<li><a href="addArticle.php"><i class="icon ion-plus"></i>Add Article</a></li>
+                                       <li><a href="myArticles.php"><i class="icon ion-document-text"></i>My Articles</a></li>';
+                            } elseif ($_SESSION['role'] == 'Admin') {
+                                echo '
                                     <li><a href="addArticle.php"><i class="icon ion-android-add"></i>Add Article</a></li>
                                     <li><a href="myArticles.php"><i class="icon ion-document-text"></i>My Articles</a></li>
                                     <li><a href="view_Articles.php"><i class="icon ion-ios-list"></i>Manage Articles</a></li>
                                     <li><a href="view_Users.php"><i class="icon ion-person-stalker"></i>Manage Users</a></li>
                                     <li><a href="adminReports.php"><i class="icon ion-android-settings"></i>Administration Reports</a></li>';
-
-                                    }
-                                    echo '<li><a href="logout.php"><i class="icon ion-log-out"></i> Logout</a></li>
+                            }
+                            echo '<li><a href="logout.php"><i class="icon ion-log-out"></i> Logout</a></li>
                                 </ul>
                             </li>';
-                                       
-                            }
-                            ?>
-                              
-                        </ul>
-                    </div>
+                        }
+                        ?>
+
+                    </ul>
                 </div>
-            </nav>
-            <!-- End nav -->
-        </header>
+            </div>
+        </nav>
+        <!-- End nav -->
+    </header>
 
 

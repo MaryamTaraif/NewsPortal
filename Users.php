@@ -24,8 +24,6 @@ class Users {
         return $this->username;
     }
 
-    
-
     function getPassword() {
         return $this->password;
     }
@@ -53,7 +51,6 @@ class Users {
         return $this;
     }
 
-    
     function setPassword($password) {
         $this->password = $password;
         return $this;
@@ -64,7 +61,7 @@ class Users {
         return $this;
     }
 
-    function initWith($user_id, $username, $password, $email,$type_name) {
+    function initWith($user_id, $username, $password, $email, $type_name) {
         $this->user_id = $user_id;
         $this->username = $username;
         $this->password = $password;
@@ -75,7 +72,7 @@ class Users {
     function initWithUid($user_id) {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE user_id = \'' . $user_id . '\'');
-        $this->initWith($data->user_id, $data->username, $data->password, $data->email,$data->type_name);
+        $this->initWith($data->user_id, $data->username, $data->password, $data->email, $data->type_name);
     }
 
 //    function checkUser($username, $password) {
@@ -116,15 +113,14 @@ class Users {
             return false;
         }
     }
-    
-  function deleteuser() {
+
+    function deleteuser() {
         try {
             $db = Database::getInstance();
             $data = $db->querySql('Delete from dbProj_User where user_id=' . $this->user_id);
-            if ($data > 0){
+            if ($data > 0) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } catch (Exception $e) {
@@ -132,7 +128,7 @@ class Users {
             return false;
         }
     }
-    
+
     function initWithUsername() {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_User WHERE username = \'' . $this->username . '\'');
@@ -141,13 +137,13 @@ class Users {
         }
         return true;
     }
-    
-  function getAllusers() {
+
+    function getAllusers() {
         $db = Database::getInstance();
         $data = $db->multiFetch('Select * from dbProj_User');
         return $data;
     }
-    
+
     function updateDB() {
 
         if ($this->isValid()) {
@@ -163,7 +159,7 @@ class Users {
             $db->querySql($data);
         }
     }
-    
+
     public function isValid() {
         $errors = true;
 
@@ -183,29 +179,28 @@ class Users {
 
         return $errors;
     }
-    
-    public static function getTypes(){
+
+    public static function getTypes() {
         $db = Database::getInstance();
         $data = $db->multiFetch('select * from dbProj_User_type ');
         return $data;
     }
-    
+
 //    
 //    public static function getAuthorId($authorName){
 //        $db = Database::getInstance();
 //        $data = $db->singleFetch('select user_id from dbProj_User where username ');
 //        return $data;
 //    }
-    
-    public static function getAuthors(){
+
+    public static function getAuthors() {
         $db = Database::getInstance();
         $data = $db->multiFetch("select * from dbProj_User where type_name = 'Author' or type_name = 'Admin'");
         return $data;
     }
-    
-    
+
     //featurd profile statistics 
-    public static function getTopAuthor(){
+    public static function getTopAuthor() {
         try {
             $db = Database::getInstance();
             $result = $db->singleFetch('CALL GetTopAuthor()');
@@ -220,7 +215,7 @@ class Users {
             return false;
         }
     }
-    
+
     public static function getUserStats($user_id) {
         $db = Database::getInstance();
         $result = $db->singleFetch("CALL GetUserStats($user_id)");
@@ -232,4 +227,5 @@ class Users {
             return false;
         }
     }
+
 }

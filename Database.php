@@ -41,11 +41,9 @@ class Database {
         return false;
     }
 
-    
     function prepare($sql) {
         return mysqli_prepare($this->dblink, $sql);
     }
-
 
     function singleFetch($sql) {
         $sql = $this->mkSafe($sql);
@@ -62,6 +60,7 @@ class Database {
         }
         return $fet;
     }
+
     function multiFetch($sql) {
         $sql = $this->mkSafe($sql);
         $result = null;
