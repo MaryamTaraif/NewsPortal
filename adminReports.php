@@ -30,14 +30,13 @@ if ($_SESSION['role'] !== 'Admin') {
                         <p>Extract all news articles published by selected author.</p>
                             <div class="form-group">
                                 <div class="input-group">
-<!--                                    <input type="text" id="author" class="form-control" oninput="showArticleByAuthor(this.value)" placeholder="Enter writer name ...">-->
                                     <select id="author" name="author" class="form-control" >
                                             <?php
                                             //populate the dropdown with authors names
                                             $authors = Users::getAuthors();
                                             if (!empty($authors)) {
                                                 for ($i = 0; $i < count($authors); $i++) {
-                                                    echo '<option value="' . $authors[$i]->user_id . '">' . $authors[$i]->username . '</option>';
+                                                    echo '<option value="' . $authors[$i]->username. '">' . $authors[$i]->username . '</option>';
                                                 }
                                             }
                                             ?>
@@ -81,7 +80,7 @@ if ($_SESSION['role'] !== 'Admin') {
 </div>
 
 <script>
-function showArticleByAuthor() {
+function showArticleByAuthor(page = 1) {
     user_id = document.getElementById("author").value;
     //create the AJAX request object
     xmlhttp = new XMLHttpRequest();
@@ -90,11 +89,11 @@ function showArticleByAuthor() {
            document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
         }
     }
-    xmlhttp.open("GET", "filter.php?author="+ user_id, true);
+  xmlhttp.open("GET", "filter.php?adminAuthor=" + user_id + "&page=" + page, true);
     xmlhttp.send();
 }
 
-function showMostPopular() {
+function showMostPopular(page = 1) {
     //create the AJAX request object
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -104,7 +103,7 @@ function showMostPopular() {
     }
     from = document.getElementById("from_date").value;
     to = document.getElementById("to_date").value;
-    xmlhttp.open("GET", "mostPopular.php?from="+ from + "&to=" + to, true);
+    xmlhttp.open("GET", "mostPopular.php?from="+ from + "&to=" + to + "&page=" + page, true);
     xmlhttp.send();
 }
 </script>

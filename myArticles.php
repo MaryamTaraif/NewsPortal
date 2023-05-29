@@ -73,39 +73,47 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
                             ?>
 		        <div class="row">
                             <?php
-                            
-                            //get the list of articles 
-                            $list = Article::authorDraftArticles($_SESSION['user_id']);
-                            //if the result if not empty 
-                            if (!empty($list)) {
-                               echo ' <div class="line">
-                                        <div>Draft Articles</div>
-                                    </div>';
-                                //loop through and display 
-                                    for ($i = 0; $i < count($list); $i++ ) {
-                                        echo '<article class="col-md-12 article-list">
+                            // Pagination variables
+                            $itemsPerPage = 5; // Number of items per page (5 for each section so total of max 10 is oermitted for a page)
+                            $currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
+
+                            // Draft articles section
+                            $draftArticles = Article::authorDraftArticles($_SESSION['user_id']);
+                            if (!empty($draftArticles)){
+                            $totalDraftArticles = count($draftArticles);
+                            $totalDraftPages = ceil($totalDraftArticles / $itemsPerPage);
+
+                            echo '<div class="line">
+                                    <div>Draft Articles</div>
+                                  </div>';
+                            $startDraft = ($currentPage - 1) * $itemsPerPage;
+                            $endDraft = $startDraft + $itemsPerPage;
+                            $draftArticlesPage = array_slice($draftArticles, $startDraft, $itemsPerPage);
+
+                            foreach ($draftArticlesPage as $article) {
+                              echo '<article class="col-md-12 article-list">
 		            <div class="inner">
 		              <figure>
-                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
+                                <img src="'. Media::getPhotoURL($article->article_id)->URL .'">
 		              </figure>
 		              <div class="details">
 		                <div class="detail">
 		                  <div class="category">
-		                   <a href="#">'. Article::getCatName($list[$i]->category_id) .'</a> 
+		                   <a href="#">'. Article::getCatName($article->category_id) .'</a> 
 		                  </div>
-                                  <div class="time">'.$list[$i]->publish_date .'</div>
+                                  <div class="time">'.$article->publish_date .'</div>
 		                </div>
-		                <h1>'.$list[$i]->title .'</h1>
+		                <h1>'.$article->title .'</h1>
 		                <p>
-		                  '.$list[$i]->description .'
+		                  '.$article->description .'
 		                </p>
 		                <footer>
-                                <a class="btn btn-primary more" href="addArticle.php?id='.$list[$i]->article_id.'"> 
+                                <a class="btn btn-primary more" href="addArticle.php?id='.$article->article_id.'"> 
 		                    <div>Edit</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>
-                                  <a href="#" class="love" onclick="deleteArticle('.$list[$i]->article_id .')"><i class="ion-android-delete"></i></a>
-		                  <a class="btn btn-primary more" onclick="publishArticle('.$list[$i]->article_id .')"> 
+                                  <a href="#" class="love" onclick="deleteArticle('.$article->article_id .')"><i class="ion-android-delete"></i></a>
+		                  <a class="btn btn-primary more" onclick="publishArticle('.$article->article_id .')"> 
 		                    <div>Publish</div>
 		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
 		                  </a>
@@ -113,41 +121,44 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
 		              </div>
 		            </div>
 		          </article>';
-                                    }
+                            }
                             }
                             
-                            ?>
-                            
-                            <?php
-                            //get the list of articles 
-                            $list = Article::authorPublishedArticles($_SESSION['user_id']);
-                            //if the result if not empty 
-                            if (!empty($list)) {
-                               echo ' <div class="line">
-                                        <div>Published Articles</div>
-                                    </div>';
-                                //loop through and display 
-                                    for ($i = 0; $i < count($list); $i++) {
-                                        echo '<article class="col-md-12 article-list">
+                            // Published articles section
+                            $publishedArticles = Article::authorPublishedArticles($_SESSION['user_id']);
+                            if (!empty($publishedArticles)){
+                            $totalPublishedArticles = count($publishedArticles);
+                            $totalPublishedPages = ceil($totalPublishedArticles / $itemsPerPage);
+
+                            echo '<div class="line">
+                                    <div>Published Articles</div>
+                                  </div>';
+
+                            $startPublished = ($currentPage - 1) * $itemsPerPage;
+                            $endPublished = $startPublished + $itemsPerPage;
+                            $publishedArticlesPage = array_slice($publishedArticles, $startPublished, $itemsPerPage);
+
+                            foreach ($publishedArticlesPage as $article) {
+                              // Display published article
+                                echo '<article class="col-md-12 article-list">
 		            <div class="inner">
 		              <figure>
-                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
+                                <img src="'. Media::getPhotoURL($article->article_id)->URL .'">
 		              </figure>
 		              <div class="details">
 		                <div class="detail">
 		                  <div class="category">
-		                   <a href="#">'. Article::getCatName($list[$i]->category_id) .'</a>
+		                   <a href="#">'. Article::getCatName($article->category_id) .'</a>
 		                  </div>
-		                  <div class="time">'.$list[$i]->publish_date .'</div>
+		                  <div class="time">'.$article->publish_date .'</div>
 		                </div>
-		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
+		                <h1><a href="singleArticle.php?aid= '.$article->article_id.'"">'.$article->title .'</a></h1>
 		                <p>
-		                  '.$list[$i]->description .'
+		                  '.$article->description.'
 		                </p>';
-                                        if ($list[$i]->description !== "This article was removed by an administrator"){
+                                        if ($article->description !== "This article was removed by an administrator"){
                                             echo '<footer>
-                                            <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->likes .'</div></a>
-                                            <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
+                                            <a class="btn btn-primary more" href="singleArticle.php?aid='.$article->article_id.'"> 
                                               <div>View</div>
                                               <div><i class="ion-ios-arrow-thin-right"></i></div>
                                             </a>
@@ -156,24 +167,32 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] !== 'Author' && $_SESSION
 		                echo'</div>
                                       </div>
                                     </article>';
-                                    }
                             }
+                            }
+                            
+                            
+                            // Pagination links
+                            if ($totalDraftPages > 1 || $totalPublishedPages > 1 ){
+                            echo '<div class="col-md-12 text-center">
+                                    <ul class="pagination">';
+                            if ($currentPage > 1) {
+                                echo '<li class="prev"><a href="?page=' . ($currentPage - 1) . '"><i class="ion-ios-arrow-left"></i></a></li>';
+                            }
+                            for ($i = 1; $i <= max($totalDraftPages, $totalPublishedPages); $i++) {
+                                if ($i <= $totalDraftPages || $i <= $totalPublishedPages) {
+                                    echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="?page=' . $i . '">' . $i . '</a></li>';
+                                }
+                            }
+
+                            if ($currentPage < max($totalDraftPages, $totalPublishedPages)) {
+                                echo '<li class="next"><a href="?page=' . ($currentPage + 1) . '"><i class="ion-ios-arrow-right"></i></a></li>';
+                            }
+                            echo '</ul>
+                                </div>';
+                            }
+
                             ?>
-                          <!--               pagination         -->  
-		          <div class="col-md-12 text-center">
-		            <ul class="pagination">
-		              <li class="prev"><a href="#"><i class="ion-ios-arrow-left"></i></a></li>
-		              <li class="active"><a href="#">1</a></li>
-		              <li><a href="#">2</a></li>
-		              <li><a href="#">3</a></li>
-		              <li><a href="#">...</a></li>
-		              <li><a href="#">97</a></li>
-		              <li class="next"><a href="#"><i class="ion-ios-arrow-right"></i></a></li>
-		            </ul>
-		            <div class="pagination-help-text">
-		            	Showing 8 results of 776 &mdash; Page 1
-		            </div>
-		          </div>
+                         
 		        </div>
 		      </div>
                         

@@ -47,16 +47,6 @@ class Comment {
         $this->aid = null;
     }
 
-    function deleteComment() {
-        try {
-            $db = Database::getInstance();
-            $db->querySql('Delete from dbProj_Comment where comment_id=' . $this->cid);
-            return true;
-        } catch (Exception $e) {
-            echo 'Exception: ' . $e;
-            return false;
-        }
-    }
     
     public static function removeComment($comment_id) {
     try {
@@ -77,7 +67,6 @@ class Comment {
 
 
     function initWithCid($cid) {
-
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Comment WHERE comment_id = ' . $cid);
         $this->initWith($data->comment_id, $data->content, $data->user_id, $data->article_id);
@@ -94,7 +83,6 @@ class Comment {
 
     function addComment(){
         try{
-            
             $db = Database::getInstance();
             $db->querySql("INSERT INTO dbProj_Comment (comment_id, content, user_id, article_id) VALUES (null, '$this->content' , '$this->uid', '$this->aid')");
             return true;
@@ -106,7 +94,6 @@ class Comment {
     }
     
     function updateDB() {
-
         $db = Database::getInstance();
         $data = 'UPDATE dbProj_Comment set
 			content = \'' . $this->content . '\' ,

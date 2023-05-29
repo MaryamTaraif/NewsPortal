@@ -11,17 +11,17 @@ include 'header.php';
                     <h4>Register</h4>
                     <form id="registrationForm" action="register.php" method="post">
                         <div class="form-group">
-                            <label>Username</label>
+                            <label>Username <span class="required"></span></label>
                             <input type="text" name="username" class="form-control" value="">
                         </div>
 
                         <div class="form-group">
-                            <label class="fw">Password</label>
+                            <label class="fw">Password <span class="required"></span></label>
                             <input type="password" name="password" class="form-control" value="">
                         </div>
 
                         <div class="form-group">
-                            <label>Role</label>
+                            <label>Role<span class="required"></span></label>
                             <select id="roles" name="role" class="form-control" value="">
                                 <!-- retrive roles list -->
                                 <?php
@@ -46,7 +46,7 @@ include 'header.php';
                         </div>
 
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>Email<span class="required"></span></label>
                             <input type="email" name="email" class="form-control" value="">
                         </div>
 

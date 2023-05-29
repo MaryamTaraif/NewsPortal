@@ -3,199 +3,93 @@ include 'header.php';
 $id = $_GET['cid'];
 $name = Article::getCatName($id);
 ?>
-		<section class="category">
-		  <div class="container" style="padding-top: 200px;">
-		    <div class="row">
-		      <div class="col-md-8 text-left">
-		        <div class="row">
-		          <div class="col-md-12">        
-		            <ol class="breadcrumb">
-		              <li><a href="#">Home</a></li>
-		              <li class="active"><?php echo $name ?></li>
-		            </ol>
-		            <h1 class="page-title"><?php echo $name ?></h1>
-		            <p class="page-subtitle">Showing all articles under category <i><?php echo $name ?></i></p>
-		          </div>
-		        </div>
-		        <div class="line"></div>
-		        <div class="row">
-                            <?php
-                            if(isset($_GET['pageno']))
-                                $start = $_GET['pageno'];
-                            else $start = 0;
-                            $end = 10;
-                            $table = 'dbProj_Article';
-                            $articles = new Article();
-                            //get the list of articles 
-                            $list = $articles -> getCatArticles($id, $start, $end);
-                            //if the result if not empty 
-                            if (!empty($list)) {
-                                //loop through and display 
-                                    for ($i = 0; $i < count($list); $i++) {
-                                        echo '<article class="col-md-12 article-list">
-		            <div class="inner">
-		              <figure>
-                                <img src="'. Media::getPhotoURL($list[$i]->article_id)->URL .'">
-		              </figure>
-		              <div class="details">
-		                <div class="detail">
-		                  <div class="category">
-		                   <a href="#">'. $name .'</a>
-		                  </div>
-		                  <div class="time">'.$list[$i]->publish_date .'</div>
-		                </div>
-		                <h1><a href="singleArticle.php?aid= '.$list[$i]->article_id.'"">'.$list[$i]->title .'</a></h1>
-		                <p>
-		                  '.$list[$i]->description .'
-		                </p>
-		                <footer>
-		                  <a href="#" class="love"><i class="ion-android-favorite-outline"></i> <div>'. $list[$i]->likes .'</div></a>
-		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$list[$i]->article_id.'"> 
-		                    <div>More</div>
-		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
-		                  </a>
-		                </footer>
-		              </div>
-		            </div>
-		          </article>';
-                                    }
-            $pagination = new Pagination();
-            $pagination->totalRecords($table);
-            $pagination->setLimit($end);
-            $pagination->page("");
-            echo $pagination->firstBack();
-            echo $pagination->where();
-            echo $pagination->nextLast();
-            echo '</td></tr></table>';
-                            }
-                            else {
-                                echo '<h6>Oops, no articles yet.</h6>';
-                            }
-                            ?>
-                          <!--               pagination         -->  
-		          <div class="col-md-12 text-center">
-		            <ul class="pagination">
-		              <li class="prev"><a href="#"><i class="ion-ios-arrow-left"></i></a></li>
-		              <li class="active"><a href="#">1</a></li>
-		              <li><a href="#">2</a></li>
-		              <li><a href="#">3</a></li>
-		              <li><a href="#">...</a></li>
-		              <li><a href="#">97</a></li>
-		              <li class="next"><a href="#"><i class="ion-ios-arrow-right"></i></a></li>
-		            </ul>
-		            <div class="pagination-help-text">
-		            	Showing 8 results of 776 &mdash; Page 1
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-<!--               side bar          -->
-<!--		      <div class="col-md-4 sidebar">
-		        <aside>
-		          <div class="aside-body">
-		            <figure class="ads">
-			            <a href="single.html">
-			              <img src="images/ad.png">
-			            </a>
-		              <figcaption>Advertisement</figcaption>
-		            </figure>
-		          </div>
-		        </aside>
-		        <aside>
-		          <h1 class="aside-title">Recent Post</h1>
-		          <div class="aside-body">
-		            <article class="article-fw">
-		              <div class="inner">
-		                <figure>
-			                <a href="single.html">
-			                  <img src="images/news/img12.jpg">
-			                </a>
-		                </figure>
-		                <div class="details">
-		                  <h1><a href="single.html">Lorem Ipsum Dolor Sit Amet Consectetur Adipisicing Elit</a></h1>
-		                  <p>
-		                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-		                    tempor incididunt ut labore et dolore magna aliqua.
-		                  </p>
-		                  <div class="detail">
-		                    <div class="time">December 26, 2016</div>
-		                    <div class="category"><a href="category.html">Lifestyle</a></div>
-		                  </div>
-		                </div>
-		              </div>
-		            </article>
-		            <div class="line"></div>
-		            <article class="article-mini">
-		              <div class="inner">
-		              <figure>
-			              <a href="single.html">
-			                <img src="images/news/img05.jpg">
-		                </a>
-		              </figure>
-		              <div class="padding">
-		                <h1><a href="single.html">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-		                <div class="detail">
-		                  <div class="category"><a href="category.html">Lifestyle</a></div>
-		                  <div class="time">December 22, 2016</div>
-		                </div>
-		              </div>
-		              </div>
-		            </article>
-		            <article class="article-mini">
-		              <div class="inner">
-		                <figure>
-			                <a href="single.html">
-			                  <img src="images/news/img02.jpg">
-		                  </a>
-		                </figure>
-		                <div class="padding">
-		                  <h1><a href="single.html">Fusce ullamcorper elit at felis cursus suscipit</a></h1>
-		                  <div class="detail">
-		                    <div class="category"><a href="category.html">Travel</a></div>
-		                    <div class="time">December 21, 2016</div>
-		                  </div>
-		                </div>
-		              </div>
-		            </article>
-		            <article class="article-mini">
-		              <div class="inner">
-		                <figure>
-			                <a href="single.html">
-			                  <img src="images/news/img13.jpg">
-		                  </a>
-		                </figure>
-		                <div class="padding">
-		                  <h1><a href="single.html">Duis aute irure dolor in reprehenderit in voluptate velit</a></h1>
-		                  <div class="detail">
-		                    <div class="category"><a href="category.html">International</a></div>
-		                    <div class="time">December 20, 2016</div>
-		                  </div>
-		                </div>
-		              </div>
-		            </article>
-		          </div>
-		        </aside>
-		        <aside>
-		          <div class="aside-body">
-		            <form class="newsletter">
-		              <div class="icon">
-		                <i class="ion-ios-email-outline"></i>
-		                <h1>Newsletter</h1>
-		              </div>
-		              <div class="input-group">
-		                <input type="email" class="form-control email" placeholder="Your mail">
-		                <div class="input-group-btn">
-		                  <button class="btn btn-primary"><i class="ion-paper-airplane"></i></button>
-		                </div>
-		              </div>
-		              <p>By subscribing you will receive new articles in your email.</p>
-		            </form>
-		          </div>
-		        </aside>
-		      </div>-->
-		    </div>
-		  </div>
-		</section>
+
+<section class="category">
+    <div class="container" style="padding-top: 200px;">
+        <div class="row">
+            <div class="col-md-8 text-left">
+                <div class="row">
+                    <div class="col-md-12">        
+                        <ol class="breadcrumb">
+                            <li><a href="#">Home</a></li>
+                            <li class="active"><?php echo $name ?></li>
+                        </ol>
+                        <h1 class="page-title"><?php echo $name ?></h1>
+                        <p class="page-subtitle">Showing all articles under category <i><?php echo $name ?></i></p>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="row">
+                    <?php
+                    // Get the total number of articles in the category
+                    $totalArticles = count(Article::totalArticles($id));
+
+                    // Check if there are any articles in the category
+                    if ($totalArticles > 0) {
+                        // Set the number of articles to display per page
+                        $articlesPerPage = 10;
+                        // Calculate the total number of pages
+                        $totalPages = ceil($totalArticles / $articlesPerPage);
+                        // Get the current page number from the URL
+                        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+                        // Calculate the start and end limits for the articles
+                        $start = ($currentPage - 1) * $articlesPerPage;
+                        $end = $start + $articlesPerPage - 1;
+                        // Get the list of articles for the current page
+                        $list = Article::getCatArticles($id, $start, $end);
+
+                        // Loop through and display the articles
+                        foreach ($list as $article) {
+                            echo '<article class="col-md-12 article-list">
+                                <div class="inner">
+                                    <figure>
+                                        <img src="'. Media::getPhotoURL($article->article_id)->URL .'">
+                                    </figure>
+                                    <div class="details">
+                                        <div class="detail">
+                                            <div class="category">
+                                                <a href="#">'. $name .'</a>
+                                            </div>
+                                            <div class="time">'. $article->publish_date .'</div>
+                                        </div>
+                                        <h1><a href="singleArticle.php?aid='.$article->article_id.'">'. $article->title .'</a></h1>
+                                        <p>'. $article->description .'</p>
+                                        <footer>
+                                            <a class="btn btn-primary more" href="singleArticle.php?aid='.$article->article_id.'">
+                                                <div>More</div>
+                                                <div><i class="ion-ios-arrow-thin-right"></i></div>
+                                            </a>
+                                        </footer>
+                                    </div>
+                                </div>
+                            </article>';
+                        }
+
+                        // Pagination
+                        if ($totalPages > 1) {
+                        echo '<div class="col-md-12 text-center">
+                            <ul class="pagination">';
+                        if ($currentPage > 1) {
+                            echo '<li><a href="?cid='.$id.'&page='.($currentPage - 1).'">Prev</a></li>';
+                        }
+                        for ($i = 1; $i <= $totalPages; $i++) {
+                            echo '<li'. ($i == $currentPage ? ' class="active"' : '') .'><a href="?cid='.$id.'&page='.$i.'">'.$i.'</a></li>';
+                        }
+                        if ($currentPage < $totalPages) {
+                            echo '<li><a href="?cid='.$id.'&page='.($currentPage + 1).'">Next</a></li>';
+                        }
+                        echo '</ul>
+                        </div>';
+                        }
+                    } else {
+                        echo '<h6>Oops, no articles yet.</h6>';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- footer -->
 <?php  

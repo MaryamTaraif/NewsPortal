@@ -1,9 +1,7 @@
 <?php
 include 'debugging.php';
+$result = Article::getArticles();
 
-$fromDate = $_GET['start_date'];
-$toDate = $_GET['end_date'];
-$result = Article::searchByDate($_GET['start_date'], $_GET['end_date']);
 
 //pagination 
 $itemsPerPage = 10; // Number of items per page
@@ -21,7 +19,7 @@ if (!empty($result)) {
 		              <div class="details">
 		                <div class="detail">
 		                  <div class="category">
-		                   <a href="#">'. Article::getCatName($result[$i]->category_id) .'</a>
+		                   <a href="#">'. $name .'</a>
 		                  </div>
 		                  <div class="time">'.$result[$i]->publish_date .'</div>
 		                </div>
@@ -41,22 +39,24 @@ if (!empty($result)) {
                                     }
                             }
                             else {
-                                echo '<h6>Oops, no articles found within the date range..</h6>';
+                                echo '<h6>Oops, no articles yet.</h6>';
                             }
+                            
                             // Pagination links
                             $totalPages = ceil(count($result) / $itemsPerPage);
                             if ($totalPages > 1) {
                                 echo '<div class="col-md-12 text-center">
                                         <ul class="pagination">';
-                            if ($currentPage > 1) {
-                              echo '<li class="prev"><a href="#" onclick="showArticleByDate(' . ($currentPage - 1) . ')"><i class="ion-ios-arrow-left"></i></a></li>';
+                                if ($currentPage > 1) {
+                                    echo '<li class="prev"><a href="#" onclick="showAll(' . ($currentPage - 1) . ')"><i class="ion-ios-arrow-left"></i></a></li>';
+                                }
+                                for ($i = 1; $i <= $totalPages; $i++) {
+                                    echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="#" onclick="showAll(' . $i . ')">' . $i . '</a></li>';
+                                }
+                                if ($currentPage < $totalPages) {
+                                    echo '<li class="next"><a href="#" onclick="showAll(' . ($currentPage + 1) . ')"><i class="ion-ios-arrow-right"></i></a></li>';
+                                }
+                                echo '</ul></div>';
                             }
-                            for ($i = 1; $i <= $totalPages; $i++) {
-                              echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="#" onclick="showArticleByDate(' . $i . ')">' . $i . '</a></li>';
-                            }
-                            if ($currentPage < $totalPages) {
-                              echo '<li class="next"><a href="#" onclick="showArticleByDate(' . ($currentPage + 1) . ')"><i class="ion-ios-arrow-right"></i></a></li>';
-                            }
-                            echo '</ul></div>';
-                          }
+
                             ?>

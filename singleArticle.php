@@ -12,7 +12,6 @@ $author = new Users();
 //get media details
 $media = new Media();
 
-
 $article->setViews($article->getViews() + 1);
 $article->updateArticleViews();
 ?>
@@ -28,7 +27,7 @@ $article->updateArticleViews();
                         location.reload();
                         alert("Deleted Successfully");
                     } else {
-                        alert(this.responseText);
+                        alert("Sorry, an error occurred.");
                     }
                 }
             };
@@ -36,6 +35,43 @@ $article->updateArticleViews();
             xhttp.send();
         }
     }
+
+    function likeArticle() {
+        // prevent the default behavior of the click event
+        event.preventDefault();
+        // make an AJAX request to update the likes count in the database
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                // update the likes count on the page
+                document.getElementById("likes_count").innerHTML = this.responseText;
+
+                // display a message to the user
+                alert("Liked Successfully");
+            }
+        };
+        xhttp.open("GET", "updateLikes.php?id=" + <?php echo $id; ?>, true);
+        xhttp.send();
+    }
+
+    function dislikeArticle() {
+        // prevent the default behavior of the click event
+        event.preventDefault();
+        // make an AJAX request to update the likes count in the database
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                // update the likes count on the page
+                document.getElementById("dislikes_count").innerHTML = this.responseText;
+
+                // display a message to the user
+                alert("Disliked Successfully");
+            }
+        };
+        xhttp.open("GET", "updateDislikes.php?id=" + <?php echo $id; ?>, true);
+        xhttp.send();
+    }
+
 </script>
 
 
@@ -52,40 +88,7 @@ $article->updateArticleViews();
                         </figure>
                     </div>
                 </aside>
-                <aside>
-                    <h1 class="aside-title">Recent Post</h1>
-                    <div class="aside-body">
-                        <!-- get the recent article-->
-                        <?php
-                        $recentArticle = Article::getRecentArticle();
 
-                        if ($recentArticle) {
-                            $recentId = $recentArticle->article_id;
-                            $recentTitle = $recentArticle->title;
-                            $recentDescription = $recentArticle->description;
-
-                            echo '<article class="article-fw">
-                                <div class="inner">
-                                    <figure>
-                                        <a href="singleArticle.php?aid=' . $recentId . '">
-                                            <img src="images/news/img16.jpg">
-                                        </a>
-                                    </figure>
-                                    <div class="details">
-                                        <h1><a href="singleArticle.php?aid=' . $recentId . '">' . $recentTitle . '</a></h1>
-                                        <p>' . $recentDescription . '</p>
-                                        <div class="detail">
-                                            <div class="time">' . $recentArticle->publish_date . '</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </article>';
-                        } else {
-                            echo "<p>No recent articles found.</p>";
-                        }
-                        ?>
-                    </div>
-                </aside>
 
             </div>
             <!-- show artcile details -->
@@ -157,15 +160,16 @@ $article->updateArticleViews();
                         <?php
                         $fileURL = $media->getDownloadableFile($id);
                         if ($fileURL) {
+                            $fileName = basename($fileURL->URL); // Extract the file name from the URL
                             echo '
-                                <div class="line">
-                                    <div>Downloadable File</div>
-                                </div>
-                                <aside style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
-                                    <div class="aside-body">
-                                        <a href="' . $fileURL->URL . '">Download File</a>
-                                    </div>
-                                </aside>';
+                       <div class="line">
+                           <div>Downloadable File</div>
+                       </div>
+                       <aside style="display: flex; justify-content: center; align-items: center; flex-direction: column; text-align: center;">
+                           <div class="aside-body">
+                               <a href="' . $fileURL->URL . '" download="' . $fileName . '">Download File</a>
+                           </div>
+                       </aside>';
                         }
                         ?>
                     </div>
@@ -193,12 +197,42 @@ $article->updateArticleViews();
                         </div>
                     </div>
 
-                    <div class="line thin" >
-                        <p style="margin-top: 20px;">
-                            <?php echo $article->getViews() . ' views';
-                            ?></p>
-
+                    <div class="line">
+                        <div>Interaction</div>
                     </div>
+                    <div class="row" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="interaction">
+                            <div class="icon-wrapper">
+                                <i class="fas fa-eye" style="font-size: 30px; color: #989898;"></i>
+                            </div>
+                            <div class="count"><?php echo $article->getViews() . ' views'; ?></div>
+                        </div>
+                        <div class="interaction" onclick="likeArticle()">
+                            <div class="icon-wrapper">
+                                <a href="#" class="love"><i class="fas fa-thumbs-up"></i></a>
+                            </div>
+                            <div class="count" data-type="likes-count"><?php echo $article->getLikes() . ' likes'; ?></div>
+                        </div>
+                        <div class="interaction" onclick="dislikeArticle()">
+                            <div class="icon-wrapper">
+                                <a href="#" class="love"><i class="fas fa-thumbs-down"></i></a>
+                            </div>
+                            <div class="count" data-type="dislikes-count"><?php echo $article->getDislikes() . ' dislikes'; ?></div>
+                        </div>
+                    </div>
+
+                    <style>
+                        .interaction {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                        }
+
+                        .icon-wrapper {
+                            margin-bottom: 10px;
+                        }
+                    </style>
+
 
 
                     <div class="line thin"></div>
@@ -296,31 +330,33 @@ $article->updateArticleViews();
 
 
 <?php
-
-
 if (isset($_POST['submitted'])) {
 
-    echo 'Add attempt';
     $comment = new Comment();
     $comment->setContent(trim($_POST['content']));
     $comment->setUid($_SESSION['user_id']);
     $comment->setAid($id);
 
-    $errors = $comment->isValid();
-
-    if (empty($errors)) {
-        if ($comment->addComment()) {
-            echo "<p>Your comment was added successfully</p>";
-        }
+    // Check if the comment is empty
+    if (empty($comment->getContent())) {
+        echo '<script>alert("Please enter a comment.");</script>';
     } else {
-        echo'<p> class="error"> Error </p>';
+        $errors = $comment->isValid();
 
-        foreach ($errors as $comment)
-            echo " - $comment<br />";
+        if (empty($errors)) {
+            if ($comment->addComment()) {
+                echo '<script>alert("Your comment was added successfully!");</script>';
+            }
+        } else {
+            echo'<p> class="error"> Error </p>';
+
+            foreach ($errors as $comment)
+                echo " - $comment<br />";
+        }
     }
 }
-include 'footer.html'
-?>;
+include 'footer.html';
+?>
 
 
 
