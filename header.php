@@ -1,6 +1,5 @@
 <?php include 'debugging.php'; ?>
 
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,7 +46,6 @@
 <script src="scripts/toast/jquery.toast.min.js"></script>
 <script src="js/demo.js"></script>
 <script src="js/e-magz.js"></script>
-
 </head>
 
 <body>
