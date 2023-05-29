@@ -30,15 +30,14 @@ class Comment {
     public function setUid($uid) {
         $this->uid = $uid;
     }
-    
-     public function getAid() {
+
+    public function getAid() {
         return $this->aid;
     }
 
     public function setAid($aid) {
         $this->aid = $aid;
     }
-
 
     function __construct() {
         $this->cid = null;
@@ -47,32 +46,27 @@ class Comment {
         $this->aid = null;
     }
 
-    
     public static function removeComment($comment_id) {
-    try {
-        $db = Database::getInstance();
-        $query = "UPDATE dbProj_Comment SET content = 'This comment was removed by an administrator' WHERE comment_id=" . $comment_id;
-        $result = $db->querySql($query);
-        if ($result){
-            return true;
-        }
-        else {
+        try {
+            $db = Database::getInstance();
+            $query = "UPDATE dbProj_Comment SET content = 'This comment was removed by an administrator' WHERE comment_id=" . $comment_id;
+            $result = $db->querySql($query);
+            if ($result) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e) {
+            echo 'Exception: ' . $e->getMessage();
             return false;
         }
-    } catch (Exception $e) {
-        echo 'Exception: ' . $e->getMessage();
-        return false;
     }
-}
-
 
     function initWithCid($cid) {
         $db = Database::getInstance();
         $data = $db->singleFetch('SELECT * FROM dbProj_Comment WHERE comment_id = ' . $cid);
         $this->initWith($data->comment_id, $data->content, $data->user_id, $data->article_id);
     }
-
-   
 
     private function initWith($cid, $content, $uid, $aid) {
         $this->cid = $cid;
@@ -81,18 +75,17 @@ class Comment {
         $this->aid = $aid;
     }
 
-    function addComment(){
-        try{
+    function addComment() {
+        try {
             $db = Database::getInstance();
             $db->querySql("INSERT INTO dbProj_Comment (comment_id, content, user_id, article_id) VALUES (null, '$this->content' , '$this->uid', '$this->aid')");
             return true;
-            
         } catch (Exception $e) {
             echo 'Exception: ' . $e;
             return false;
         }
     }
-    
+
     function updateDB() {
         $db = Database::getInstance();
         $data = 'UPDATE dbProj_Comment set
@@ -117,7 +110,7 @@ class Comment {
 
         if (empty($this->uid))
             $errors = false;
-        
+
         if (empty($this->aid))
             $errors = false;
 

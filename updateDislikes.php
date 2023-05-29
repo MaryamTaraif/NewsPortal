@@ -1,7 +1,6 @@
-<?php 
+<?php
 
 include 'debugging.php';
-
 
 $id = $_GET['id'];
 
