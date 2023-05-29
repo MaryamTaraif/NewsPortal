@@ -1,7 +1,7 @@
 <?php
 include 'header.php';
 if ($_GET['searchText']){
-    $result = Article::searchArticles($_GET['searchText']);
+    $searchresult = Article::searchArticles($_GET['searchText']);
 }
 
 ?>
@@ -98,7 +98,7 @@ function showRecent() {
     return false;
 }
 
-function showAll() {
+function showAll(page = 1) {
     //create the AJAX request object
     xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
@@ -106,7 +106,7 @@ function showAll() {
            document.getElementById("searchResult").innerHTML = xmlhttp.responseText;
         }
     }
-    xmlhttp.open("GET", "allArticles.php?", true);
+    xmlhttp.open("GET", "allArticles.php?page=" + page, true);
     xmlhttp.send();
     return false;
 }
@@ -179,65 +179,67 @@ function showAll() {
                 <div class="row" id="searchResult">
                     
                     <?php
-                    $itemsPerPage = 10; // Number of items per page
-                $currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
+$itemsPerPage = 10; // Number of items per page
+$currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Current page number
 
-                // Calculate the start and end positions for the current page
-                $start = ($currentPage - 1) * $itemsPerPage;
-                $end = $start + $itemsPerPage;
+// Calculate the start and end positions for the current page
+$start = ($currentPage - 1) * $itemsPerPage;
+$end = $start + $itemsPerPage;
 
-                // Return the desired data as the response
-                if (!empty($result)) {
-                                //loop through and display 
-                                for ($i = $start; $i < min($end, count($result)); $i++) {
-                                        echo '<article class="col-md-12 article-list">
-		            <div class="inner">
-		              <figure>
-                                <img src="'. Media::getPhotoURL($result[$i]->article_id)->URL .'">
-		              </figure>
-		              <div class="details">
-		                <div class="detail">
-		                  <div class="category">
-		                   <a href="#">'. Article::getCatName($result[$i]->category_id) .'</a>
-		                  </div>
-		                  <div class="time">'.$result[$i]->publish_date .'</div>
-		                </div>
-		                <h1><a href="singleArticle.php?aid='.$result[$i]->article_id.'"">'.$result[$i]->title .'</a></h1>
-		                <p>
-		                  '.$result[$i]->description .'
-		                </p>
-		                <footer>
-		                  <a class="btn btn-primary more" href="singleArticle.php?aid='.$result[$i]->article_id.'"> 
-		                    <div>More</div>
-		                    <div><i class="ion-ios-arrow-thin-right"></i></div>
-		                  </a>
-		                </footer>
-		              </div>
-		            </div>
-		          </article>';
-                                    }
-                            }
-                            else {
-                               echo '<h6>Oops, no articles yet.</h6>';
-                            }
-                            $totalPages = ceil(count($result) / $itemsPerPage);
-                            if ($totalPages > 1) {
+// Return the desired data as the response
+if (!empty($searchresult)) {
+    // Loop through and display the filtered results
+    $filteredResult = array_slice($searchresult, $start, $itemsPerPage);
+    foreach ($filteredResult as $article) {
+        echo '<article class="col-md-12 article-list">
+            <div class="inner">
+                <figure>
+                    <img src="'. Media::getPhotoURL($article->article_id)->URL .'">
+                </figure>
+                <div class="details">
+                    <div class="detail">
+                        <div class="category">
+                            <a href="#">'. Article::getCatName($article->category_id) .'</a>
+                        </div>
+                        <div class="time">'.$article->publish_date .'</div>
+                    </div>
+                    <h1><a href="singleArticle.php?aid='.$article->article_id.'"">'.$article->title .'</a></h1>
+                    <p>
+                        '.$article->description .'
+                    </p>
+                    <footer>
+                        <a class="btn btn-primary more" href="singleArticle.php?aid='.$article->article_id.'"> 
+                            <div>More</div>
+                            <div><i class="ion-ios-arrow-thin-right"></i></div>
+                        </a>
+                    </footer>
+                </div>
+            </div>
+        </article>';
+    }
+} else {
+    echo '<h6>Oops, no articles yet.</h6>';
+}
 
-                            echo '<div class="col-md-12 text-center">
-                                    <ul class="pagination">';
-                            if ($currentPage > 1) {
-                                echo '<li class="prev"><a href="?page=' . ($currentPage - 1) . '"><i class="ion-ios-arrow-left"></i></a></li>';
-                            }
-                            for ($i = 1; $i <= ceil(count($result) / $itemsPerPage); $i++) {
-                                echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="?page=' . $i . '">' . $i . '</a></li>';
-                            }
-                            if ($currentPage < ceil(count($result) / $itemsPerPage)) {
-                                echo '<li class="next"><a href="?page=' . ($currentPage + 1) . '"><i class="ion-ios-arrow-right"></i></a></li>';
-                            }
-                            echo '</ul></div>';
-                            }
-                            
-                            ?>
+$totalPages = ceil(count($searchresult) / $itemsPerPage);
+if ($totalPages > 1) {
+    echo '<div class="col-md-12 text-center">
+            <ul class="pagination">';
+    if ($currentPage > 1) {
+        echo '<li class="prev"><a href="?searchText=' . urlencode($_GET['searchText']) . '&page=' . ($currentPage - 1) . '"><i class="ion-ios-arrow-left"></i></a></li>';
+    }
+    for ($i = 1; $i <= $totalPages; $i++) {
+        echo '<li' . ($i == $currentPage ? ' class="active"' : '') . '><a href="?searchText=' . urlencode($_GET['searchText']) . '&page=' . $i . '">' . $i . '</a></li>';
+    }
+    if ($currentPage < $totalPages) {
+        echo '<li class="next"><a href="?searchText=' . urlencode($_GET['searchText']) . '&page=' . ($currentPage + 1) . '"><i class="ion-ios-arrow-right"></i></a></li>';
+    }
+    echo '</ul></div>';
+}
+
+
+?>
+
                 </div>
             </div>
         </div>
