@@ -7,7 +7,7 @@ if ($_SESSION['role'] !== 'Admin') {
     exit();
 }
 ?>
-
+<section class="category">
 <div class="container" >
     <div class="row">
         <div class="col-md-12">        
@@ -77,6 +77,7 @@ if ($_SESSION['role'] !== 'Admin') {
         </div>
     </section>
 </div>
+</section>
 
 <script>
     function showArticleByAuthor(page = 1) {
