@@ -48,7 +48,7 @@ if (isset($_GET['id'])) {
 
 
 <section class="page">
-    <div class="container" style="padding-top: 200px;">
+    <div class="container" >
         <div class="row">
             <div class="col-md-12">
                 <ol class="breadcrumb">
