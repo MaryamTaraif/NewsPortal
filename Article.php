@@ -194,11 +194,10 @@ class Article {
                     . ' status = \'' . $this->status . '\' '
                     . 'WHERE article_id = ' . $this->article_id;
             $result = $db->querySql($q);
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

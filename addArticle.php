@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
                     // update the page
                     if (this.responseText === "removed") {
                         location.reload();
-                        alert("Deleted Successfully");
+                        alert("Removed Successfully");
                     }
                 }
             };
@@ -217,13 +217,13 @@ if (isset($_POST['submitted'])) {
             $msg = $upload->upload('photo');
             //if uploaded to the server, create new object to insert/update to db 
             if (empty($msg)) {
-                $photo = new Media();
+                $photoMedia = new Media();
                 if ($edit) {
                     //if this is an editedarticle, get the photo record to replace data 
-                    $photo->initWithId($photo->media_id);
+                    $photoMedia->initWithId($photo->media_id);
                 }
-                $photo->setType_name($upload->getFileType());
-                $photo->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
+                $photoMedia->setType_name($upload->getFileType());
+                $photoMedia->setUrl($upload->getUploadDir() . '/' . $upload->getFilepath());
             } else {
                 if (is_array($msg)) {
                     foreach ($msg as $errorMessage) {
@@ -327,21 +327,21 @@ if (isset($_POST['submitted'])) {
 
         //add or update media that were uploaded  
         //photo 
-        if ($photo) {
-            $photo->setArticle_id($article->getArticle_id());
+        if ($photoMedia) {
+                            $photoMedia->setArticle_id($article->getArticle_id());
             if ($edit) {
-                if (!$photo->updateMedia()) {
+                if (!$photoMedia->updateMedia()) {
                     $errors[] = 'Failed to update the photo.';
                 }
             } else {
-                if (!$photo->addMedia()) {
+                if (!$photoMedia->addMedia()) {
                     $errors[] = 'Failed to add the photo.';
                 }
             }
         }
         //video/audio 
         if ($videoAudio != null) {
-            $videoAudio->setArticle_id($article->getArticle_id());
+                            $videoAudio->setArticle_id($article->getArticle_id());
             if ($edit) {
                 if (!$videoAudio->updateMedia()) {
                     $errors[] = 'Failed to update the video/audio.';
